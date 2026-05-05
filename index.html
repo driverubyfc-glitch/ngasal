@@ -3,195 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rose Rekber - Premium Interface</title>
+    <title>Rose Rekber - Fluid Interface</title>
     <style>
         :root {
-            --tg-blue: #24A1DE;
-            --tg-blue-dark: #1d86b9;
-            --tg-bg: #f0f2f5;
+            --tg-blue: #0088cc;
+            --tg-blue-light: #40a7e3;
+            --tg-bg: #f5f6f7;
             --tg-text: #222222;
-            --tg-gray: #8E8E93;
-            --white: #ffffff;
-            --bubble: #e7f3ff;
+            --tg-hint: #999999;
+            --bubble-me: #effdde;
+            --bubble-bot: #ffffff;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            margin: 0; padding: 0; background-color: #f0f0f0;
-            display: flex; justify-content: center; color: var(--tg-text);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0; background: var(--tg-bg); color: var(--tg-text);
+            display: flex; justify-content: center; align-items: center; height: 100vh;
         }
 
-        .app-container {
-            width: 100%; max-width: 450px; height: 100vh;
-            background: var(--white); position: relative; overflow: hidden;
-            display: flex; flex-direction: column; box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        .phone-frame {
+            width: 100%; max-width: 400px; height: 100vh;
+            background: #ffffff; display: flex; flex-direction: column;
+            position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        /* Animations */
-        .page {
-            position: absolute; width: 100%; height: 100%;
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
-            background: var(--white); overflow-y: auto; padding-bottom: 30px;
+        /* HEADER */
+        .app-bar {
+            background: var(--tg-blue); color: white; padding: 12px 16px;
+            display: flex; align-items: center; gap: 15px;
         }
-        .hidden-left { transform: translateX(-100%); opacity: 0; }
-        .hidden-right { transform: translateX(100%); opacity: 0; }
-        .active-page { transform: translateX(0); opacity: 1; }
-
-        /* --- HOME PAGE --- */
-        .home-hero {
-            background: linear-gradient(135deg, var(--tg-blue), #1c82b1);
-            color: white; padding: 50px 20px; text-align: center;
-            border-radius: 0 0 30px 30px; margin-bottom: 40px;
-        }
-        .order-circle {
-            width: 140px; height: 140px; background: white;
-            border-radius: 50%; margin: -70px auto 30px;
+        .avatar {
+            width: 40px; height: 40px; background: #fff; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            color: var(--tg-blue); font-weight: 800; cursor: pointer;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            transition: 0.3s; border: 4px solid var(--bubble);
+            font-weight: bold; color: var(--tg-blue);
         }
-        .order-circle:hover { transform: scale(1.05); background: var(--tg-blue); color: white; }
 
-        /* --- ORDER PAGE --- */
-        .header {
-            padding: 15px 20px; background: var(--white);
-            display: flex; align-items: center; justify-content: space-between;
-            border-bottom: 1px solid #f0f0f0; position: sticky; top: 0; z-index: 10;
+        /* CHAT AREA */
+        .chat-container {
+            flex: 1; overflow-y: auto; padding: 20px 15px;
+            background: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+            background-size: cover;
         }
-        .nav-tabs {
-            display: grid; grid-template-columns: repeat(3, 1fr);
-            gap: 8px; padding: 15px 20px;
+
+        .bubble {
+            max-width: 85%; padding: 12px 16px; border-radius: 15px;
+            margin-bottom: 12px; font-size: 0.95rem; line-height: 1.4;
+            position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .bot { background: var(--bubble-bot); border-bottom-left-radius: 2px; }
+        
+        /* DYNAMIC INPUTS */
+        .input-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+            margin-top: 10px;
+        }
+        .field-box {
+            background: rgba(255,255,255,0.9); border: 1px solid #ddd;
+            border-radius: 8px; padding: 8px;
+        }
+        .field-box label { font-size: 0.7rem; color: var(--tg-blue); display: block; font-weight: bold; }
+        .field-box input, .field-box select {
+            width: 100%; border: none; background: transparent; outline: none;
+            font-size: 0.9rem; padding: 4px 0;
+        }
+
+        /* OUTPUT BOX */
+        .result-bubble {
+            background: #ffffff; border-radius: 12px; padding: 15px;
+            font-family: 'Consolas', monospace; font-size: 0.8rem;
+            white-space: pre-wrap; border-left: 4px solid var(--tg-blue);
+            margin-top: 15px;
+        }
+
+        /* BOTTOM NAV */
+        .tabs {
+            display: flex; border-top: 1px solid #eee; background: #fff;
         }
         .tab-btn {
-            border: none; background: var(--tg-bg); padding: 12px;
-            border-radius: 12px; font-weight: bold; cursor: pointer;
-            color: var(--tg-gray); transition: 0.3s; font-size: 0.8rem;
+            flex: 1; padding: 15px; text-align: center; cursor: pointer;
+            color: var(--tg-hint); font-size: 0.8rem; font-weight: bold;
         }
-        .tab-btn.active { background: var(--tg-blue); color: white; }
+        .tab-btn.active { color: var(--tg-blue); border-top: 2px solid var(--tg-blue); }
 
-        .form-section { padding: 0 20px; }
-        input, select {
-            width: 100%; padding: 14px; border-radius: 12px;
-            border: 1px solid #e0e0e0; background: var(--tg-bg);
-            margin-top: 10px; outline: none; transition: 0.3s;
-        }
-        input:focus { border-color: var(--tg-blue); background: white; }
-
-        .output-container {
-            background: #242f3d; color: #fff; padding: 20px;
-            border-radius: 15px; margin: 20px; font-family: 'Courier New', Courier, monospace;
-            font-size: 0.85rem; line-height: 1.5; white-space: pre-wrap;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
-        }
-
-        .btn-copy {
+        .btn-send {
             background: var(--tg-blue); color: white; border: none;
-            padding: 16px; border-radius: 12px; width: calc(100% - 40px);
-            margin: 0 20px; font-weight: bold; cursor: pointer;
-            box-shadow: 0 4px 15px rgba(36, 161, 222, 0.3);
-        }
-
-        /* Sidebar Overlay */
-        .overlay {
-            position: absolute; top: 0; right: -100%; width: 80%; height: 100%;
-            background: rgba(255,255,255,0.98); z-index: 100; transition: 0.4s;
-            padding: 40px 25px; box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-        }
-        .overlay.open { right: 0; }
-        .menu-link {
-            display: block; padding: 15px 0; font-size: 1.1rem;
-            font-weight: bold; text-decoration: none; color: var(--tg-text);
-            border-bottom: 1px solid #f0f0f0;
+            width: 100%; padding: 15px; font-weight: bold; cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    
-    <!-- PAGE 1: HOME -->
-    <div id="page-home" class="page active-page">
-        <div class="home-hero">
-            <h1 style="margin:0">ROSE REKBER</h1>
-            <p style="opacity: 0.8; font-size: 0.9rem;">Safe & Fast Transaction</p>
-        </div>
-        <div class="order-circle" onclick="goTo('page-order')">TAP TO<br>ORDER</div>
-        
-        <div style="padding: 0 20px;">
-            <a href="https://t.me/roserekber" class="menu-link" style="color: var(--tg-blue)">Rate And Kritsar</a>
-            <a href="https://t.me/roserekber" class="menu-link" style="color: var(--tg-blue)">Testimonial</a>
-            <a href="https://t.me/roserekber" class="menu-link" style="color: var(--tg-blue)">List Admin</a>
+<div class="phone-frame">
+    <div class="app-bar">
+        <div class="avatar">R</div>
+        <div>
+            <div style="font-weight: bold;">Rose System Bot</div>
+            <div style="font-size: 0.75rem; opacity: 0.8;">online</div>
         </div>
     </div>
 
-    <!-- PAGE 2: ORDER -->
-    <div id="page-order" class="page hidden-right">
-        <div class="header">
-            <div onclick="goTo('page-home')" style="cursor:pointer; color:var(--tg-blue); font-weight:bold;">← Back</div>
-            <span style="font-weight: bold;">@rekberrtele</span>
-            <div onclick="toggleSidebar()" style="cursor:pointer; font-size: 20px;">☰</div>
+    <div class="chat-container">
+        <div class="bubble bot">
+            Halo! Pilih layanan untuk membuat format transaksi secara otomatis.
         </div>
 
-        <div class="nav-tabs">
-            <button class="tab-btn active" onclick="switchTab('rekber', this)">REKBER</button>
-            <button class="tab-btn" onclick="switchTab('jaspin', this)">JASPIN</button>
-            <button class="tab-btn" onclick="switchTab('convert', this)">CONVERT</button>
+        <!-- INPUTS -->
+        <div id="input-section" class="input-grid">
+            <!-- Injected by JS -->
         </div>
 
-        <div class="form-section">
-            <div id="dynamic-fields"></div>
-            <select id="g_qris" onchange="updateFormat()">
-                <option value="no">Pakai QRIS? No</option>
-                <option value="yes only dana">Pakai QRIS? Yes Only Dana</option>
-            </select>
-            <select id="g_subs" onchange="updateFormat()">
-                <option value="sudah">Subs @roserekber? Sudah</option>
-                <option value="belum">Subs @roserekber? Belum</option>
-            </select>
+        <div class="input-grid" style="grid-template-columns: 1fr; margin-top: 10px;">
+            <div class="field-box">
+                <label>Pilihan Tambahan</label>
+                <select id="g_qris" onchange="updateFormat()">
+                    <option value="no">Tanpa QRIS</option>
+                    <option value="yes only dana">QRIS (Dana Only)</option>
+                </select>
+                <select id="g_subs" onchange="updateFormat()" style="margin-top: 5px;">
+                    <option value="sudah">Sudah Subs @roserekber</option>
+                    <option value="belum">Belum Subs @roserekber</option>
+                </select>
+            </div>
         </div>
 
-        <div class="output-container" id="output"></div>
-        <button class="btn-copy" onclick="copyResult()">SALIN FORMAT</button>
+        <!-- OUTPUT -->
+        <div id="output" class="result-bubble">Isi data di atas...</div>
     </div>
 
-    <!-- SIDEBAR -->
-    <div id="sidebar" class="overlay">
-        <div onclick="toggleSidebar()" style="font-size: 30px; margin-bottom: 30px; cursor: pointer; color: var(--tg-blue);">×</div>
-        <a href="https://t.me/roserekber" class="menu-link">REGULATION</a>
-        <a href="https://t.me/roserekber" class="menu-link">CARA KERJA</a>
+    <div class="tabs">
+        <div class="tab-btn active" onclick="switchTab('rekber', this)">REKBER</div>
+        <div class="tab-btn" onclick="switchTab('jaspin', this)">JASPIN</div>
+        <div class="tab-btn" onclick="switchTab('convert', this)">CONVERT</div>
     </div>
+    <button class="btn-send" onclick="copyResult()">SALIN FORMAT & KIRIM</button>
 </div>
 
 <script>
     let activeTab = 'rekber';
 
-    // Helper: Format angka dengan titik
     function formatTitik(n) {
         if (!n) return "0";
         return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
 
-    // Input Handler: Format otomatis saat mengetik
     function handleInputNominal(el) {
         let val = el.value.replace(/\D/g, '');
-        el.dataset.raw = val; // Simpan nilai asli
+        el.dataset.raw = val;
         el.value = val ? formatTitik(val) : '';
         updateFormat();
     }
-
-    function goTo(pageId) {
-        document.querySelectorAll('.page').forEach(p => {
-            p.classList.remove('active-page');
-            p.classList.add(pageId === 'page-home' ? 'hidden-right' : 'hidden-left');
-        });
-        document.getElementById(pageId).classList.remove('hidden-left', 'hidden-right');
-        document.getElementById(pageId).classList.add('active-page');
-    }
-
-    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 
     function switchTab(type, btn) {
         activeTab = type;
@@ -201,29 +162,28 @@
     }
 
     function renderFields() {
-        const container = document.getElementById('dynamic-fields');
+        const container = document.getElementById('input-section');
         if(activeTab === 'rekber') {
             container.innerHTML = `
-                <input type="text" id="r_sell" placeholder="Username Penjual" oninput="updateFormat()">
-                <input type="text" id="r_buy" placeholder="Username Pembeli" oninput="updateFormat()">
-                <input type="text" id="r_item" placeholder="Jenis Orderan" oninput="updateFormat()">
-                <input type="text" id="r_nom" placeholder="Nominal" oninput="handleInputNominal(this)">
-                <input type="text" id="r_vp" placeholder="Penjual Via" oninput="updateFormat()">
-                <input type="text" id="r_vb" placeholder="Pembeli Via" oninput="updateFormat()">
+                <div class="field-box"><label>Seller</label><input type="text" id="r_sell" oninput="updateFormat()"></div>
+                <div class="field-box"><label>Buyer</label><input type="text" id="r_buy" oninput="updateFormat()"></div>
+                <div class="field-box"><label>Item</label><input type="text" id="r_item" oninput="updateFormat()"></div>
+                <div class="field-box"><label>Nominal</label><input type="text" id="r_nom" oninput="handleInputNominal(this)"></div>
+                <div class="field-box"><label>Via Sell</label><input type="text" id="r_vp" oninput="updateFormat()"></div>
+                <div class="field-box"><label>Via Buy</label><input type="text" id="r_vb" oninput="updateFormat()"></div>
             `;
         } else if(activeTab === 'jaspin') {
             container.innerHTML = `
-                <input type="text" id="j_user" placeholder="Username" oninput="updateFormat()">
-                <input type="text" id="j_nom" placeholder="Nominal" oninput="handleInputNominal(this)">
-                <input type="text" id="j_nan" placeholder="Nomor + A.N" oninput="updateFormat()">
+                <div class="field-box"><label>User</label><input type="text" id="j_user" oninput="updateFormat()"></div>
+                <div class="field-box"><label>Nominal</label><input type="text" id="j_nom" oninput="handleInputNominal(this)"></div>
+                <div class="field-box" style="grid-column: span 2;"><label>Nomor + A.N</label><input type="text" id="j_nan" oninput="updateFormat()"></div>
             `;
         } else {
             container.innerHTML = `
-                <select id="c_tipe" onchange="updateFormat()"><option value="prem">Premium</option><option value="non">Non-Prem</option></select>
-                <input type="text" id="c_user" placeholder="Username" oninput="updateFormat()">
-                <input type="text" id="c_nom" placeholder="Nominal Convert" oninput="handleInputNominal(this)">
-                <input type="text" id="c_dari" placeholder="Dari" oninput="updateFormat()">
-                <input type="text" id="c_ke" placeholder="Ke" oninput="updateFormat()">
+                <div class="field-box"><label>Tipe</label><select id="c_tipe" onchange="updateFormat()"><option value="prem">Prem</option><option value="non">Non</option></select></div>
+                <div class="field-box"><label>Nominal</label><input type="text" id="c_nom" oninput="handleInputNominal(this)"></div>
+                <div class="field-box"><label>Dari</label><input type="text" id="c_dari" oninput="updateFormat()"></div>
+                <div class="field-box"><label>Ke</label><input type="text" id="c_ke" oninput="updateFormat()"></div>
             `;
         }
         updateFormat();
@@ -239,7 +199,7 @@
             let vp = (document.getElementById('r_vp')?.value || "").toLowerCase().trim();
             let vb = (document.getElementById('r_vb')?.value || "").toLowerCase().trim();
             
-            // Logika Fee Rekber (Sesuai User Summary)
+            // Logika Fee Rekber @cellrekber Original
             let feeRek = 0; let isP = true;
             if(nom < 10000) feeRek = 0;
             else if(nom < 20000) feeRek = 30;
@@ -248,21 +208,10 @@
             else if(nom < 1000000) { feeRek = 2000; isP = false; }
             else { feeRek = 5000; isP = false; }
 
-            // Logika Convert
-            let feeCv = 0; let info = "";
-            if(vp !== "" && vb !== "" && vp !== vb) {
-                if(qris.includes("yes")) {
-                    feeCv = (nom < 100000) ? 4000 : 8000; // Contoh tarif non-prem
-                    info = " (inc cv non-prem)";
-                } else {
-                    feeCv = (Math.floor(nom/100000)+1)*1000; // Contoh tarif prem
-                    info = " (inc cv prem)";
-                }
-            }
-            let total = feeRek + feeCv;
-            let fFinal = (total < 1000 && isP && feeCv === 0) ? total + "p" : formatTitik(total);
+            let total = feeRek;
+            let fFinal = (total < 1000 && isP) ? total + "p" : formatTitik(total);
 
-            output = `🪷 𓏸  FORMAT REKBER E WALLET ☏\n\nㅤ𐀶. . username penjual :: @${document.getElementById('r_sell')?.value || "..."}\nㅤ𐀶. . username pembeli :: @${document.getElementById('r_buy')?.value || "..."}\nㅤ𐀶. . jenis orderan :: ${document.getElementById('r_item')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatTitik(nom)}\nㅤ𐀶. . fee rekber :: ${fFinal}${info}\nㅤ𐀶. . penjual via :: ${vp}\nㅤ𐀶. . pembeli via :: ${vb}\nㅤ𐀶. . pakai qris :: ${qris}\nㅤ𐀶. . sudah subs @roserekber ? :: ${subs}`;
+            output = `🪷 𓏸  FORMAT REKBER E WALLET ☏\n\nㅤ𐀶. . username penjual :: @${document.getElementById('r_sell')?.value || "..."}\nㅤ𐀶. . username pembeli :: @${document.getElementById('r_buy')?.value || "..."}\nㅤ𐀶. . jenis orderan :: ${document.getElementById('r_item')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatTitik(nom)}\nㅤ𐀶. . fee rekber :: ${fFinal}\nㅤ𐀶. . penjual via :: ${vp}\nㅤ𐀶. . pembeli via :: ${vb}\nㅤ𐀶. . pakai qris :: ${qris}\nㅤ𐀶. . sudah subs @roserekber ? :: ${subs}`;
         } else if(activeTab === 'jaspin') {
             let nom = parseInt(document.getElementById('j_nom')?.dataset.raw) || 0;
             output = `🪷 𓏸  FORMAT JASPIN ☏\n\nㅤ𐀶. . username :: @${document.getElementById('j_user')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatTitik(nom)}\nㅤ𐀶. . fee :: 1.000\nㅤ𐀶. . nomor :: ${document.getElementById('j_nan')?.value || "..."}`;
@@ -275,7 +224,7 @@
 
     function copyResult() {
         navigator.clipboard.writeText(document.getElementById('output').innerText);
-        alert("Format Berhasil Disalin!");
+        alert("Format berhasil disalin ke clipboard!");
     }
 
     renderFields();
