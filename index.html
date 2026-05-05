@@ -3,231 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rose Rekber - Fluid Interface</title>
+    <title>Rose Rekber Premium</title>
     <style>
         :root {
-            --tg-blue: #0088cc;
-            --tg-blue-light: #40a7e3;
-            --tg-bg: #f5f6f7;
-            --tg-text: #222222;
-            --tg-hint: #999999;
-            --bubble-me: #effdde;
-            --bubble-bot: #ffffff;
-            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --tg-blue: #24A1DE;
+            --tg-dark: #1d2733;
+            --tg-bg: #f0f2f5;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.8);
         }
 
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            margin: 0; background: var(--tg-bg); color: var(--tg-text);
-            display: flex; justify-content: center; align-items: center; height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            margin: 0; background: var(--tg-bg); color: #333; overflow: hidden;
         }
 
-        .phone-frame {
-            width: 100%; max-width: 400px; height: 100vh;
-            background: #ffffff; display: flex; flex-direction: column;
-            position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        .app-shell {
+            width: 100%; max-width: 430px; height: 100vh; margin: auto;
+            background: var(--white); position: relative; overflow: hidden;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
         }
 
-        /* HEADER */
-        .app-bar {
-            background: var(--tg-blue); color: white; padding: 12px 16px;
-            display: flex; align-items: center; gap: 15px;
+        /* --- ANIMATIONS --- */
+        .page {
+            position: absolute; width: 100%; height: 100%;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto; background: var(--white);
         }
-        .avatar {
-            width: 40px; height: 40px; background: #fff; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; color: var(--tg-blue);
-        }
+        .slide-out { transform: translateX(-100%); opacity: 0; }
+        .slide-in { transform: translateX(100%); opacity: 0; }
+        .active { transform: translateX(0); opacity: 1; z-index: 5; }
 
-        /* CHAT AREA */
-        .chat-container {
-            flex: 1; overflow-y: auto; padding: 20px 15px;
-            background: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
-            background-size: cover;
+        /* --- PAGE 1: INSTA-PROFILE --- */
+        .profile-header { padding: 25px 20px; text-align: center; background: linear-gradient(180deg, #eef7ff 0%, #fff 100%); }
+        .avatar-ring {
+            width: 90px; height: 90px; border-radius: 50%;
+            padding: 3px; background: linear-gradient(45deg, #24A1DE, #64b5f6);
+            margin: 0 auto 15px;
         }
-
-        .bubble {
-            max-width: 85%; padding: 12px 16px; border-radius: 15px;
-            margin-bottom: 12px; font-size: 0.95rem; line-height: 1.4;
-            position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        }
-        .bot { background: var(--bubble-bot); border-bottom-left-radius: 2px; }
+        .avatar-img { width: 100%; height: 100%; border-radius: 50%; background: #ddd; border: 3px solid white; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--tg-blue); font-size: 1.5rem; }
         
-        /* DYNAMIC INPUTS */
-        .input-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-            margin-top: 10px;
+        .stats-row { display: flex; justify-content: space-around; margin: 20px 0; }
+        .stat-item { text-align: center; }
+        .stat-num { font-weight: 800; font-size: 1.1rem; }
+        .stat-label { font-size: 0.8rem; color: #888; }
+
+        .bio { padding: 0 25px; text-align: center; margin-bottom: 25px; font-size: 0.9rem; }
+        
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 20px; }
+        .btn-main { 
+            grid-column: span 2; background: var(--tg-blue); color: white; 
+            padding: 14px; border-radius: 10px; font-weight: bold; border: none; cursor: pointer;
+            transition: 0.3s; margin-bottom: 10px;
         }
-        .field-box {
-            background: rgba(255,255,255,0.9); border: 1px solid #ddd;
-            border-radius: 8px; padding: 8px;
-        }
-        .field-box label { font-size: 0.7rem; color: var(--tg-blue); display: block; font-weight: bold; }
-        .field-box input, .field-box select {
-            width: 100%; border: none; background: transparent; outline: none;
-            font-size: 0.9rem; padding: 4px 0;
+        .btn-sub { 
+            background: #f1f1f1; border: none; padding: 10px; border-radius: 8px; 
+            font-size: 0.85rem; font-weight: 600; cursor: pointer;
         }
 
-        /* OUTPUT BOX */
-        .result-bubble {
-            background: #ffffff; border-radius: 12px; padding: 15px;
-            font-family: 'Consolas', monospace; font-size: 0.8rem;
-            white-space: pre-wrap; border-left: 4px solid var(--tg-blue);
-            margin-top: 15px;
+        /* --- PAGE 2: DASHBOARD --- */
+        .top-bar { 
+            padding: 15px; display: flex; align-items: center; justify-content: space-between;
+            background: var(--white); border-bottom: 1px solid #eee; position: sticky; top: 0;
         }
+        .form-container { padding: 20px; }
+        .smart-input {
+            width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #e0e0e0;
+            background: #f9f9f9; margin-bottom: 12px; outline: none; transition: 0.3s;
+        }
+        .smart-input:focus { border-color: var(--tg-blue); background: #fff; box-shadow: 0 4px 12px rgba(36,161,222,0.1); }
 
-        /* BOTTOM NAV */
-        .tabs {
-            display: flex; border-top: 1px solid #eee; background: #fff;
+        .output-card {
+            background: #2b3949; color: #fff; padding: 20px; border-radius: 15px;
+            font-family: 'Consolas', monospace; font-size: 0.8rem; line-height: 1.5;
+            margin-top: 20px; position: relative; overflow: hidden;
         }
-        .tab-btn {
-            flex: 1; padding: 15px; text-align: center; cursor: pointer;
-            color: var(--tg-hint); font-size: 0.8rem; font-weight: bold;
-        }
-        .tab-btn.active { color: var(--tg-blue); border-top: 2px solid var(--tg-blue); }
+        .output-card::after { content: 'FORMAT'; position: absolute; top: 10px; right: 10px; font-size: 0.6rem; opacity: 0.3; }
 
-        .btn-send {
-            background: var(--tg-blue); color: white; border: none;
-            width: 100%; padding: 15px; font-weight: bold; cursor: pointer;
+        .floating-copy {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 380px; background: var(--tg-blue);
+            color: white; border: none; padding: 16px; border-radius: 15px;
+            font-weight: bold; box-shadow: 0 10px 20px rgba(36,161,222,0.3); cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-<div class="phone-frame">
-    <div class="app-bar">
-        <div class="avatar">R</div>
-        <div>
-            <div style="font-weight: bold;">Rose System Bot</div>
-            <div style="font-size: 0.75rem; opacity: 0.8;">online</div>
+<div class="app-shell">
+    
+    <!-- PAGE 1 -->
+    <div id="p1" class="page active">
+        <div class="profile-header">
+            <div class="avatar-ring"><div class="avatar-img">RR</div></div>
+            <h3 style="margin:0">@roserekber</h3>
+            <p style="color:var(--tg-blue); font-size: 0.8rem; font-weight:bold;">Verified Service System</p>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-item"><div class="stat-num">500+</div><div class="stat-label">Trust</div></div>
+            <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-label">Online</div></div>
+            <div class="stat-item"><div class="stat-num">1k+</div><div class="stat-label">Subs</div></div>
+        </div>
+
+        <div class="bio">
+            <b>Rose Rekber System</b><br>
+            Fast, Safe, & Trusted Digital Escrow.<br>
+            Powered by @cellrekber Logic.
+        </div>
+
+        <div class="action-grid">
+            <button class="btn-main" onclick="nav(2)">ORDER SEKARANG</button>
+            <button class="btn-sub" onclick="window.open('https://t.me/roserekber')">REGULATION</button>
+            <button class="btn-sub" onclick="window.open('https://t.me/roserekber')">RATE & KRISTAR</button>
+            <button class="btn-sub" style="grid-column: span 2;" onclick="window.open('https://t.me/roserekber')">LIST ADMINS</button>
         </div>
     </div>
 
-    <div class="chat-container">
-        <div class="bubble bot">
-            Halo! Pilih layanan untuk membuat format transaksi secara otomatis.
+    <!-- PAGE 2 -->
+    <div id="p2" class="page slide-in">
+        <div class="top-bar">
+            <div onclick="nav(1)" style="cursor:pointer; color:var(--tg-blue); font-size:1.2rem;">✕</div>
+            <b style="font-size: 0.9rem;">BUAT FORMAT</b>
+            <div style="font-size:1.5rem; color:var(--tg-blue); cursor:pointer;">⋮</div>
         </div>
 
-        <!-- INPUTS -->
-        <div id="input-section" class="input-grid">
-            <!-- Injected by JS -->
+        <div class="form-container">
+            <select class="smart-input" id="serv" onchange="renderForm()">
+                <option value="rek">REKBER E-WALLET</option>
+                <option value="jas">JASPIN (Jasa Pinjam)</option>
+                <option value="con">CONVERT PREMIUM</option>
+            </select>
+
+            <div id="fields"></div>
+
+            <select class="smart-input" id="qris" onchange="upd()">
+                <option value="no">Pakai QRIS? No</option>
+                <option value="yes only dana">Pakai QRIS? Yes (Dana Only)</option>
+            </select>
+
+            <div class="output-card" id="out">Silahkan isi data...</div>
+            <div style="height: 100px;"></div> <!-- Spacer -->
         </div>
 
-        <div class="input-grid" style="grid-template-columns: 1fr; margin-top: 10px;">
-            <div class="field-box">
-                <label>Pilihan Tambahan</label>
-                <select id="g_qris" onchange="updateFormat()">
-                    <option value="no">Tanpa QRIS</option>
-                    <option value="yes only dana">QRIS (Dana Only)</option>
-                </select>
-                <select id="g_subs" onchange="updateFormat()" style="margin-top: 5px;">
-                    <option value="sudah">Sudah Subs @roserekber</option>
-                    <option value="belum">Belum Subs @roserekber</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- OUTPUT -->
-        <div id="output" class="result-bubble">Isi data di atas...</div>
+        <button class="floating-copy" onclick="copy()">SALIN FORMAT</button>
     </div>
 
-    <div class="tabs">
-        <div class="tab-btn active" onclick="switchTab('rekber', this)">REKBER</div>
-        <div class="tab-btn" onclick="switchTab('jaspin', this)">JASPIN</div>
-        <div class="tab-btn" onclick="switchTab('convert', this)">CONVERT</div>
-    </div>
-    <button class="btn-send" onclick="copyResult()">SALIN FORMAT & KIRIM</button>
 </div>
 
 <script>
-    let activeTab = 'rekber';
+    let mode = 'rek';
 
-    function formatTitik(n) {
-        if (!n) return "0";
-        return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    function nav(p) {
+        if(p===2) {
+            document.getElementById('p1').className = 'page slide-out';
+            document.getElementById('p2').className = 'page active';
+            renderForm();
+        } else {
+            document.getElementById('p1').className = 'page active';
+            document.getElementById('p2').className = 'page slide-in';
+        }
     }
 
-    function handleInputNominal(el) {
-        let val = el.value.replace(/\D/g, '');
-        el.dataset.raw = val;
-        el.value = val ? formatTitik(val) : '';
-        updateFormat();
+    function dot(n) {
+        return n.toString().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
 
-    function switchTab(type, btn) {
-        activeTab = type;
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        renderFields();
-    }
-
-    function renderFields() {
-        const container = document.getElementById('input-section');
-        if(activeTab === 'rekber') {
-            container.innerHTML = `
-                <div class="field-box"><label>Seller</label><input type="text" id="r_sell" oninput="updateFormat()"></div>
-                <div class="field-box"><label>Buyer</label><input type="text" id="r_buy" oninput="updateFormat()"></div>
-                <div class="field-box"><label>Item</label><input type="text" id="r_item" oninput="updateFormat()"></div>
-                <div class="field-box"><label>Nominal</label><input type="text" id="r_nom" oninput="handleInputNominal(this)"></div>
-                <div class="field-box"><label>Via Sell</label><input type="text" id="r_vp" oninput="updateFormat()"></div>
-                <div class="field-box"><label>Via Buy</label><input type="text" id="r_vb" oninput="updateFormat()"></div>
-            `;
-        } else if(activeTab === 'jaspin') {
-            container.innerHTML = `
-                <div class="field-box"><label>User</label><input type="text" id="j_user" oninput="updateFormat()"></div>
-                <div class="field-box"><label>Nominal</label><input type="text" id="j_nom" oninput="handleInputNominal(this)"></div>
-                <div class="field-box" style="grid-column: span 2;"><label>Nomor + A.N</label><input type="text" id="j_nan" oninput="updateFormat()"></div>
+    function renderForm() {
+        mode = document.getElementById('serv').value;
+        const f = document.getElementById('fields');
+        if(mode==='rek') {
+            f.innerHTML = `
+                <input class="smart-input" id="s" placeholder="Username Penjual" oninput="upd()">
+                <input class="smart-input" id="b" placeholder="Username Pembeli" oninput="upd()">
+                <input class="smart-input" id="i" placeholder="Jenis Barang" oninput="upd()">
+                <input class="smart-input" id="n" placeholder="Nominal (Titik Otomatis)" oninput="handleNom(this)">
+                <input class="smart-input" id="v1" placeholder="Penjual Via (e.g Dana)" oninput="upd()">
+                <input class="smart-input" id="v2" placeholder="Pembeli Via (e.g Dana)" oninput="upd()">
             `;
         } else {
-            container.innerHTML = `
-                <div class="field-box"><label>Tipe</label><select id="c_tipe" onchange="updateFormat()"><option value="prem">Prem</option><option value="non">Non</option></select></div>
-                <div class="field-box"><label>Nominal</label><input type="text" id="c_nom" oninput="handleInputNominal(this)"></div>
-                <div class="field-box"><label>Dari</label><input type="text" id="c_dari" oninput="updateFormat()"></div>
-                <div class="field-box"><label>Ke</label><input type="text" id="c_ke" oninput="updateFormat()"></div>
+            f.innerHTML = `
+                <input class="smart-input" id="u" placeholder="Username" oninput="upd()">
+                <input class="smart-input" id="n" placeholder="Nominal" oninput="handleNom(this)">
+                <input class="smart-input" id="ext" placeholder="${mode==='jas'?'No + A.N':'E-Wallet Tujuan'}" oninput="upd()">
             `;
         }
-        updateFormat();
+        upd();
     }
 
-    function updateFormat() {
-        let output = "";
-        const qris = document.getElementById('g_qris').value;
-        const subs = document.getElementById('g_subs').value;
+    function handleNom(el) {
+        let v = el.value.replace(/\D/g, "");
+        el.dataset.raw = v;
+        el.value = v ? dot(v) : "";
+        upd();
+    }
 
-        if(activeTab === 'rekber') {
-            let nom = parseInt(document.getElementById('r_nom')?.dataset.raw) || 0;
-            let vp = (document.getElementById('r_vp')?.value || "").toLowerCase().trim();
-            let vb = (document.getElementById('r_vb')?.value || "").toLowerCase().trim();
+    function upd() {
+        let nom = parseInt(document.getElementById('n')?.dataset?.raw || 0);
+        let out = "";
+        
+        if(mode==='rek') {
+            // Logika Fee Original
+            let fee = 0; let p = true;
+            if(nom < 10000) fee = 0;
+            else if(nom < 20000) fee = 30;
+            else if(nom < 60000) fee = 100;
+            else if(nom < 400000) fee = 200;
+            else if(nom < 1000000) { fee = 2000; p = false; }
+            else { fee = 5000; p = false; }
             
-            // Logika Fee Rekber @cellrekber Original
-            let feeRek = 0; let isP = true;
-            if(nom < 10000) feeRek = 0;
-            else if(nom < 20000) feeRek = 30;
-            else if(nom < 60000) feeRek = 100;
-            else if(nom < 400000) feeRek = 200;
-            else if(nom < 1000000) { feeRek = 2000; isP = false; }
-            else { feeRek = 5000; isP = false; }
+            let fFinal = (fee < 1000 && p) ? fee + "p" : dot(fee);
 
-            let total = feeRek;
-            let fFinal = (total < 1000 && isP) ? total + "p" : formatTitik(total);
-
-            output = `🪷 𓏸  FORMAT REKBER E WALLET ☏\n\nㅤ𐀶. . username penjual :: @${document.getElementById('r_sell')?.value || "..."}\nㅤ𐀶. . username pembeli :: @${document.getElementById('r_buy')?.value || "..."}\nㅤ𐀶. . jenis orderan :: ${document.getElementById('r_item')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatTitik(nom)}\nㅤ𐀶. . fee rekber :: ${fFinal}\nㅤ𐀶. . penjual via :: ${vp}\nㅤ𐀶. . pembeli via :: ${vb}\nㅤ𐀶. . pakai qris :: ${qris}\nㅤ𐀶. . sudah subs @roserekber ? :: ${subs}`;
-        } else if(activeTab === 'jaspin') {
-            let nom = parseInt(document.getElementById('j_nom')?.dataset.raw) || 0;
-            output = `🪷 𓏸  FORMAT JASPIN ☏\n\nㅤ𐀶. . username :: @${document.getElementById('j_user')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatTitik(nom)}\nㅤ𐀶. . fee :: 1.000\nㅤ𐀶. . nomor :: ${document.getElementById('j_nan')?.value || "..."}`;
+            out = `🪷 𓏸 FORMAT REKBER E WALLET ☏\n\nㅤ𐀶. . penjual :: @${document.getElementById('s')?.value || "..."}\nㅤ𐀶. . pembeli :: @${document.getElementById('b')?.value || "..."}\nㅤ𐀶. . barang :: ${document.getElementById('i')?.value || "..."}\nㅤ𐀶. . nominal :: ${dot(nom)}\nㅤ𐀶. . fee rekber :: ${fFinal}\nㅤ𐀶. . penjual via :: ${document.getElementById('v1')?.value || "..."}\nㅤ𐀶. . pembeli via :: ${document.getElementById('v2')?.value || "..."}\nㅤ𐀶. . qris :: ${document.getElementById('qris').value}`;
         } else {
-            let nom = parseInt(document.getElementById('c_nom')?.dataset.raw) || 0;
-            output = `🪷 𓏸  FORMAT CONVERT ☏\n\nㅤ𐀶. . username :: @${document.getElementById('c_user')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatTitik(nom)}\nㅤ𐀶. . via :: ${document.getElementById('c_dari')?.value || "..."} ke ${document.getElementById('c_ke')?.value || "..."}`;
+            out = `🪷 𓏸 FORMAT ${mode.toUpperCase()} ☏\n\nㅤ𐀶. . user :: @${document.getElementById('u')?.value || "..."}\nㅤ𐀶. . nominal :: ${dot(nom)}\nㅤ𐀶. . data :: ${document.getElementById('ext')?.value || "..."}`;
         }
-        document.getElementById('output').innerText = output;
+        document.getElementById('out').innerText = out;
     }
 
-    function copyResult() {
-        navigator.clipboard.writeText(document.getElementById('output').innerText);
-        alert("Format berhasil disalin ke clipboard!");
+    function copy() {
+        navigator.clipboard.writeText(document.getElementById('out').innerText);
+        alert("Format Berhasil Disalin!");
     }
-
-    renderFields();
 </script>
+
 </body>
 </html>
