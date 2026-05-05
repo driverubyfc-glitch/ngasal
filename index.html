@@ -3,508 +3,321 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>iOS x Telegram - 3 Pages (Order Concept)</title>
+  <title>iOS x Telegram - Smart Order</title>
   <style>
     :root{
-      --bg:#f4f6fa; --text:#0f172a; --muted:rgba(15,23,42,.55);
-      --line:rgba(15,23,42,.10); --shadow:0 18px 60px rgba(2,6,23,.12);
-      --tg:#229ED9; --tg2:#1b86b6;
-      --radius-xl:28px; --radius-lg:20px; --blur:blur(18px);
-      --device:430px;
+      --bg: #f4f6fa;
+      --card: rgba(255,255,255,.86);
+      --card2: rgba(255,255,255,.72);
+      --text: #0f172a;
+      --muted: rgba(15,23,42,.55);
+      --line: rgba(15,23,42,.10);
+      --shadow: 0 18px 60px rgba(2,6,23,.12);
+
+      /* Telegram-ish */
+      --tg: #229ED9;
+      --tg2: #1b86b6;
+
+      /* iOS-ish */
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --blur: blur(18px);
+
+      /* preview width */
+      --device: 430px;
     }
-    *{box-sizing:border-box}
+
+    *{ box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
     body{
-      margin:0; font-family:system-ui,-apple-system,"SF Pro Display","SF Pro Text",Segoe UI,Roboto,Helvetica,Arial;
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "SF Pro Display","SF Pro Text", Segoe UI, Roboto, Helvetica, Arial;
       background: radial-gradient(1200px 600px at 20% -10%, rgba(34,158,217,.18), transparent 60%),
                   radial-gradient(900px 500px at 90% 10%, rgba(34,158,217,.10), transparent 55%),
-                  linear-gradient(180deg,#eef3fb,var(--bg));
-      display:flex; justify-content:center; padding:18px 12px 36px; color:var(--text);
-    }
-    .phone{
-      width:min(var(--device),100%); border-radius:36px; overflow:hidden;
-      border:1px solid rgba(2,6,23,.10); box-shadow:0 30px 90px rgba(2,6,23,.20);
-      background:var(--bg); position:relative;
-    }
-    .safe{ padding-top:max(12px, env(safe-area-inset-top)); padding-bottom:max(18px, env(safe-area-inset-bottom)); }
-
-    /* TOP */
-    .top{
-      position:sticky; top:0; z-index:30; padding:14px 14px 12px;
-      background:rgba(244,246,250,.70); backdrop-filter:var(--blur);
-      border-bottom:1px solid rgba(15,23,42,.08);
-    }
-    .topRow{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
-    .brand{ display:flex; align-items:center; gap:10px; min-width:140px; }
-    .logo{
-      width:40px; height:40px; border-radius:999px; display:grid; place-items:center; font-weight:900;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(255,255,255,.25)),
-                  linear-gradient(180deg, rgba(34,158,217,.35), rgba(34,158,217,.15));
-      border:1px solid rgba(34,158,217,.25); color:rgba(15,23,42,.75);
-    }
-    .brandText{ line-height:1.1; }
-    .brandText b{ display:block; font-size:14px; }
-    .brandText span{ display:block; font-size:12px; color:var(--muted); }
-
-    .headerActions{ display:flex; align-items:center; gap:10px; }
-    .iconBtn{
-      width:42px; height:42px; border-radius:14px; cursor:pointer; user-select:none;
-      border:1px solid rgba(15,23,42,.10); background:rgba(255,255,255,.72);
-      box-shadow:0 16px 36px rgba(2,6,23,.08); display:grid; place-items:center;
-    }
-    .iconDot{ width:16px; height:16px; border-radius:999px; background:linear-gradient(180deg,var(--tg),var(--tg2)); box-shadow:0 10px 22px rgba(34,158,217,.22); }
-    .search{
-      margin-top:12px; display:flex; gap:10px; align-items:center;
-      background:rgba(255,255,255,.70); border:1px solid rgba(15,23,42,.10);
-      border-radius:16px; padding:10px 12px;
-    }
-    .search input{ border:0; outline:none; width:100%; background:transparent; font-size:14px; color:var(--text); }
-    .chip{
-      font-size:12px; font-weight:800; color:rgba(15,23,42,.76);
-      background:rgba(34,158,217,.12); border:1px solid rgba(34,158,217,.20);
-      padding:8px 10px; border-radius:999px; white-space:nowrap; cursor:pointer;
-    }
-
-    /* PAGES */
-    .page{ display:none; padding:14px 14px 92px; }
-    .page.active{ display:block; }
-    .sectionTitle{ display:flex; align-items:flex-end; justify-content:space-between; gap:10px; margin:10px 2px 10px; }
-    .sectionTitle h3{ margin:0; font-size:16px; letter-spacing:.2px; }
-    .sectionTitle span{ font-size:12px; color:var(--muted); font-weight:700; }
-
-    .card{
-      background:rgba(255,255,255,.86); border:1px solid rgba(15,23,42,.10);
-      border-radius:var(--radius-xl); box-shadow:var(--shadow); backdrop-filter:var(--blur);
-    }
-    .card.pad{ padding:14px; }
-
-    /* Tabs bottom */
-    .tabs{
-      position:absolute; left:0; right:0; bottom:0; z-index:40;
-      padding:10px 12px max(12px, env(safe-area-inset-bottom));
-      background:rgba(244,246,250,.70); backdrop-filter:var(--blur);
-      border-top:1px solid rgba(15,23,42,.08);
-    }
-    .tabBar{ display:flex; gap:8px; background:rgba(15,23,42,.07); border-radius:20px; padding:6px; }
-    .tab{
-      flex:1; border:0; padding:10px 10px; border-radius:16px;
-      background:transparent; font-weight:900; color:rgba(15,23,42,.62); cursor:pointer;
-    }
-    .tab.active{
-      background:rgba(255,255,255,.86); color:rgba(15,23,42,.92);
-      box-shadow:0 12px 26px rgba(2,6,23,.10); border:1px solid rgba(15,23,42,.10);
-    }
-
-    /* ===== Order Concept Styles ===== */
-    .segWrap{
-      background:rgba(15,23,42,.07);
-      border-radius:18px;
-      padding:6px;
+                  linear-gradient(180deg, #eef3fb, var(--bg));
       display:flex;
-      gap:6px;
-      margin-bottom:12px;
-    }
-    .segBtn{
-      flex:1; border:0; cursor:pointer;
-      padding:10px 10px;
-      border-radius:14px;
-      background:transparent;
-      font-weight:900;
-      color:rgba(15,23,42,.62);
-    }
-    .segBtn.active{
-      background:rgba(255,255,255,.90);
-      border:1px solid rgba(15,23,42,.10);
-      box-shadow:0 10px 22px rgba(2,6,23,.08);
-      color:rgba(15,23,42,.92);
-    }
-    .field{
-      background:rgba(255,255,255,.74);
-      border:1px solid rgba(15,23,42,.10);
-      border-radius:18px;
-      padding:12px;
-      margin-top:10px;
-    }
-    .field label{
-      display:block; font-size:12px; color:rgba(15,23,42,.65);
-      font-weight:900; margin-bottom:6px;
-    }
-    .field input,.field select,.field textarea{
-      width:100%; border:0; outline:none; background:transparent;
-      font-size:14px; color:var(--text);
-      font-family:inherit;
-    }
-    .row2{ display:flex; gap:10px; }
-    .row2 .field{ flex:1; }
-    .hint{ font-size:12px; color:var(--muted); margin-top:10px; line-height:1.35; }
-
-    .orderText{
-      min-height:160px;
-      resize:none;
-      background:rgba(255,255,255,.65);
-      border-radius:16px;
-      padding:12px;
-      border:1px dashed rgba(34,158,217,.35);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size:12.5px;
-      line-height:1.45;
+      justify-content:center;
+      padding: 18px 12px 36px;
+      color: var(--text);
     }
 
-    .cta{
-      margin-top:12px; width:100%;
-      border:0; border-radius:18px;
-      padding:14px 14px;
-      font-weight:900; letter-spacing:.3px;
-      color:rgba(255,255,255,.95);
-      background:linear-gradient(180deg,var(--tg),var(--tg2));
-      box-shadow:0 20px 50px rgba(34,158,217,.25);
-      cursor:pointer;
+    /* phone shell */
+    .phone{
+      width: min(var(--device), 100%);
+      border-radius: 36px;
+      overflow:hidden;
+      border: 1px solid rgba(2,6,23,.10);
+      box-shadow: 0 30px 90px rgba(2,6,23,.20);
+      background: var(--bg);
+      position:relative;
+      min-height: 844px;
     }
 
-    .toast{
+    .safe{
+      padding-top: max(12px, env(safe-area-inset-top));
+      padding-bottom: max(18px, env(safe-area-inset-bottom));
+    }
+
+    /* top header */
+    .top{
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      padding: 14px 14px 12px;
+      background: rgba(244,246,250,.70);
+      backdrop-filter: var(--blur);
+      border-bottom: 1px solid rgba(15,23,42,.08);
+    }
+    .topRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+    }
+    .logo{
+      width: 40px; height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--tg), var(--tg2));
+      display:grid;
+      place-items:center;
+      font-weight: 900;
+      color: white;
+    }
+    .brandText b{ display:block; font-size: 14px; }
+    .brandText span{ display:block; font-size: 12px; color: var(--muted); }
+
+    .headerActions{ display:flex; align-items:center; gap: 10px; }
+    .iconBtn{ width: 42px; height: 42px; border-radius: 14px; border: 1px solid rgba(15,23,42,.10); background: rgba(255,255,255,.72); display:grid; place-items:center; cursor:pointer; }
+
+    /* pages */
+    .page{ display:none; padding: 14px 14px 120px; animation: fadeIn 0.3s ease; }
+    .page.active{ display:block; }
+    @keyframes fadeIn { from{opacity:0; transform: translateY(8px);} to{opacity:1; transform: translateY(0);} }
+
+    /* iOS cards */
+    .card{ background: var(--card); border: 1px solid rgba(15,23,42,.10); border-radius: var(--radius-xl); box-shadow: var(--shadow); backdrop-filter: var(--blur); }
+    .card.pad{ padding: 18px; }
+
+    .sectionTitle{ display:flex; align-items:flex-end; justify-content:space-between; margin: 10px 2px 10px; }
+    .sectionTitle h3{ margin:0; font-size: 16px; font-weight: 800; }
+    .sectionTitle span{ font-size: 11px; color: var(--muted); font-weight: 700; }
+
+    /* Tabs Pill */
+    .tab-pill-container{ display: flex; background: rgba(15,23,42,.05); padding: 4px; border-radius: 16px; margin-bottom: 15px; }
+    .tab-pill{ flex: 1; padding: 10px; border: none; border-radius: 12px; background: transparent; font-size: 13px; font-weight: 700; color: var(--muted); cursor: pointer; transition: 0.2s; }
+    .tab-pill.active{ background: white; color: var(--tg); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+
+    /* Form */
+    .field{ background: rgba(255,255,255,.74); border: 1px solid rgba(15,23,42,.10); border-radius: 18px; padding: 12px; margin-bottom: 10px; }
+    .field label{ display:block; font-size: 11px; color: var(--tg); font-weight: 900; margin-bottom: 4px; text-transform: uppercase; }
+    .field input, .field select{ width:100%; border:0; outline:none; background: transparent; font-size: 14px; color: var(--text); }
+
+    #orderText {
+      width: 100%; min-height: 140px; background: #f0f7ff; padding: 16px; border-radius: 20px; 
+      margin-top: 15px; font-family: 'SF Mono', monospace; font-size: 12px;
+      border: 1px dashed rgba(34,158,217,0.3); color: #444; line-height: 1.5; outline: none; resize: none;
+    }
+
+    .cta{ width:100%; border:0; border-radius: 18px; padding: 16px; font-weight: 900; color: white; background: linear-gradient(180deg, var(--tg), var(--tg2)); box-shadow: 0 15px 35px rgba(34,158,217,.25); cursor:pointer; margin-top: 12px; }
+
+    /* bottom tab bar */
+    .tabs{
       position:absolute;
-      left:50%; bottom:86px; transform:translateX(-50%);
-      background:rgba(15,23,42,.92);
-      color:#fff;
-      padding:10px 12px;
-      border-radius:14px;
-      font-size:12px;
-      font-weight:800;
-      opacity:0;
-      pointer-events:none;
-      transition:.2s ease;
-      border:1px solid rgba(255,255,255,.12);
+      left:0; right:0; bottom:0;
+      padding: 10px 12px 30px;
+      background: rgba(244,246,250,.70);
+      backdrop-filter: var(--blur);
+      border-top: 1px solid rgba(15,23,42,.08);
+      z-index: 40;
     }
-    .toast.show{ opacity:1; }
+    .tabBar{ display:flex; gap: 8px; background: rgba(15,23,42,.07); border-radius: 20px; padding: 6px; }
+    .tab{ flex:1; border:0; padding: 12px; border-radius: 16px; background: transparent; font-weight: 800; color: var(--muted); cursor:pointer; font-size: 13px; }
+    .tab.active{ background: white; color: var(--text); box-shadow: 0 8px 20px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05); }
+
+    .chatRow{ display:flex; gap: 12px; align-items:center; padding: 12px; border-radius: 18px; cursor:pointer; }
+    .chatAvatar{ width: 44px; height: 44px; border-radius: 999px; background: rgba(34,158,217,.1); border: 1px solid rgba(34,158,217,.2); display:grid; place-items:center; font-weight: 900; color: var(--tg); }
   </style>
 </head>
 
 <body>
   <div class="phone safe" id="app">
-    <div class="top">
+    <!-- TOP -->
+    <header class="top">
       <div class="topRow">
         <div class="brand">
-          <div class="logo">TG</div>
+          <div class="logo">RT</div>
           <div class="brandText">
-            <b>iOS x Telegram UI</b>
-            <span>layout demo • 3 pages</span>
+            <b>Rekberr TeLe</b>
+            <span>Automated Smart Form</span>
           </div>
         </div>
         <div class="headerActions">
-          <div class="iconBtn" title="Notifikasi"><div class="iconDot"></div></div>
-          <div class="iconBtn" title="Menu">≡</div>
+          <div class="iconBtn">≡</div>
         </div>
       </div>
+    </header>
 
-      <div class="search">
-        <input placeholder="Cari layanan / keyword..." />
-        <div class="chip">Quick</div>
-      </div>
-    </div>
-
-    <!-- PAGE 1 (simple) -->
+    <!-- PAGE 1: HOME -->
     <section class="page active" id="page-1">
-      <div class="sectionTitle">
-        <h3>Home</h3><span>placeholder</span>
+      <div class="sectionTitle"><h3>Dashboard</h3><span>Sistem Online ✅</span></div>
+      <div class="card pad" style="background: linear-gradient(135deg, var(--tg), var(--tg2)); color: white; border: none; margin-bottom: 20px;">
+        <h4 style="margin:0">Selamat Datang!</h4>
+        <p style="font-size: 12px; opacity: 0.9; margin: 8px 0 0;">Silahkan pilih layanan untuk membuat format transaksi.</p>
       </div>
-      <div class="card pad">
-        Ini page home (biar fokus kita di struktur order/page-2).
+      <div class="card">
+        <div class="chatRow" onclick="go(2)">
+          <div class="chatAvatar">📝</div>
+          <div style="flex:1"><b style="font-size: 14px;">Buat Order</b><br><small style="color:var(--muted)">Rekber, Convert, & Jaspin</small></div>
+          <div>›</div>
+        </div>
       </div>
     </section>
 
-    <!-- PAGE 2 (ORDER: sesuai konsep file kamu) -->
+    <!-- PAGE 2: ORDER CENTER (MODIFIED) -->
     <section class="page" id="page-2">
-      <div class="sectionTitle">
-        <h3>Order</h3>
-        <span>service → format → copy & go</span>
+      <div class="sectionTitle"><h3>Order Center</h3><span>Auto-Logic v2.4</span></div>
+      
+      <div class="tab-pill-container">
+        <button class="tab-pill active" onclick="setService('jaspin', this)">Jaspin</button>
+        <button class="tab-pill" onclick="setService('convert', this)">Convert</button>
+        <button class="tab-pill" onclick="setService('rekber', this)">Rekber</button>
       </div>
 
       <div class="card pad">
-        <!-- Service picker (konsep setService) -->
-        <div class="segWrap">
-          <button class="segBtn active" id="btn-jaspin" onclick="setService('jaspin')">Jaspin</button>
-          <button class="segBtn" id="btn-convert" onclick="setService('convert')">Convert</button>
-          <button class="segBtn" id="btn-rekber" onclick="setService('rekber')">Rekber</button>
+        <div id="form-fields"></div>
+        
+        <div class="field" id="qris-wrapper">
+          <label>Pakai QRIS?</label>
+          <select id="qris_global" onchange="updateAll()">
+            <option value="no">No</option>
+            <option value="yes only dana">Yes Only Dana</option>
+          </select>
         </div>
 
-        <!-- ====== FORMS (show/hide) ====== -->
-        <div id="form-jaspin">
-          <div class="field">
-            <label>Username</label>
-            <input id="user_j" placeholder="roserekber" oninput="updateAll()" />
-          </div>
-          <div class="field">
-            <label>Nominal</label>
-            <input id="nom_j" placeholder="8.000" inputmode="numeric" oninput="formatInput(this); updateAll()" />
-          </div>
-          <div class="field">
-            <label>Nomor + A.N</label>
-            <input id="nan_j" placeholder="0812... a.n Rose" oninput="updateAll()" />
-          </div>
+        <div class="field">
+          <label>Subs @Rekberr TeLe?</label>
+          <select id="subs_global" onchange="updateAll()">
+            <option value="sudah">Sudah</option>
+            <option value="belum">Belum</option>
+          </select>
         </div>
-
-        <div id="form-convert" style="display:none;">
-          <div class="field">
-            <label>Tipe E-wallet</label>
-            <select id="tipe_cv" onchange="updateAll()">
-              <option value="prem">E-wallet Premium</option>
-              <option value="nonprem">E-wallet Non-Premium</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Username</label>
-            <input id="user_c" placeholder="roserekber" oninput="updateAll()" />
-          </div>
-          <div class="field">
-            <label>Nominal Convert</label>
-            <input id="nom_c" placeholder="500.000" inputmode="numeric" oninput="formatInput(this); updateAll()" />
-          </div>
-
-          <div class="row2">
-            <div class="field">
-              <label>Dari</label>
-              <input id="dari_c" placeholder="Dana" oninput="updateAll()" />
-            </div>
-            <div class="field">
-              <label>Ke</label>
-              <input id="ke_c" placeholder="Gopay" oninput="updateAll()" />
-            </div>
-          </div>
-        </div>
-
-        <div id="form-rekber" style="display:none;">
-          <div class="field">
-            <label>Username Penjual</label>
-            <input id="user_p_rek" placeholder="penjual" oninput="updateAll()" />
-          </div>
-          <div class="field">
-            <label>Username Pembeli</label>
-            <input id="user_b_rek" placeholder="pembeli" oninput="updateAll()" />
-          </div>
-          <div class="field">
-            <label>Jenis Orderan</label>
-            <input id="jenis_rek" placeholder="Acc, dll" oninput="updateAll()" />
-          </div>
-          <div class="field">
-            <label>Nominal</label>
-            <input id="nom_rek" placeholder="1.000.000" inputmode="numeric" oninput="formatInput(this); updateAll()" />
-          </div>
-
-          <div class="row2">
-            <div class="field">
-              <label>Penjual via (tujuan)</label>
-              <input id="p_via" placeholder="Dana" oninput="updateAll()" />
-            </div>
-            <div class="field">
-              <label>Pembeli via (asal)</label>
-              <input id="b_via" placeholder="Gopay" oninput="updateAll()" />
-            </div>
-          </div>
-
-          <div class="hint">Jika via berbeda, fee convert bisa ditambahkan (opsional sesuai logic kamu).</div>
-        </div>
-
-        <!-- Global (seperti di code kamu) -->
-        <div class="row2">
-          <div class="field">
-            <label>Pakai QRIS?</label>
-            <select id="qris_global" onchange="updateAll()">
-              <option value="no">No</option>
-              <option value="yes only dana">Yes Only Dana</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Subs @roserekber?</label>
-            <select id="subs_global" onchange="updateAll()">
-              <option value="sudah">Sudah</option>
-              <option value="belum">Belum</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- ====== OUTPUT TEXTAREA (konsep orderText) ====== -->
-        <div class="field" style="margin-top:12px;">
-          <label>Format (auto)</label>
-          <textarea id="orderText" class="orderText" readonly onclick="this.select()"></textarea>
-        </div>
-
-        <!-- ====== COPY & GO (konsep copyAndGo) ====== -->
-        <button class="cta" onclick="copyAndGo()">COPY &amp; GO KE BOT</button>
-        <div class="hint">Tombol ini akan: copy teks → buka Telegram bot.</div>
+        
+        <textarea id="orderText" readonly></textarea>
+        
+        <button class="cta" onclick="copyAndGo()">SALIN & KIRIM KE BOT</button>
       </div>
     </section>
 
-    <!-- PAGE 3 (simple) -->
+    <!-- PAGE 3: PROFILE -->
     <section class="page" id="page-3">
-      <div class="sectionTitle">
-        <h3>Profile</h3><span>placeholder</span>
-      </div>
-      <div class="card pad">
-        Ini page profile (placeholder).
+      <div class="sectionTitle"><h3>Profile</h3></div>
+      <div class="card pad" style="display:flex; align-items:center; gap:15px;">
+        <div class="chatAvatar" style="width:60px; height:60px; font-size: 24px;">RT</div>
+        <div><b>@Rekberr TeLe</b><br><small style="color:var(--muted)">Official Digital Service</small></div>
       </div>
     </section>
-
-    <div class="toast" id="toast">Copied!</div>
 
     <!-- Bottom Tabs -->
-    <div class="tabs">
+    <nav class="tabs">
       <div class="tabBar">
         <button class="tab active" data-page="1">Home</button>
         <button class="tab" data-page="2">Order</button>
         <button class="tab" data-page="3">Profile</button>
       </div>
-    </div>
+    </nav>
   </div>
 
   <script>
-    // ===== Bottom nav =====
-    const tabs = document.querySelectorAll('.tab');
-    const pages = {
-      1: document.getElementById('page-1'),
-      2: document.getElementById('page-2'),
-      3: document.getElementById('page-3')
-    };
-    function go(n){
-      Object.values(pages).forEach(p => p.classList.remove('active'));
-      pages[n].classList.add('active');
-      tabs.forEach(t => t.classList.toggle('active', t.dataset.page === String(n)));
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    tabs.forEach(t => t.addEventListener('click', () => go(Number(t.dataset.page))));
-
-    // ===== Order concept (setService + orderText + copyAndGo) =====
     let currentService = 'jaspin';
 
-    function setService(name){
-      currentService = name;
+    function go(n){
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + n).classList.add('active');
+      document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.page === String(n)));
+      if(n === 2) setService(currentService);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => go(Number(t.dataset.page))));
 
-      // segmented active state
-      document.getElementById('btn-jaspin').classList.toggle('active', name === 'jaspin');
-      document.getElementById('btn-convert').classList.toggle('active', name === 'convert');
-      document.getElementById('btn-rekber').classList.toggle('active', name === 'rekber');
+    function setService(service, el) {
+      currentService = service;
+      if(el) {
+        document.querySelectorAll('.tab-pill').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+      }
+      const container = document.getElementById('form-fields');
+      const qrisWrapper = document.getElementById('qris-wrapper');
 
-      // show/hide forms
-      document.getElementById('form-jaspin').style.display = name === 'jaspin' ? '' : 'none';
-      document.getElementById('form-convert').style.display = name === 'convert' ? '' : 'none';
-      document.getElementById('form-rekber').style.display = name === 'rekber' ? '' : 'none';
-
+      if(service === 'jaspin') {
+        qrisWrapper.style.display = 'none';
+        container.innerHTML = `
+          <div class="field"><label>Username</label><input type="text" id="user_j" placeholder="username" oninput="updateAll()"></div>
+          <div class="field"><label>Nominal</label><input type="text" id="nom_j" placeholder="8.000" oninput="formatInput(this); updateAll()"></div>
+          <div class="field"><label>Nomor + A.N</label><input type="text" id="nan_j" placeholder="0812... a.n Rose" oninput="updateAll()"></div>
+        `;
+      } else if(service === 'convert') {
+        qrisWrapper.style.display = 'block';
+        container.innerHTML = `
+          <div class="field"><label>Username</label><input type="text" id="user_c" placeholder="username" oninput="updateAll()"></div>
+          <div class="field"><label>Nominal Convert</label><input type="text" id="nom_c" placeholder="500.000" oninput="formatInput(this); updateAll()"></div>
+          <div style="display:flex; gap:10px;">
+            <div class="field" style="flex:1"><label>Dari</label><input type="text" id="dari_c" placeholder="Dana" oninput="updateAll()"></div>
+            <div class="field" style="flex:1"><label>Ke</label><input type="text" id="ke_c" placeholder="Gopay" oninput="updateAll()"></div>
+          </div>
+        `;
+      } else {
+        qrisWrapper.style.display = 'block';
+        container.innerHTML = `
+          <div class="field"><label>Username Penjual</label><input type="text" id="user_p_rek" placeholder="penjual" oninput="updateAll()"></div>
+          <div class="field"><label>Username Pembeli</label><input type="text" id="user_b_rek" placeholder="pembeli" oninput="updateAll()"></div>
+          <div class="field"><label>Nominal</label><input type="text" id="nom_rek" placeholder="1.000.000" oninput="formatInput(this); updateAll()"></div>
+        `;
+      }
       updateAll();
     }
 
-    function toast(msg){
-      const el = document.getElementById('toast');
-      el.textContent = msg;
-      el.classList.add('show');
-      setTimeout(()=> el.classList.remove('show'), 1400);
-    }
-
-    function formatRibuan(n){
-      return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
-    function formatInput(el){
-      let val = (el.value || "").replace(/\D/g,'');
+    function formatRibuan(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+    function formatInput(el) {
+      let val = el.value.replace(/\D/g, '');
       el.value = val ? formatRibuan(val) : '';
     }
 
-    function updateAll(){
-      if(currentService === 'jaspin') updateJaspin();
-      else if(currentService === 'convert') updateConvert();
-      else updateRekber();
-    }
+    function updateAll() {
+      const output = document.getElementById('orderText');
+      const subs = document.getElementById('subs_global').value;
+      const qris = document.getElementById('qris_global').value;
 
-    // ==== Template generators (boleh kamu ganti isi kalimatnya) ====
-    function updateJaspin(){
-      const raw = (document.getElementById('nom_j').value || '').replace(/\./g,'');
-      const user = document.getElementById('user_j').value || '...';
-      const nan  = document.getElementById('nan_j').value || '...';
-
-      // contoh fee simple (opsional)
-      const nom = parseInt(raw || '0', 10) || 0;
-      let fee = "0";
-      if (nom >= 10 && nom < 1000) fee = "free";
-      else if (nom >= 1000) fee = "cek admin";
-
-      const text =
-`🪷 FORMAT JASPIN
-
-- username : @${user}
-- nominal  : ${raw ? formatRibuan(raw) : "0"}
-- fee      : ${fee}
-- nomor+a.n: ${nan}
-- qris     : ${document.getElementById('qris_global').value}
-- subs?    : ${document.getElementById('subs_global').value}
-`;
-      document.getElementById('orderText').value = text;
-    }
-
-    function updateConvert(){
-      const raw = (document.getElementById('nom_c').value || '').replace(/\./g,'');
-      const user = document.getElementById('user_c').value || '...';
-      const tipe = document.getElementById('tipe_cv').value;
-      const dari = document.getElementById('dari_c').value || '...';
-      const ke   = document.getElementById('ke_c').value || '...';
-
-      const text =
-`🪷 FORMAT CONVERT
-
-- username : @${user}
-- tipe     : ${tipe}
-- nominal  : ${raw ? formatRibuan(raw) : "0"}
-- dari     : ${dari}
-- ke       : ${ke}
-- qris     : ${document.getElementById('qris_global').value}
-- subs?    : ${document.getElementById('subs_global').value}
-`;
-      document.getElementById('orderText').value = text;
-    }
-
-    function updateRekber(){
-      const raw = (document.getElementById('nom_rek').value || '').replace(/\./g,'');
-      const penjual = document.getElementById('user_p_rek').value || '...';
-      const pembeli = document.getElementById('user_b_rek').value || '...';
-      const jenis   = document.getElementById('jenis_rek').value || '...';
-      const pvia    = document.getElementById('p_via').value || '...';
-      const bvia    = document.getElementById('b_via').value || '...';
-
-      const text =
-`🪷 FORMAT REKBER
-
-- penjual  : @${penjual}
-- pembeli  : @${pembeli}
-- jenis    : ${jenis}
-- nominal  : ${raw ? formatRibuan(raw) : "0"}
-- penjual via: ${pvia}
-- pembeli via: ${bvia}
-- qris     : ${document.getElementById('qris_global').value}
-- subs?    : ${document.getElementById('subs_global').value}
-`;
-      document.getElementById('orderText').value = text;
-    }
-
-    // ===== COPY & GO (sesuai konsep file kamu) =====
-    async function copyAndGo(){
-      const ta = document.getElementById('orderText');
-      const value = ta.value || '';
-
-      try{
-        await navigator.clipboard.writeText(value);
-        toast("Pesan disalin ✓");
-      }catch(e){
-        // fallback
-        ta.removeAttribute('readonly');
-        ta.select();
-        document.execCommand('copy');
-        ta.setAttribute('readonly','readonly');
-        toast("Pesan disalin ✓");
+      if(currentService === 'jaspin') {
+        let raw = (document.getElementById('nom_j')?.value || "0").replace(/\./g, '');
+        let nom = parseInt(raw) || 0;
+        let fee = (nom < 21000) ? (Math.floor(nom/1000)*10 - 5) : (195 + (Math.floor(nom/1000)-20)*10);
+        output.value = `🪷 𓏸  FORMAT JASPIN ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_j')?.value || "..."}\nㅤ𐀶. . jaspin nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . fee jaspin :: ${fee < 1000 ? fee+'p' : formatRibuan(fee)}\nㅤ𐀶. . nomor + a.n :: ${document.getElementById('nan_j')?.value || "..."}\nㅤ𐀶. . pakai qris :: yes only dana\nㅤ𐀶. . sudah subs @Rekberr TeLe ? :: ${subs}`;
+      } 
+      else if(currentService === 'convert') {
+        let raw = (document.getElementById('nom_c')?.value || "0").replace(/\./g, '');
+        output.value = `🪷 𓏸  FORMAT CONVERT ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_c')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . dari :: ${document.getElementById('dari_c')?.value || "..."}\nㅤ𐀶. . ke :: ${document.getElementById('ke_c')?.value || "..."}\nㅤ𐀶. . pakai qris :: ${qris}\nㅤ𐀶. . sudah subs @Rekberr TeLe ? :: ${subs}`;
       }
+      else {
+        let raw = (document.getElementById('nom_rek')?.value || "0").replace(/\./g, '');
+        output.value = `🪷 𓏸  FORMAT REKBER ☏\n\nㅤ𐀶. . penjual :: @${document.getElementById('user_p_rek')?.value || "..."}\nㅤ𐀶. . pembeli :: @${document.getElementById('user_b_rek')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . pakai qris :: ${qris}\nㅤ𐀶. . sudah subs @Rekberr TeLe ? :: ${subs}`;
+      }
+    }
 
+    function copyAndGo() {
+      const copyText = document.getElementById("orderText");
+      copyText.select();
+      copyText.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(copyText.value);
+      alert("Pesan disalin!");
       window.open("https://t.me/rekberrtelebot", "_blank");
     }
 
-    // init
-    window.onload = () => {
-      setService('jaspin');
-      updateAll();
-    };
+    window.onload = () => setService('jaspin');
   </script>
 </body>
 </html>
