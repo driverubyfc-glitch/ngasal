@@ -3,51 +3,52 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>iOS + Telegram Layout (Page 1-3)</title>
+  <title>iOS x Telegram - 3 Pages</title>
   <style>
     :root{
-      --bg: #f5f6f8;
-      --card: #ffffff;
+      --bg: #f4f6fa;
+      --card: rgba(255,255,255,.86);
+      --card2: rgba(255,255,255,.72);
       --text: #0f172a;
-      --muted: #6b7280;
+      --muted: rgba(15,23,42,.55);
+      --line: rgba(15,23,42,.10);
+      --shadow: 0 18px 60px rgba(2,6,23,.12);
 
       /* Telegram-ish */
       --tg: #229ED9;
-      --tg-dark: #1b86b6;
-
-      /* Accent (mirip hijau contoh, tapi dibikin lebih “soft”) */
-      --accent: #0b7a4b;
-      --accent-soft: #0b7a4b1a;
+      --tg2: #1b86b6;
 
       /* iOS-ish */
-      --radius-xl: 22px;
-      --radius-lg: 18px;
-      --radius-md: 14px;
-      --shadow: 0 10px 30px rgba(15, 23, 42, .08);
-      --hairline: rgba(15, 23, 42, .10);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --blur: blur(18px);
 
-      --device-w: 430px; /* iPhone-ish preview width */
+      /* preview width */
+      --device: 430px;
     }
 
-    *{ box-sizing: border-box; }
+    *{ box-sizing:border-box; }
     body{
       margin:0;
-      background: linear-gradient(180deg, #eef2f7 0%, var(--bg) 40%, #f7f7fb 100%);
-      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial;
-      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, "SF Pro Display","SF Pro Text", Segoe UI, Roboto, Helvetica, Arial;
+      background: radial-gradient(1200px 600px at 20% -10%, rgba(34,158,217,.18), transparent 60%),
+                  radial-gradient(900px 500px at 90% 10%, rgba(34,158,217,.10), transparent 55%),
+                  linear-gradient(180deg, #eef3fb, var(--bg));
       display:flex;
       justify-content:center;
-      padding: 22px 12px 40px;
+      padding: 18px 12px 36px;
+      color: var(--text);
     }
 
-    /* ====== Phone frame (optional) ====== */
+    /* phone shell */
     .phone{
-      width: min(var(--device-w), 100%);
-      background: var(--bg);
-      border-radius: 34px;
-      box-shadow: 0 25px 80px rgba(2, 6, 23, .18);
+      width: min(var(--device), 100%);
+      border-radius: 36px;
       overflow:hidden;
-      border: 1px solid rgba(2, 6, 23, .08);
+      border: 1px solid rgba(2,6,23,.10);
+      box-shadow: 0 30px 90px rgba(2,6,23,.20);
+      background: var(--bg);
       position:relative;
     }
 
@@ -56,471 +57,628 @@
       padding-bottom: max(18px, env(safe-area-inset-bottom));
     }
 
-    /* ====== Top iOS segmented switcher (buat demo pindah page 1-3) ====== */
-    .switcher{
+    /* top header */
+    .top{
       position: sticky;
       top: 0;
       z-index: 30;
-      padding: 12px 14px 10px;
-      backdrop-filter: blur(14px);
-      background: rgba(245,246,248,.72);
+      padding: 14px 14px 12px;
+      background: rgba(244,246,250,.70);
+      backdrop-filter: var(--blur);
       border-bottom: 1px solid rgba(15,23,42,.08);
     }
-    .segmented{
-      display:flex;
-      background: rgba(15,23,42,.08);
-      border-radius: 14px;
-      padding: 4px;
-      gap: 4px;
-    }
-    .segmented button{
-      flex:1;
-      border:0;
-      padding: 10px 10px;
-      border-radius: 11px;
-      font-weight: 700;
-      color: rgba(15,23,42,.75);
-      background: transparent;
-      cursor:pointer;
-    }
-    .segmented button.active{
-      background: var(--card);
-      color: var(--text);
-      box-shadow: 0 6px 18px rgba(15,23,42,.10);
-    }
-
-    /* ====== Screen wrapper ====== */
-    .screen{
-      display:none;
-      padding: 14px;
-    }
-    .screen.active{ display:block; }
-
-    /* ====== iOS/Telegram header ====== */
-    .topbar{
+    .topRow{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap: 12px;
-      padding: 10px 2px 14px;
+      gap: 10px;
     }
-    .profile{
+    .brand{
       display:flex;
       align-items:center;
       gap: 10px;
-      min-width: 110px;
+      min-width: 140px;
     }
-    .avatar{
-      width: 38px; height: 38px;
+    .logo{
+      width: 40px; height: 40px;
       border-radius: 999px;
-      background: linear-gradient(180deg, rgba(34,158,217,.22), rgba(34,158,217,.10));
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(255,255,255,.25)),
+                  linear-gradient(180deg, rgba(34,158,217,.35), rgba(34,158,217,.15));
       border: 1px solid rgba(34,158,217,.25);
-      display:grid; place-items:center;
-      font-size: 10px;
-      color: rgba(15,23,42,.65);
-      font-weight: 800;
-      letter-spacing: .5px;
-    }
-    .handle{
-      font-weight: 800;
-      letter-spacing: .2px;
-      font-size: 18px;
-    }
-    .hamburger{
-      width: 44px; height: 38px;
-      border-radius: 12px;
-      border: 1px solid rgba(15,23,42,.10);
-      background: rgba(255,255,255,.75);
-      box-shadow: 0 10px 20px rgba(15,23,42,.06);
       display:grid;
       place-items:center;
-      cursor:pointer;
-    }
-    .hamburger i{
-      display:block; width: 18px; height: 2px;
-      background: rgba(15,23,42,.8);
-      border-radius: 10px;
-      position:relative;
-    }
-    .hamburger i:before,
-    .hamburger i:after{
-      content:"";
-      position:absolute; left:0;
-      width: 18px; height: 2px;
-      background: rgba(15,23,42,.8);
-      border-radius: 10px;
-    }
-    .hamburger i:before{ top:-6px; }
-    .hamburger i:after{ top:6px; }
-
-    .title{
-      text-align:center;
       font-weight: 900;
-      font-size: 28px;
-      margin: 2px 0 12px;
-      color: #0b6c46;
-      letter-spacing: .4px;
+      color: rgba(15,23,42,.75);
     }
-    .subtitle{
-      text-align:center;
-      margin: -6px 0 14px;
-      font-size: 12px;
-      color: var(--muted);
+    .brandText{
+      line-height: 1.1;
     }
+    .brandText b{ display:block; font-size: 14px; }
+    .brandText span{ display:block; font-size: 12px; color: var(--muted); }
 
-    /* ====== Buttons grid ====== */
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 8px;
+    .headerActions{
+      display:flex;
+      align-items:center;
+      gap: 10px;
     }
-    .pill{
-      border-radius: 18px;
-      padding: 16px 14px;
-      background: #0b1220; /* biar vibe Telegram dark bubble */
-      color: rgba(255,255,255,.9);
-      border: 1px solid rgba(255,255,255,.08);
-      box-shadow: 0 14px 30px rgba(2, 6, 23, .18);
-      text-align:center;
-      font-weight: 800;
-      letter-spacing: .35px;
-      font-size: 13px;
+    .iconBtn{
+      width: 42px; height: 42px;
+      border-radius: 14px;
+      border: 1px solid rgba(15,23,42,.10);
+      background: rgba(255,255,255,.72);
+      box-shadow: 0 16px 36px rgba(2,6,23,.08);
+      display:grid; place-items:center;
       cursor:pointer;
       user-select:none;
     }
-    .pill.soft{
-      background: rgba(15,23,42,.92);
-    }
-    .single{
-      margin: 12px auto 0;
-      max-width: 70%;
+    .iconDot{
+      width: 16px; height: 16px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--tg), var(--tg2));
+      box-shadow: 0 10px 22px rgba(34,158,217,.22);
     }
 
-    /* ====== List card ====== */
-    .listCard{
-      margin-top: 16px;
-      background: rgba(15,23,42,.16);
+    .search{
+      margin-top: 12px;
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      background: rgba(255,255,255,.70);
+      border: 1px solid rgba(15,23,42,.10);
+      border-radius: 16px;
+      padding: 10px 12px;
+    }
+    .search input{
+      border:0;
+      outline:none;
+      width:100%;
+      background: transparent;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .chip{
+      font-size: 12px;
+      font-weight: 800;
+      color: rgba(15,23,42,.76);
+      background: rgba(34,158,217,.12);
+      border: 1px solid rgba(34,158,217,.20);
+      padding: 8px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+      cursor:pointer;
+    }
+
+    /* pages */
+    .page{
+      display:none;
+      padding: 14px 14px 92px; /* bottom bar space */
+    }
+    .page.active{ display:block; }
+
+    /* iOS cards */
+    .card{
+      background: var(--card);
       border: 1px solid rgba(15,23,42,.10);
       border-radius: var(--radius-xl);
-      padding: 14px;
+      box-shadow: var(--shadow);
+      backdrop-filter: var(--blur);
     }
-    .listItem{
-      background: rgba(2,6,23,.88);
-      border: 1px solid rgba(255,255,255,.08);
-      color: rgba(255,255,255,.9);
-      border-radius: 18px;
-      padding: 16px 14px;
-      margin: 10px 0;
-      text-align:center;
-      font-weight: 800;
-      letter-spacing: .25px;
-      font-size: 14px;
+    .card.pad{ padding: 14px; }
+
+    .sectionTitle{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap: 10px;
+      margin: 10px 2px 10px;
     }
-    .listItem.muted{
-      color: rgba(255,255,255,.55);
+    .sectionTitle h3{
+      margin:0;
+      font-size: 16px;
+      letter-spacing: .2px;
+    }
+    .sectionTitle span{
+      font-size: 12px;
+      color: var(--muted);
       font-weight: 700;
     }
 
-    /* ====== Bottom CTA ====== */
-    .cta{
-      margin: 16px auto 6px;
-      width: min(78%, 320px);
-      border-radius: 22px;
-      padding: 16px 14px;
-      background: linear-gradient(180deg, rgba(34,158,217,.20), rgba(34,158,217,.10));
-      border: 1px solid rgba(34,158,217,.25);
-      color: rgba(15,23,42,.92);
-      font-weight: 900;
-      letter-spacing: .4px;
-      text-align:center;
-      box-shadow: 0 18px 40px rgba(34,158,217,.14);
+    /* Page 1 - quick actions */
+    .quickGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .action{
+      padding: 14px;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(15,23,42,.10);
+      background: rgba(255,255,255,.74);
+      backdrop-filter: var(--blur);
       cursor:pointer;
     }
-
-    /* ====== Drawer (Page 2) ====== */
-    .backdrop{
-      position:absolute;
-      inset:0;
-      background: rgba(2,6,23,.40);
-      backdrop-filter: blur(6px);
-      opacity:0;
-      pointer-events:none;
-      transition: .25s ease;
-      z-index: 40;
+    .actionTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 10px;
     }
-    .drawer{
-      position:absolute;
-      top:0; right:0;
-      height: 100%;
-      width: min(78%, 320px);
-      background: rgba(245,246,248,.86);
-      backdrop-filter: blur(18px);
-      border-left: 1px solid rgba(15,23,42,.10);
-      box-shadow: -18px 0 60px rgba(2,6,23,.25);
-      transform: translateX(110%);
-      transition: .25s ease;
-      z-index: 50;
-      padding: max(18px, env(safe-area-inset-top)) 16px 18px;
+    .badge{
+      font-size: 12px;
+      font-weight: 900;
+      padding: 6px 10px;
+      border-radius: 999px;
+      color: rgba(255,255,255,.92);
+      background: linear-gradient(180deg, var(--tg), var(--tg2));
+      box-shadow: 0 14px 30px rgba(34,158,217,.18);
     }
-    .drawer h4{
-      margin: 10px 0 14px;
-      font-size: 26px;
-      letter-spacing: .6px;
-    }
-    .drawer a{
-      display:block;
-      padding: 12px 12px;
-      margin: 8px 0;
-      border-radius: 14px;
+    .arrow{
+      width: 34px; height: 34px;
+      border-radius: 12px;
+      background: rgba(15,23,42,.06);
       border: 1px solid rgba(15,23,42,.10);
-      background: rgba(255,255,255,.70);
-      color: rgba(15,23,42,.86);
-      font-weight: 800;
-      text-decoration:none;
+      display:grid; place-items:center;
+      color: rgba(15,23,42,.7);
+      font-weight: 900;
     }
-    .drawer a:hover{
-      border-color: rgba(34,158,217,.35);
-      box-shadow: 0 10px 22px rgba(34,158,217,.10);
+    .action h4{
+      margin:0;
+      font-size: 14px;
+      letter-spacing: .2px;
     }
-    .drawer .hint{
-      margin-top: 10px;
+    .action p{
+      margin: 6px 0 0;
       font-size: 12px;
       color: var(--muted);
-      line-height: 1.45;
-    }
-    .drawerOpen .backdrop{
-      opacity:1;
-      pointer-events:auto;
-    }
-    .drawerOpen .drawer{
-      transform: translateX(0);
+      line-height: 1.35;
     }
 
-    /* ====== Page 3 layout ====== */
-    .promoCard{
-      background: linear-gradient(180deg, rgba(11,122,75,.92), rgba(11,122,75,.82));
-      border-radius: 26px;
-      padding: 26px 18px;
-      color: rgba(255,255,255,.92);
-      border: 1px solid rgba(255,255,255,.10);
-      box-shadow: 0 18px 50px rgba(11,122,75,.22);
-      text-align:center;
-      font-weight: 900;
-      letter-spacing: .6px;
-      min-height: 120px;
-      display:grid;
-      place-items:center;
-    }
-    .bigCircleWrap{
-      display:grid;
-      place-items:center;
-      padding: 34px 0 24px;
-    }
-    .bigCircle{
-      width: 220px;
-      aspect-ratio: 1 / 1;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.22), rgba(255,255,255,0) 55%),
-                  linear-gradient(180deg, rgba(11,122,75,.95), rgba(11,122,75,.80));
-      border: 1px solid rgba(255,255,255,.12);
-      box-shadow: 0 26px 70px rgba(11,122,75,.25);
-      display:grid;
-      place-items:center;
-      color: rgba(255,255,255,.92);
-      font-weight: 900;
-      letter-spacing: .4px;
-      cursor:pointer;
-      user-select:none;
-    }
-    .actionsBox{
-      background: linear-gradient(180deg, rgba(11,122,75,.92), rgba(11,122,75,.78));
-      border-radius: 26px;
-      padding: 16px 14px;
-      border: 1px solid rgba(255,255,255,.10);
-      box-shadow: 0 18px 60px rgba(11,122,75,.22);
-    }
-    .actionBtn{
-      background: rgba(255,255,255,.92);
-      border: 1px solid rgba(15,23,42,.08);
+    /* Telegram-ish mini chat list */
+    .chatList{ padding: 8px; }
+    .chatRow{
+      display:flex;
+      gap: 12px;
+      align-items:center;
+      padding: 12px 10px;
       border-radius: 18px;
-      padding: 16px 14px;
-      margin: 10px 0;
-      text-align:center;
-      font-weight: 900;
-      letter-spacing: .25px;
       cursor:pointer;
     }
-    .footerHandle{
-      text-align:center;
-      padding: 16px 0 8px;
+    .chatRow:hover{ background: rgba(34,158,217,.08); }
+    .chatAvatar{
+      width: 44px; height: 44px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.95), rgba(255,255,255,.2)),
+                  linear-gradient(180deg, rgba(34,158,217,.35), rgba(34,158,217,.12));
+      border: 1px solid rgba(34,158,217,.22);
+      display:grid; place-items:center;
       font-weight: 900;
       color: rgba(15,23,42,.78);
-      letter-spacing: .2px;
-      font-size: 20px;
+      flex: 0 0 auto;
+    }
+    .chatMeta{ flex:1; min-width: 0; }
+    .chatMeta b{
+      display:block;
+      font-size: 13px;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+    .chatMeta span{
+      display:block;
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+      margin-top: 2px;
+    }
+    .chatTime{
+      font-size: 11px;
+      color: rgba(15,23,42,.45);
+      font-weight: 800;
+      flex: 0 0 auto;
+    }
+
+    /* Page 2 - order layout */
+    .steps{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .step{
+      flex: 1 1 110px;
+      background: rgba(255,255,255,.74);
+      border: 1px solid rgba(15,23,42,.10);
+      border-radius: 18px;
+      padding: 12px;
+    }
+    .step b{ display:block; font-size: 12px; }
+    .step span{ display:block; font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    .form{
+      display:grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .field{
+      background: rgba(255,255,255,.74);
+      border: 1px solid rgba(15,23,42,.10);
+      border-radius: 18px;
+      padding: 12px;
+    }
+    .field label{
+      display:block;
+      font-size: 12px;
+      color: rgba(15,23,42,.65);
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+    .field input, .field select{
+      width:100%;
+      border:0;
+      outline:none;
+      background: transparent;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .cta{
+      margin-top: 12px;
+      width:100%;
+      border:0;
+      border-radius: 18px;
+      padding: 14px 14px;
+      font-weight: 900;
+      letter-spacing: .3px;
+      color: rgba(255,255,255,.95);
+      background: linear-gradient(180deg, var(--tg), var(--tg2));
+      box-shadow: 0 20px 50px rgba(34,158,217,.25);
+      cursor:pointer;
+    }
+
+    .twoCol{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .mini{
+      padding: 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(15,23,42,.10);
+      background: rgba(255,255,255,.74);
+    }
+    .mini h5{ margin:0 0 6px; font-size: 13px; }
+    .mini p{ margin:0; font-size: 12px; color: var(--muted); line-height: 1.35; }
+
+    /* Page 3 - profile/settings */
+    .profileCard{
+      display:flex;
+      gap: 12px;
+      align-items:center;
+    }
+    .bigAvatar{
+      width: 64px; height: 64px;
+      border-radius: 22px;
+      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.95), rgba(255,255,255,.2)),
+                  linear-gradient(180deg, rgba(34,158,217,.35), rgba(34,158,217,.12));
+      border: 1px solid rgba(34,158,217,.22);
+      display:grid; place-items:center;
+      font-weight: 1000;
+      color: rgba(15,23,42,.75);
+      flex: 0 0 auto;
+    }
+    .profileCard b{ display:block; font-size: 16px; }
+    .profileCard span{ display:block; font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    .settings{
+      margin-top: 12px;
+      overflow:hidden;
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(15,23,42,.10);
+      background: rgba(255,255,255,.74);
+    }
+    .setRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 14px 14px;
+      border-top: 1px solid rgba(15,23,42,.08);
+      cursor:pointer;
+    }
+    .setRow:first-child{ border-top:0; }
+    .setRow b{ font-size: 13px; }
+    .setRow span{ font-size: 12px; color: var(--muted); }
+
+    /* bottom tab bar */
+    .tabs{
+      position:absolute;
+      left:0; right:0; bottom:0;
+      padding: 10px 12px max(12px, env(safe-area-inset-bottom));
+      background: rgba(244,246,250,.70);
+      backdrop-filter: var(--blur);
+      border-top: 1px solid rgba(15,23,42,.08);
+      z-index: 40;
+    }
+    .tabBar{
+      display:flex;
+      gap: 8px;
+      background: rgba(15,23,42,.07);
+      border-radius: 20px;
+      padding: 6px;
+    }
+    .tab{
+      flex:1;
+      border:0;
+      padding: 10px 10px;
+      border-radius: 16px;
+      background: transparent;
+      font-weight: 900;
+      color: rgba(15,23,42,.62);
+      cursor:pointer;
+    }
+    .tab.active{
+      background: rgba(255,255,255,.86);
+      color: rgba(15,23,42,.92);
+      box-shadow: 0 12px 26px rgba(2,6,23,.10);
+      border: 1px solid rgba(15,23,42,.10);
+    }
+
+    /* small */
+    @media (max-width: 360px){
+      .twoCol{ grid-template-columns: 1fr; }
+      .quickGrid{ grid-template-columns: 1fr; }
     }
   </style>
 </head>
 
 <body>
   <div class="phone safe" id="app">
-    <!-- Demo switcher -->
-    <div class="switcher">
-      <div class="segmented">
-        <button class="active" data-go="p1">Page 1</button>
-        <button data-go="p2">Page 2</button>
-        <button data-go="p3">Page 3</button>
+    <!-- TOP -->
+    <div class="top">
+      <div class="topRow">
+        <div class="brand">
+          <div class="logo">TG</div>
+          <div class="brandText">
+            <b>iOS x Telegram UI</b>
+            <span>layout demo • 3 pages</span>
+          </div>
+        </div>
+        <div class="headerActions">
+          <div class="iconBtn" title="Notifikasi"><div class="iconDot"></div></div>
+          <div class="iconBtn" title="Menu">≡</div>
+        </div>
+      </div>
+
+      <div class="search">
+        <input placeholder="Cari layanan / keyword..." />
+        <div class="chip">Quick</div>
       </div>
     </div>
 
-    <!-- Drawer overlay (dipakai di Page 2, tapi bisa dibuka juga dari hamburger) -->
-    <div class="backdrop" id="backdrop"></div>
-    <aside class="drawer" id="drawer">
-      <h4>Menu</h4>
-      <a href="#">Regulation</a>
-      <a href="#">Cara Kerja</a>
-      <a href="#">Verified by</a>
-      <a href="#">Bot Laporan</a>
-      <a href="#">Bug / Lainnya</a>
-      <a href="#">Informasi</a>
-      <a href="#">Request</a>
-      <div class="hint">Ini hanya layout (tema iOS + Telegram). Tombol belum dihubungkan ke fitur.</div>
-    </aside>
+    <!-- PAGE 1 -->
+    <section class="page active" id="page-1">
+      <div class="sectionTitle">
+        <h3>Dashboard</h3>
+        <span>shortcut & info</span>
+      </div>
 
-    <!-- ===== Page 1 ===== -->
-    <section class="screen active" id="p1">
-      <div class="topbar">
-        <div class="profile">
-          <div class="avatar">PROFILE</div>
+      <div class="quickGrid">
+        <div class="action">
+          <div class="actionTop">
+            <div class="badge">Order</div>
+            <div class="arrow">›</div>
+          </div>
+          <h4>Buat Order Baru</h4>
+          <p>Pilih layanan, isi data, lalu kirim ke bot.</p>
         </div>
-        <div class="handle">@rekberrtele</div>
-        <button class="hamburger" id="burger1" aria-label="Menu"><i></i></button>
+
+        <div class="action">
+          <div class="actionTop">
+            <div class="badge">Harga</div>
+            <div class="arrow">›</div>
+          </div>
+          <h4>Cek Estimasi Fee</h4>
+          <p>Lihat kisaran biaya berdasarkan kategori.</p>
+        </div>
+
+        <div class="action">
+          <div class="actionTop">
+            <div class="badge">Help</div>
+            <div class="arrow">›</div>
+          </div>
+          <h4>Panduan Singkat</h4>
+          <p>Step by step alur transaksi & tips aman.</p>
+        </div>
+
+        <div class="action">
+          <div class="actionTop">
+            <div class="badge">Admin</div>
+            <div class="arrow">›</div>
+          </div>
+          <h4>Kontak Admin</h4>
+          <p>List admin & jam aktif (placeholder).</p>
+        </div>
       </div>
 
-      <div class="title">top rekber needs</div>
-      <div class="subtitle">layout saja — iOS feel + Telegram vibe</div>
-
-      <div class="grid">
-        <div class="pill">REKBER EWALLET &amp; CNIT</div>
-        <div class="pill soft">JASPIN</div>
-        <div class="pill soft">CONVERT EWALLET</div>
-        <div class="pill">JASGET</div>
+      <div class="sectionTitle" style="margin-top:14px;">
+        <h3>Recent Chats (style Telegram)</h3>
+        <span>preview layout</span>
       </div>
 
-      <div class="pill single">KATALOG LAINNYA</div>
-
-      <div class="listCard">
-        <div class="listItem">Daftar Harga</div>
-        <div class="listItem muted">Slot Menu 1</div>
-        <div class="listItem muted">Slot Menu 2</div>
-        <div class="listItem muted">Slot Menu 3</div>
-        <div class="listItem muted">Slot Menu 4</div>
+      <div class="card chatList">
+        <div class="chatRow">
+          <div class="chatAvatar">RB</div>
+          <div class="chatMeta">
+            <b>Bot Order</b>
+            <span>Tap untuk mulai order…</span>
+          </div>
+          <div class="chatTime">09:12</div>
+        </div>
+        <div class="chatRow">
+          <div class="chatAvatar">AD</div>
+          <div class="chatMeta">
+            <b>Admin Support</b>
+            <span>FAQ • regulation • request…</span>
+          </div>
+          <div class="chatTime">Kemarin</div>
+        </div>
+        <div class="chatRow">
+          <div class="chatAvatar">PR</div>
+          <div class="chatMeta">
+            <b>Promo & Info</b>
+            <span>Update terbaru & event…</span>
+          </div>
+          <div class="chatTime">Sen</div>
+        </div>
       </div>
-
-      <div class="cta">KIRIM KE BOT ORDER</div>
     </section>
 
-    <!-- ===== Page 2 (drawer kebuka) ===== -->
-    <section class="screen" id="p2">
-      <div class="topbar">
-        <div class="profile">
-          <div class="avatar">PROFILE</div>
+    <!-- PAGE 2 -->
+    <section class="page" id="page-2">
+      <div class="sectionTitle">
+        <h3>Order Center</h3>
+        <span>layout form</span>
+      </div>
+
+      <div class="card pad">
+        <div class="steps">
+          <div class="step">
+            <b>1) Pilih layanan</b>
+            <span>Rekber / Convert / Jasa lain</span>
+          </div>
+          <div class="step">
+            <b>2) Isi detail</b>
+            <span>Username, nominal, catatan</span>
+          </div>
+          <div class="step">
+            <b>3) Kirim</b>
+            <span>Copy format lalu send ke bot</span>
+          </div>
         </div>
-        <div class="handle">@rekberrtele</div>
-        <button class="hamburger" id="burger2" aria-label="Menu"><i></i></button>
+
+        <div class="form">
+          <div class="field">
+            <label>Username</label>
+            <input placeholder="@usernamekamu" />
+          </div>
+          <div class="field">
+            <label>Layanan</label>
+            <select>
+              <option>Rekber</option>
+              <option>Convert</option>
+              <option>Jasa Posting</option>
+              <option>Request Lainnya</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Nominal</label>
+            <input placeholder="contoh: 150000" inputmode="numeric" />
+          </div>
+          <div class="field">
+            <label>Catatan</label>
+            <input placeholder="contoh: via dana, jam 9-11" />
+          </div>
+
+          <button class="cta">KIRIM FORMAT (dummy)</button>
+        </div>
       </div>
 
-      <div class="title">top rekber needs</div>
-      <div class="subtitle">Page 2: contoh menu Telegram-style (drawer)</div>
-
-      <div class="grid">
-        <div class="pill">REKBER EWALLET</div>
-        <div class="pill soft">JASPIN</div>
-        <div class="pill soft">CONVERT</div>
-        <div class="pill">LAINNYA</div>
+      <div class="twoCol">
+        <div class="mini">
+          <h5>Estimasi Fee</h5>
+          <p>Taruh ringkasan fee / rate di sini (placeholder).</p>
+        </div>
+        <div class="mini">
+          <h5>Status Order</h5>
+          <p>Untuk layout tracking: menunggu / proses / selesai.</p>
+        </div>
       </div>
-
-      <div class="listCard">
-        <div class="listItem">Daftar Harga</div>
-        <div class="listItem muted">Informasi / Update</div>
-        <div class="listItem muted">FAQ</div>
-        <div class="listItem muted">Status Order</div>
-      </div>
-
-      <div class="cta">KIRIM KE BOT ORDER</div>
     </section>
 
-    <!-- ===== Page 3 ===== -->
-    <section class="screen" id="p3">
-      <div class="topbar">
-        <div class="profile">
-          <div class="avatar">PROFILE</div>
+    <!-- PAGE 3 -->
+    <section class="page" id="page-3">
+      <div class="sectionTitle">
+        <h3>Profile & Settings</h3>
+        <span>iOS list</span>
+      </div>
+
+      <div class="card pad profileCard">
+        <div class="bigAvatar">U</div>
+        <div>
+          <b>@username</b>
+          <span>Member • last seen: today</span>
         </div>
-        <div class="handle">@rekbertele</div>
-        <button class="hamburger" id="burger3" aria-label="Menu"><i></i></button>
       </div>
 
-      <div class="promoCard">TEXT PROMOSI</div>
-
-      <div class="bigCircleWrap">
-        <div class="bigCircle">Tap to order</div>
+      <div class="sectionTitle" style="margin-top:14px;">
+        <h3>Menu</h3>
+        <span>layout saja</span>
       </div>
 
-      <div class="actionsBox">
-        <div class="actionBtn">Rate and Kritsar</div>
-        <div class="actionBtn">Testimonial</div>
-        <div class="actionBtn">List Admin</div>
+      <div class="settings">
+        <div class="setRow">
+          <b>Regulation</b>
+          <span>›</span>
+        </div>
+        <div class="setRow">
+          <b>Cara Kerja</b>
+          <span>›</span>
+        </div>
+        <div class="setRow">
+          <b>Verified & Admin</b>
+          <span>›</span>
+        </div>
+        <div class="setRow">
+          <b>Bug / Laporan</b>
+          <span>›</span>
+        </div>
+        <div class="setRow">
+          <b>Request</b>
+          <span>›</span>
+        </div>
       </div>
 
-      <div class="footerHandle">@rekber tele</div>
+      <div class="sectionTitle" style="margin-top:14px;">
+        <h3>Quick Actions</h3>
+        <span>telegram vibe</span>
+      </div>
+
+      <div class="card pad">
+        <button class="cta" style="margin-top:0;">OPEN BOT (dummy)</button>
+      </div>
     </section>
+
+    <!-- Bottom Tabs -->
+    <div class="tabs">
+      <div class="tabBar">
+        <button class="tab active" data-page="1">Home</button>
+        <button class="tab" data-page="2">Order</button>
+        <button class="tab" data-page="3">Profile</button>
+      </div>
+    </div>
   </div>
 
   <script>
-    const app = document.getElementById('app');
-    const drawer = document.getElementById('drawer');
-    const backdrop = document.getElementById('backdrop');
-
-    const screens = {
-      p1: document.getElementById('p1'),
-      p2: document.getElementById('p2'),
-      p3: document.getElementById('p3')
+    const tabs = document.querySelectorAll('.tab');
+    const pages = {
+      1: document.getElementById('page-1'),
+      2: document.getElementById('page-2'),
+      3: document.getElementById('page-3'),
     };
 
-    function setActivePage(id){
-      Object.values(screens).forEach(s => s.classList.remove('active'));
-      screens[id].classList.add('active');
+    function go(n){
+      Object.values(pages).forEach(p => p.classList.remove('active'));
+      pages[n].classList.add('active');
 
-      document.querySelectorAll('.segmented button').forEach(b=>{
-        b.classList.toggle('active', b.dataset.go === id);
-      });
-
-      // Page 2 default drawer kebuka (biar mirip screenshot, tapi gak harus sama)
-      if(id === 'p2') openDrawer(true);
-      else openDrawer(false);
+      tabs.forEach(t => t.classList.toggle('active', t.dataset.page === String(n)));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function openDrawer(state){
-      app.classList.toggle('drawerOpen', state);
-    }
-
-    // segmented switcher
-    document.querySelectorAll('.segmented button').forEach(btn=>{
-      btn.addEventListener('click', () => setActivePage(btn.dataset.go));
-    });
-
-    // burger open/close
-    ['burger1','burger2','burger3'].forEach(id=>{
-      document.getElementById(id).addEventListener('click', ()=>{
-        openDrawer(!app.classList.contains('drawerOpen'));
-      });
-    });
-
-    // click backdrop to close
-    backdrop.addEventListener('click', ()=> openDrawer(false));
-
-    // initial
-    setActivePage('p1');
+    tabs.forEach(t => t.addEventListener('click', () => go(Number(t.dataset.page))));
   </script>
 </body>
 </html>
