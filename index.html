@@ -5,65 +5,113 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Jaspin Auto Fee</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
-        .container { max-width: 400px; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        input, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        .output { background: #eee; padding: 15px; margin-top: 20px; white-space: pre-wrap; border-radius: 5px; font-family: monospace; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background: #f0f2f5; color: #333; }
+        .container { max-width: 450px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h3 { text-align: center; color: #d63384; }
+        label { font-size: 0.9rem; font-weight: bold; display: block; margin-top: 10px; }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
+        .output-box { background: #fff5f8; padding: 15px; margin-top: 20px; white-space: pre-wrap; border: 1px dashed #d63384; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.95rem; position: relative; }
+        .copy-btn { margin-top: 10px; width: 100%; padding: 10px; background: #d63384; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .copy-btn:hover { background: #b82a6e; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h3>Form Jaspin</h3>
-    <input type="text" id="username" placeholder="Username (tanpa @)">
-    <input type="number" id="nominal" placeholder="Nominal Jaspin (contoh: 8000)" oninput="updateFee()">
-    <input type="text" id="fee" placeholder="Fee Otomatis" readonly>
-    <input type="text" id="nomoran" placeholder="Nomor + A.N">
-    <select id="subs">
-        <option value="Sudah">Sudah Subs @roserekber</option>
-        <option value="Belum">Belum Subs @roserekber</option>
+    <h3>🪷 Jaspin Form Generator</h3>
+    
+    <label>Username</label>
+    <input type="text" id="username" placeholder="Contoh: roserekber" oninput="updateAll()">
+    
+    <label>Nominal Jaspin</label>
+    <input type="text" id="nominalInput" placeholder="Masukkan angka (e.g. 900000)" oninput="formatAndCalculate()">
+    
+    <label>Nomor + A.N</label>
+    <input type="text" id="nomoran" placeholder="Contoh: 0812... a.n Rose" oninput="updateAll()">
+    
+    <label>Sudah Subs?</label>
+    <select id="subs" onchange="updateAll()">
+        <option value="sudah">Sudah</option>
+        <option value="belum">Belum</option>
     </select>
     
-    <div class="output" id="hasilForm">Format akan muncul di sini...</div>
+    <div class="output-box" id="hasilForm">Format akan muncul di sini...</div>
+    <button class="copy-btn" onclick="copyText()">Salin Format</button>
 </div>
 
 <script>
-function updateFee() {
-    let nom = parseInt(document.getElementById('nominal').value) || 0;
-    let feeText = "";
-
-    if (nom < 10) {
-        feeText = "0";
-    } else if (nom < 1000) {
-        feeText = "free";
-    } else if (nom < 21000) {
-        let ribuan = Math.floor(nom / 1000);
-        feeText = ((ribuan * 10) - 5) + "p";
-    } else {
-        let selisih = Math.floor(nom / 1000) - 20;
-        feeText = (195 + (selisih * 10)) + "p";
-    }
-
-    document.getElementById('fee').value = feeText;
-    renderForm(feeText);
+// Fungsi untuk menambah titik sebagai pemisah ribuan
+function formatRibuan(angka) {
+    if (!angka) return "0";
+    return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
-function renderForm(fee) {
-    let user = document.getElementById('username').value;
-    let nom = document.getElementById('nominal').value;
-    let nan = document.getElementById('nomoran').value;
+function formatAndCalculate() {
+    let input = document.getElementById('nominalInput');
+    // Hapus semua karakter kecuali angka
+    let rawValue = input.value.replace(/\D/g, '');
+    
+    // Update tampilan input dengan titik
+    if (rawValue) {
+        input.value = formatRibuan(rawValue);
+    }
+    
+    updateAll();
+}
+
+function updateAll() {
+    let rawNom = document.getElementById('nominalInput').value.replace(/\./g, '');
+    let nom = parseInt(rawNom) || 0;
+    let feeDisplay = "";
+
+    // LOGIKA PERHITUNGAN FEE
+    if (nom < 10) {
+        feeDisplay = "0";
+    } else if (nom < 1000) {
+        feeDisplay = "free";
+    } else {
+        let feeValue = 0;
+        if (nom < 21000) {
+            let ribuan = Math.floor(nom / 1000);
+            feeValue = (ribuan * 10) - 5;
+        } else {
+            let selisih = Math.floor(nom / 1000) - 20;
+            feeValue = 195 + (selisih * 10);
+        }
+
+        // FORMAT TAMPILAN FEE (3 digit pakai p, 4 digit pakai titik)
+        if (feeValue < 1000) {
+            feeDisplay = feeValue + "p";
+        } else {
+            feeDisplay = formatRibuan(feeValue); // Hilangkan 'p' dan beri titik
+        }
+    }
+
+    renderForm(formatRibuan(rawNom), feeDisplay);
+}
+
+function renderForm(nomFormatted, fee) {
+    let user = document.getElementById('username').value || "...";
+    let nan = document.getElementById('nomoran').value || "...";
     let sub = document.getElementById('subs').value;
 
     let template = `ㅤㅤ ㅤ🪷 𓏸  FORMAT JASPIN ☏
 
 ㅤ𐀶. . username :: @${user}
-ㅤ𐀶. . jaspin nominal :: ${nom}
+ㅤ𐀶. . jaspin nominal :: ${nomFormatted}
 ㅤ𐀶. . fee jaspin :: ${fee}
 ㅤ𐀶. . nomor + a.n :: ${nan}
 ㅤ𐀶. . pakai qris :: yes only dana
 ㅤ𐀶. . sudah subs @roserekber ? :: ${sub}`;
 
     document.getElementById('hasilForm').innerText = template;
+}
+
+function copyText() {
+    let text = document.getElementById('hasilForm').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+        alert("Format berhasil disalin!");
+    });
 }
 </script>
 
