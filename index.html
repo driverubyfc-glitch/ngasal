@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Jaspin Auto Fee</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
+        .container { max-width: 400px; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        input, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .output { background: #eee; padding: 15px; margin-top: 20px; white-space: pre-wrap; border-radius: 5px; font-family: monospace; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h3>Form Jaspin</h3>
+    <input type="text" id="username" placeholder="Username (tanpa @)">
+    <input type="number" id="nominal" placeholder="Nominal Jaspin (contoh: 8000)" oninput="updateFee()">
+    <input type="text" id="fee" placeholder="Fee Otomatis" readonly>
+    <input type="text" id="nomoran" placeholder="Nomor + A.N">
+    <select id="subs">
+        <option value="Sudah">Sudah Subs @roserekber</option>
+        <option value="Belum">Belum Subs @roserekber</option>
+    </select>
+    
+    <div class="output" id="hasilForm">Format akan muncul di sini...</div>
+</div>
+
+<script>
+function updateFee() {
+    let nom = parseInt(document.getElementById('nominal').value) || 0;
+    let feeText = "";
+
+    if (nom < 10) {
+        feeText = "0";
+    } else if (nom < 1000) {
+        feeText = "free";
+    } else if (nom < 21000) {
+        let ribuan = Math.floor(nom / 1000);
+        feeText = ((ribuan * 10) - 5) + "p";
+    } else {
+        let selisih = Math.floor(nom / 1000) - 20;
+        feeText = (195 + (selisih * 10)) + "p";
+    }
+
+    document.getElementById('fee').value = feeText;
+    renderForm(feeText);
+}
+
+function renderForm(fee) {
+    let user = document.getElementById('username').value;
+    let nom = document.getElementById('nominal').value;
+    let nan = document.getElementById('nomoran').value;
+    let sub = document.getElementById('subs').value;
+
+    let template = `ㅤㅤ ㅤ🪷 𓏸  FORMAT JASPIN ☏
+
+ㅤ𐀶. . username :: @${user}
+ㅤ𐀶. . jaspin nominal :: ${nom}
+ㅤ𐀶. . fee jaspin :: ${fee}
+ㅤ𐀶. . nomor + a.n :: ${nan}
+ㅤ𐀶. . pakai qris :: yes only dana
+ㅤ𐀶. . sudah subs @roserekber ? :: ${sub}`;
+
+    document.getElementById('hasilForm').innerText = template;
+}
+</script>
+
+</body>
+</html>
