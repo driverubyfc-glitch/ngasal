@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Rose Rekber - Smart Form</title>
+  <title>Rekberr TeLe - Smart Form</title>
   <style>
     :root{
       --bg: #f4f6fa;
@@ -115,7 +115,7 @@
       <div class="brand">
         <div class="logo">🪷</div>
         <div class="brandText">
-          <b>Rose Rekber</b>
+          <b>Rekberr TeLe</b>
           <span>Automated Smart Form</span>
         </div>
       </div>
@@ -146,7 +146,6 @@
 
           <hr style="border: 0; border-top: 1px solid rgba(0,0,0,0.05); margin: 20px 0;">
 
-          <!-- Dropdown QRIS disembunyikan jika Jaspin -->
           <div class="form-group" id="qris-wrapper">
             <label>Pakai QRIS?</label>
             <select class="field-input" id="qris_global" onchange="updateAll()">
@@ -156,7 +155,7 @@
           </div>
 
           <div class="form-group">
-            <label>Subs @roserekber?</label>
+            <label>Subs @Rekberr TeLe?</label>
             <select class="field-input" id="subs_global" onchange="updateAll()">
               <option value="sudah">Sudah</option>
               <option value="belum">Belum</option>
@@ -171,7 +170,7 @@
       <!-- PROFILE -->
       <section class="page" id="page-3">
         <div class="sectionTitle"><h3>Settings</h3></div>
-        <div class="card"><b>@cellrekber</b><br><small>v2.4 Smart-Logic</small></div>
+        <div class="card"><b>@Rekberr TeLe</b><br><small>v2.4 Smart-Logic</small></div>
       </section>
     </div>
 
@@ -206,7 +205,7 @@
       const qrisWrapper = document.getElementById('qris-wrapper');
 
       if(service === 'jaspin') {
-        qrisWrapper.style.display = 'none'; // Sembunyikan dropdown sesuai permintaan
+        qrisWrapper.style.display = 'none';
         container.innerHTML = `
           <div class="form-group"><label>Username</label><input type="text" id="user_j" class="field-input" placeholder="username" oninput="updateAll()"></div>
           <div class="form-group"><label>Nominal</label><input type="text" id="nom_j" class="field-input" placeholder="8.000" oninput="formatInput(this); updateAll()"></div>
@@ -244,17 +243,17 @@
         let raw = (document.getElementById('nom_j')?.value || "0").replace(/\./g, '');
         let nom = parseInt(raw) || 0;
         let fee = (nom < 21000) ? (Math.floor(nom/1000)*10 - 5) : (195 + (Math.floor(nom/1000)-20)*10);
-        let template = `🪷 𓏸  FORMAT JASPIN ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_j')?.value || "..."}\nㅤ𐀶. . jaspin nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . fee jaspin :: ${fee < 1000 ? fee+'p' : formatRibuan(fee)}\nㅤ𐀶. . nomor + a.n :: ${document.getElementById('nan_j')?.value || "..."}\nㅤ𐀶. . pakai qris :: yes only dana\nㅤ𐀶. . sudah subs @roserekber ? :: ${document.getElementById('subs_global').value}`;
+        let template = `🪷 𓏸  FORMAT JASPIN ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_j')?.value || "..."}\nㅤ𐀶. . jaspin nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . fee jaspin :: ${fee < 1000 ? fee+'p' : formatRibuan(fee)}\nㅤ𐀶. . nomor + a.n :: ${document.getElementById('nan_j')?.value || "..."}\nㅤ𐀶. . pakai qris :: yes only dana\nㅤ𐀶. . sudah subs @Rekberr TeLe ? :: ${document.getElementById('subs_global').value}`;
         document.getElementById('hasilForm').innerText = template;
       } 
       else if(currentService === 'convert') {
         let raw = (document.getElementById('nom_c')?.value || "0").replace(/\./g, '');
-        let template = `🪷 𓏸  FORMAT CONVERT ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_c')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . dari :: ${document.getElementById('dari_c')?.value || "..."}\nㅤ𐀶. . ke :: ${document.getElementById('ke_c')?.value || "..."}\nㅤ𐀶. . pakai qris :: ${document.getElementById('qris_global').value}\nㅤ𐀶. . sudah subs @roserekber ? :: ${document.getElementById('subs_global').value}`;
+        let template = `🪷 𓏸  FORMAT CONVERT ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_c')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . dari :: ${document.getElementById('dari_c')?.value || "..."}\nㅤ𐀶. . ke :: ${document.getElementById('ke_c')?.value || "..."}\nㅤ𐀶. . pakai qris :: ${document.getElementById('qris_global').value}\nㅤ𐀶. . sudah subs @Rekberr TeLe ? :: ${document.getElementById('subs_global').value}`;
         document.getElementById('hasilForm').innerText = template;
       }
       else {
         let raw = (document.getElementById('nom_rek')?.value || "0").replace(/\./g, '');
-        let template = `🪷 𓏸  FORMAT REKBER ☏\n\nㅤ𐀶. . penjual :: @${document.getElementById('user_p_rek')?.value || "..."}\nㅤ𐀶. . pembeli :: @${document.getElementById('user_b_rek')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . pakai qris :: ${document.getElementById('qris_global').value}\nㅤ𐀶. . sudah subs @roserekber ? :: ${document.getElementById('subs_global').value}`;
+        let template = `🪷 𓏸  FORMAT REKBER ☏\n\nㅤ𐀶. . penjual :: @${document.getElementById('user_p_rek')?.value || "..."}\nㅤ𐀶. . pembeli :: @${document.getElementById('user_b_rek')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . pakai qris :: ${document.getElementById('qris_global').value}\nㅤ𐀶. . sudah subs @Rekberr TeLe ? :: ${document.getElementById('subs_global').value}`;
         document.getElementById('hasilForm').innerText = template;
       }
     }
