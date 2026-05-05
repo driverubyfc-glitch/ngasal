@@ -3,682 +3,454 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>iOS x Telegram - 3 Pages</title>
+  <title>Rose Rekber - iOS Telegram UI</title>
   <style>
     :root{
       --bg: #f4f6fa;
-      --card: rgba(255,255,255,.86);
-      --card2: rgba(255,255,255,.72);
+      --card: rgba(255,255,255,.90);
       --text: #0f172a;
       --muted: rgba(15,23,42,.55);
       --line: rgba(15,23,42,.10);
       --shadow: 0 18px 60px rgba(2,6,23,.12);
-
-      /* Telegram-ish */
-      --tg: #229ED9;
-      --tg2: #1b86b6;
-
-      /* iOS-ish */
+      --tg: #d63384; /* Rose Theme */
+      --tg2: #b82a6e;
       --radius-xl: 28px;
       --radius-lg: 20px;
       --radius-md: 16px;
-      --blur: blur(18px);
-
-      /* preview width */
+      --blur: blur(20px);
       --device: 430px;
     }
 
-    *{ box-sizing:border-box; }
+    *{ box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, "SF Pro Display","SF Pro Text", Segoe UI, Roboto, Helvetica, Arial;
-      background: radial-gradient(1200px 600px at 20% -10%, rgba(34,158,217,.18), transparent 60%),
-                  radial-gradient(900px 500px at 90% 10%, rgba(34,158,217,.10), transparent 55%),
-                  linear-gradient(180deg, #eef3fb, var(--bg));
-      display:flex;
-      justify-content:center;
-      padding: 18px 12px 36px;
-      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial;
+      background: radial-gradient(1000px 500px at 10% -10%, rgba(214,51,132,.15), transparent 50%),
+                  radial-gradient(800px 400px at 90% 10%, rgba(214,51,132,.08), transparent 50%),
+                  linear-gradient(180deg, #fdf2f8, var(--bg));
+      display:flex; justify-content:center; padding: 18px 12px 36px; color: var(--text); min-height: 100vh;
     }
 
-    /* phone shell */
     .phone{
       width: min(var(--device), 100%);
-      border-radius: 36px;
-      overflow:hidden;
-      border: 1px solid rgba(2,6,23,.10);
-      box-shadow: 0 30px 90px rgba(2,6,23,.20);
-      background: var(--bg);
-      position:relative;
+      border-radius: 40px; overflow:hidden;
+      border: 1px solid rgba(2,6,23,.08);
+      box-shadow: 0 30px 90px rgba(2,6,23,.15);
+      background: var(--bg); position:relative; display: flex; flex-direction: column; height: 844px; /* Fixed height for demo */
     }
 
-    .safe{
-      padding-top: max(12px, env(safe-area-inset-top));
-      padding-bottom: max(18px, env(safe-area-inset-bottom));
-    }
-
-    /* top header */
     .top{
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      padding: 14px 14px 12px;
-      background: rgba(244,246,250,.70);
-      backdrop-filter: var(--blur);
-      border-bottom: 1px solid rgba(15,23,42,.08);
+      position: sticky; top: 0; z-index: 30; padding: 16px 20px 12px;
+      background: rgba(244,246,250,.75); backdrop-filter: var(--blur);
+      border-bottom: 1px solid rgba(15,23,42,.06);
     }
-    .topRow{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-    }
-    .brand{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      min-width: 140px;
-    }
+    .brand{ display:flex; align-items:center; gap: 12px; }
     .logo{
-      width: 40px; height: 40px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(255,255,255,.25)),
-                  linear-gradient(180deg, rgba(34,158,217,.35), rgba(34,158,217,.15));
-      border: 1px solid rgba(34,158,217,.25);
-      display:grid;
-      place-items:center;
-      font-weight: 900;
-      color: rgba(15,23,42,.75);
+      width: 42px; height: 42px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--tg), var(--tg2));
+      display:grid; place-items:center; color: white; font-weight: bold; font-size: 20px;
     }
-    .brandText{
-      line-height: 1.1;
-    }
-    .brandText b{ display:block; font-size: 14px; }
+    .brandText b{ display:block; font-size: 15px; }
     .brandText span{ display:block; font-size: 12px; color: var(--muted); }
 
-    .headerActions{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-    }
-    .iconBtn{
-      width: 42px; height: 42px;
-      border-radius: 14px;
-      border: 1px solid rgba(15,23,42,.10);
-      background: rgba(255,255,255,.72);
-      box-shadow: 0 16px 36px rgba(2,6,23,.08);
-      display:grid; place-items:center;
-      cursor:pointer;
-      user-select:none;
-    }
-    .iconDot{
-      width: 16px; height: 16px;
-      border-radius: 999px;
-      background: linear-gradient(180deg, var(--tg), var(--tg2));
-      box-shadow: 0 10px 22px rgba(34,158,217,.22);
-    }
-
-    .search{
-      margin-top: 12px;
-      display:flex;
-      gap: 10px;
-      align-items:center;
-      background: rgba(255,255,255,.70);
-      border: 1px solid rgba(15,23,42,.10);
-      border-radius: 16px;
-      padding: 10px 12px;
-    }
-    .search input{
-      border:0;
-      outline:none;
-      width:100%;
-      background: transparent;
-      font-size: 14px;
-      color: var(--text);
-    }
-    .chip{
-      font-size: 12px;
-      font-weight: 800;
-      color: rgba(15,23,42,.76);
-      background: rgba(34,158,217,.12);
-      border: 1px solid rgba(34,158,217,.20);
-      padding: 8px 10px;
-      border-radius: 999px;
-      white-space: nowrap;
-      cursor:pointer;
-    }
-
-    /* pages */
-    .page{
-      display:none;
-      padding: 14px 14px 92px; /* bottom bar space */
-    }
+    .content-area { flex: 1; overflow-y: auto; padding: 10px 16px 100px; scroll-behavior: smooth; }
+    .page{ display:none; animation: fadeIn 0.3s ease; }
     .page.active{ display:block; }
+    @keyframes fadeIn { from{opacity:0; transform: translateY(10px);} to{opacity:1; transform: translateY(0);} }
 
-    /* iOS cards */
+    .sectionTitle{ margin: 20px 4px 10px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .sectionTitle h3{ margin:0; font-size: 17px; font-weight: 800; }
+    .sectionTitle span{ font-size: 12px; color: var(--muted); font-weight: 600; }
+
+    /* Forms iOS Style */
     .card{
-      background: var(--card);
-      border: 1px solid rgba(15,23,42,.10);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow);
-      backdrop-filter: var(--blur);
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: var(--radius-xl); padding: 20px; box-shadow: var(--shadow);
     }
-    .card.pad{ padding: 14px; }
+    .form-group{ margin-bottom: 14px; }
+    .form-group label{ display:block; font-size: 12px; font-weight: 700; color: var(--tg); margin-bottom: 6px; margin-left: 4px; }
+    .field-input{
+      width: 100%; padding: 14px; border-radius: 16px; border: 1px solid rgba(15,23,42,.08);
+      background: white; font-size: 15px; transition: 0.2s; outline: none;
+    }
+    .field-input:focus{ border-color: var(--tg); box-shadow: 0 0 0 4px rgba(214,51,132,0.1); }
+    
+    select.field-input { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
 
-    .sectionTitle{
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap: 10px;
-      margin: 10px 2px 10px;
+    .tab-pill-container{
+      display: flex; background: rgba(15,23,42,.05); padding: 4px; border-radius: 14px; margin-bottom: 15px;
     }
-    .sectionTitle h3{
-      margin:0;
-      font-size: 16px;
-      letter-spacing: .2px;
+    .tab-pill{
+      flex: 1; padding: 8px; border: none; border-radius: 11px; background: transparent;
+      font-size: 13px; font-weight: 700; color: var(--muted); cursor: pointer; transition: 0.2s;
     }
-    .sectionTitle span{
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 700;
+    .tab-pill.active{ background: white; color: var(--tg); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+
+    .output-box {
+      background: #fff5f8; padding: 16px; border-radius: 18px; margin-top: 15px;
+      font-family: 'SF Mono', 'Courier New', monospace; font-size: 12px;
+      white-space: pre-wrap; border: 1px dashed rgba(214,51,132,0.3); color: #444; line-height: 1.5;
     }
 
-    /* Page 1 - quick actions */
-    .quickGrid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    .action{
-      padding: 14px;
-      border-radius: var(--radius-lg);
-      border: 1px solid rgba(15,23,42,.10);
-      background: rgba(255,255,255,.74);
-      backdrop-filter: var(--blur);
-      cursor:pointer;
-    }
-    .actionTop{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-    .badge{
-      font-size: 12px;
-      font-weight: 900;
-      padding: 6px 10px;
-      border-radius: 999px;
-      color: rgba(255,255,255,.92);
+    .cta-btn{
+      width: 100%; padding: 16px; border-radius: 18px; border: none;
       background: linear-gradient(180deg, var(--tg), var(--tg2));
-      box-shadow: 0 14px 30px rgba(34,158,217,.18);
+      color: white; font-weight: 800; font-size: 15px; cursor: pointer;
+      box-shadow: 0 10px 25px rgba(214,51,132,.25); margin-top: 15px; transition: 0.3s;
     }
-    .arrow{
-      width: 34px; height: 34px;
-      border-radius: 12px;
-      background: rgba(15,23,42,.06);
-      border: 1px solid rgba(15,23,42,.10);
-      display:grid; place-items:center;
-      color: rgba(15,23,42,.7);
-      font-weight: 900;
-    }
-    .action h4{
-      margin:0;
-      font-size: 14px;
-      letter-spacing: .2px;
-    }
-    .action p{
-      margin: 6px 0 0;
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.35;
-    }
+    .cta-btn:active{ transform: scale(0.97); opacity: 0.9; }
 
-    /* Telegram-ish mini chat list */
-    .chatList{ padding: 8px; }
-    .chatRow{
-      display:flex;
-      gap: 12px;
-      align-items:center;
-      padding: 12px 10px;
-      border-radius: 18px;
-      cursor:pointer;
+    /* Bottom Nav */
+    .nav-bar{
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(244,246,250,.85); backdrop-filter: var(--blur);
+      border-top: 1px solid rgba(15,23,42,.06); padding: 10px 20px 30px;
     }
-    .chatRow:hover{ background: rgba(34,158,217,.08); }
-    .chatAvatar{
-      width: 44px; height: 44px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.95), rgba(255,255,255,.2)),
-                  linear-gradient(180deg, rgba(34,158,217,.35), rgba(34,158,217,.12));
-      border: 1px solid rgba(34,158,217,.22);
-      display:grid; place-items:center;
-      font-weight: 900;
-      color: rgba(15,23,42,.78);
-      flex: 0 0 auto;
+    .nav-items{ display: flex; justify-content: space-around; }
+    .nav-item{
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      color: var(--muted); cursor: pointer; font-size: 11px; font-weight: 700;
     }
-    .chatMeta{ flex:1; min-width: 0; }
-    .chatMeta b{
-      display:block;
-      font-size: 13px;
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-    }
-    .chatMeta span{
-      display:block;
-      font-size: 12px;
-      color: var(--muted);
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-      margin-top: 2px;
-    }
-    .chatTime{
-      font-size: 11px;
-      color: rgba(15,23,42,.45);
-      font-weight: 800;
-      flex: 0 0 auto;
-    }
+    .nav-item.active{ color: var(--tg); }
+    .nav-icon{ font-size: 20px; margin-bottom: 2px; }
 
-    /* Page 2 - order layout */
-    .steps{
-      display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-    .step{
-      flex: 1 1 110px;
-      background: rgba(255,255,255,.74);
-      border: 1px solid rgba(15,23,42,.10);
-      border-radius: 18px;
-      padding: 12px;
-    }
-    .step b{ display:block; font-size: 12px; }
-    .step span{ display:block; font-size: 12px; color: var(--muted); margin-top: 4px; }
-
-    .form{
-      display:grid;
-      gap: 10px;
-      margin-top: 12px;
-    }
-    .field{
-      background: rgba(255,255,255,.74);
-      border: 1px solid rgba(15,23,42,.10);
-      border-radius: 18px;
-      padding: 12px;
-    }
-    .field label{
-      display:block;
-      font-size: 12px;
-      color: rgba(15,23,42,.65);
-      font-weight: 900;
-      margin-bottom: 6px;
-    }
-    .field input, .field select{
-      width:100%;
-      border:0;
-      outline:none;
-      background: transparent;
-      font-size: 14px;
-      color: var(--text);
-    }
-
-    .cta{
-      margin-top: 12px;
-      width:100%;
-      border:0;
-      border-radius: 18px;
-      padding: 14px 14px;
-      font-weight: 900;
-      letter-spacing: .3px;
-      color: rgba(255,255,255,.95);
-      background: linear-gradient(180deg, var(--tg), var(--tg2));
-      box-shadow: 0 20px 50px rgba(34,158,217,.25);
-      cursor:pointer;
-    }
-
-    .twoCol{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 12px;
-    }
-    .mini{
-      padding: 12px;
-      border-radius: 20px;
-      border: 1px solid rgba(15,23,42,.10);
-      background: rgba(255,255,255,.74);
-    }
-    .mini h5{ margin:0 0 6px; font-size: 13px; }
-    .mini p{ margin:0; font-size: 12px; color: var(--muted); line-height: 1.35; }
-
-    /* Page 3 - profile/settings */
-    .profileCard{
-      display:flex;
-      gap: 12px;
-      align-items:center;
-    }
-    .bigAvatar{
-      width: 64px; height: 64px;
-      border-radius: 22px;
-      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.95), rgba(255,255,255,.2)),
-                  linear-gradient(180deg, rgba(34,158,217,.35), rgba(34,158,217,.12));
-      border: 1px solid rgba(34,158,217,.22);
-      display:grid; place-items:center;
-      font-weight: 1000;
-      color: rgba(15,23,42,.75);
-      flex: 0 0 auto;
-    }
-    .profileCard b{ display:block; font-size: 16px; }
-    .profileCard span{ display:block; font-size: 12px; color: var(--muted); margin-top: 4px; }
-
-    .settings{
-      margin-top: 12px;
-      overflow:hidden;
-      border-radius: var(--radius-xl);
-      border: 1px solid rgba(15,23,42,.10);
-      background: rgba(255,255,255,.74);
-    }
-    .setRow{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      padding: 14px 14px;
-      border-top: 1px solid rgba(15,23,42,.08);
-      cursor:pointer;
-    }
-    .setRow:first-child{ border-top:0; }
-    .setRow b{ font-size: 13px; }
-    .setRow span{ font-size: 12px; color: var(--muted); }
-
-    /* bottom tab bar */
-    .tabs{
-      position:absolute;
-      left:0; right:0; bottom:0;
-      padding: 10px 12px max(12px, env(safe-area-inset-bottom));
-      background: rgba(244,246,250,.70);
-      backdrop-filter: var(--blur);
-      border-top: 1px solid rgba(15,23,42,.08);
-      z-index: 40;
-    }
-    .tabBar{
-      display:flex;
-      gap: 8px;
-      background: rgba(15,23,42,.07);
-      border-radius: 20px;
-      padding: 6px;
-    }
-    .tab{
-      flex:1;
-      border:0;
-      padding: 10px 10px;
-      border-radius: 16px;
-      background: transparent;
-      font-weight: 900;
-      color: rgba(15,23,42,.62);
-      cursor:pointer;
-    }
-    .tab.active{
-      background: rgba(255,255,255,.86);
-      color: rgba(15,23,42,.92);
-      box-shadow: 0 12px 26px rgba(2,6,23,.10);
-      border: 1px solid rgba(15,23,42,.10);
-    }
-
-    /* small */
-    @media (max-width: 360px){
-      .twoCol{ grid-template-columns: 1fr; }
-      .quickGrid{ grid-template-columns: 1fr; }
-    }
+    .info-badge { font-size: 11px; color: var(--tg2); font-style: italic; margin-top: 4px; display: block; opacity: 0.8; }
   </style>
 </head>
 
 <body>
-  <div class="phone safe" id="app">
-    <!-- TOP -->
-    <div class="top">
-      <div class="topRow">
-        <div class="brand">
-          <div class="logo">TG</div>
-          <div class="brandText">
-            <b>iOS x Telegram UI</b>
-            <span>layout demo • 3 pages</span>
-          </div>
-        </div>
-        <div class="headerActions">
-          <div class="iconBtn" title="Notifikasi"><div class="iconDot"></div></div>
-          <div class="iconBtn" title="Menu">≡</div>
+  <div class="phone" id="app">
+    <!-- Header -->
+    <header class="top">
+      <div class="brand">
+        <div class="logo">🪷</div>
+        <div class="brandText">
+          <b>Rose Rekber</b>
+          <span>Automated Smart Form</span>
         </div>
       </div>
+    </header>
 
-      <div class="search">
-        <input placeholder="Cari layanan / keyword..." />
-        <div class="chip">Quick</div>
-      </div>
-    </div>
-
-    <!-- PAGE 1 -->
-    <section class="page active" id="page-1">
-      <div class="sectionTitle">
-        <h3>Dashboard</h3>
-        <span>shortcut & info</span>
-      </div>
-
-      <div class="quickGrid">
-        <div class="action">
-          <div class="actionTop">
-            <div class="badge">Order</div>
-            <div class="arrow">›</div>
-          </div>
-          <h4>Buat Order Baru</h4>
-          <p>Pilih layanan, isi data, lalu kirim ke bot.</p>
+    <div class="content-area">
+      <!-- PAGE 1: DASHBOARD -->
+      <section class="page active" id="page-1">
+        <div class="sectionTitle">
+          <h3>Welcome back!</h3>
+          <span>Overview</span>
         </div>
-
-        <div class="action">
-          <div class="actionTop">
-            <div class="badge">Harga</div>
-            <div class="arrow">›</div>
-          </div>
-          <h4>Cek Estimasi Fee</h4>
-          <p>Lihat kisaran biaya berdasarkan kategori.</p>
+        <div class="card" style="margin-bottom: 15px; background: linear-gradient(135deg, #d63384, #9d1757); color: white;">
+          <small style="opacity: 0.8;">Status Layanan</small>
+          <div style="font-size: 20px; font-weight: 800; margin: 5px 0;">Sistem Online ✅</div>
+          <p style="font-size: 12px; margin: 0; opacity: 0.9;">Silahkan pilih menu Order untuk membuat format transaksi otomatis.</p>
         </div>
-
-        <div class="action">
-          <div class="actionTop">
-            <div class="badge">Help</div>
-            <div class="arrow">›</div>
-          </div>
-          <h4>Panduan Singkat</h4>
-          <p>Step by step alur transaksi & tips aman.</p>
+        
+        <div class="sectionTitle">
+          <h3>Quick Links</h3>
         </div>
-
-        <div class="action">
-          <div class="actionTop">
-            <div class="badge">Admin</div>
-            <div class="arrow">›</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="card" style="padding: 15px; text-align: center; cursor: pointer;" onclick="go(2)">
+            <div style="font-size: 24px;">📝</div>
+            <b style="font-size: 13px; display: block; margin-top: 8px;">Buat Format</b>
           </div>
-          <h4>Kontak Admin</h4>
-          <p>List admin & jam aktif (placeholder).</p>
-        </div>
-      </div>
-
-      <div class="sectionTitle" style="margin-top:14px;">
-        <h3>Recent Chats (style Telegram)</h3>
-        <span>preview layout</span>
-      </div>
-
-      <div class="card chatList">
-        <div class="chatRow">
-          <div class="chatAvatar">RB</div>
-          <div class="chatMeta">
-            <b>Bot Order</b>
-            <span>Tap untuk mulai order…</span>
-          </div>
-          <div class="chatTime">09:12</div>
-        </div>
-        <div class="chatRow">
-          <div class="chatAvatar">AD</div>
-          <div class="chatMeta">
-            <b>Admin Support</b>
-            <span>FAQ • regulation • request…</span>
-          </div>
-          <div class="chatTime">Kemarin</div>
-        </div>
-        <div class="chatRow">
-          <div class="chatAvatar">PR</div>
-          <div class="chatMeta">
-            <b>Promo & Info</b>
-            <span>Update terbaru & event…</span>
-          </div>
-          <div class="chatTime">Sen</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PAGE 2 -->
-    <section class="page" id="page-2">
-      <div class="sectionTitle">
-        <h3>Order Center</h3>
-        <span>layout form</span>
-      </div>
-
-      <div class="card pad">
-        <div class="steps">
-          <div class="step">
-            <b>1) Pilih layanan</b>
-            <span>Rekber / Convert / Jasa lain</span>
-          </div>
-          <div class="step">
-            <b>2) Isi detail</b>
-            <span>Username, nominal, catatan</span>
-          </div>
-          <div class="step">
-            <b>3) Kirim</b>
-            <span>Copy format lalu send ke bot</span>
+          <div class="card" style="padding: 15px; text-align: center; cursor: pointer;">
+            <div style="font-size: 24px;">⚖️</div>
+            <b style="font-size: 13px; display: block; margin-top: 8px;">Cek Rate</b>
           </div>
         </div>
+      </section>
 
-        <div class="form">
-          <div class="field">
-            <label>Username</label>
-            <input placeholder="@usernamekamu" />
+      <!-- PAGE 2: ORDER CENTER (SMART FORM) -->
+      <section class="page" id="page-2">
+        <div class="sectionTitle">
+          <h3>Order Center</h3>
+          <span>Smart Calculator</span>
+        </div>
+
+        <div class="tab-pill-container">
+          <button class="tab-pill active" onclick="setService('jaspin', this)">Jaspin</button>
+          <button class="tab-pill" onclick="setService('convert', this)">Convert</button>
+          <button class="tab-pill" onclick="setService('rekber', this)">Rekber</button>
+        </div>
+
+        <div class="card">
+          <!-- Dinamis Form Content -->
+          <div id="form-content">
+            <!-- Isi form akan berubah sesuai tab -->
           </div>
-          <div class="field">
-            <label>Layanan</label>
-            <select>
-              <option>Rekber</option>
-              <option>Convert</option>
-              <option>Jasa Posting</option>
-              <option>Request Lainnya</option>
+
+          <hr style="border: 0; border-top: 1px solid rgba(0,0,0,0.05); margin: 20px 0;">
+
+          <div class="form-group">
+            <label>Pakai QRIS?</label>
+            <select class="field-input" id="qris_global" onchange="updateAll()">
+              <option value="no">No</option>
+              <option value="yes only dana">Yes Only Dana</option>
             </select>
           </div>
-          <div class="field">
-            <label>Nominal</label>
-            <input placeholder="contoh: 150000" inputmode="numeric" />
+
+          <div class="form-group">
+            <label>Subs @roserekber?</label>
+            <select class="field-input" id="subs_global" onchange="updateAll()">
+              <option value="sudah">Sudah</option>
+              <option value="belum">Belum</option>
+            </select>
           </div>
-          <div class="field">
-            <label>Catatan</label>
-            <input placeholder="contoh: via dana, jam 9-11" />
+
+          <div class="output-box" id="hasilForm">Format muncul di sini...</div>
+          <button class="cta-btn" onclick="copyText()">SALIN FORMAT</button>
+        </div>
+      </section>
+
+      <!-- PAGE 3: PROFILE -->
+      <section class="page" id="page-3">
+        <div class="sectionTitle">
+          <h3>Settings</h3>
+        </div>
+        <div class="card" style="display: flex; align-items: center; gap: 15px;">
+          <div style="width: 60px; height: 60px; border-radius: 20px; background: #eee; display: grid; place-items: center; font-size: 30px;">👤</div>
+          <div>
+            <b style="font-size: 16px;">Customer</b>
+            <span style="display: block; font-size: 12px; color: var(--muted);">v2.4 Smart-Logic</span>
           </div>
-
-          <button class="cta">KIRIM FORMAT (dummy)</button>
         </div>
-      </div>
-
-      <div class="twoCol">
-        <div class="mini">
-          <h5>Estimasi Fee</h5>
-          <p>Taruh ringkasan fee / rate di sini (placeholder).</p>
+        <div class="card" style="margin-top: 15px; padding: 0;">
+            <div style="padding: 15px; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between;">
+                <span style="font-size: 14px; font-weight: 600;">Regulation</span>
+                <span style="color: var(--muted);">›</span>
+            </div>
+            <div style="padding: 15px; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between;">
+                <span style="font-size: 14px; font-weight: 600;">Testimoni</span>
+                <span style="color: var(--muted);">›</span>
+            </div>
+            <div style="padding: 15px; display: flex; justify-content: space-between;">
+                <span style="font-size: 14px; font-weight: 600; color: #ef4444;">Bantuan Admin</span>
+                <span style="color: var(--muted);">›</span>
+            </div>
         </div>
-        <div class="mini">
-          <h5>Status Order</h5>
-          <p>Untuk layout tracking: menunggu / proses / selesai.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- PAGE 3 -->
-    <section class="page" id="page-3">
-      <div class="sectionTitle">
-        <h3>Profile & Settings</h3>
-        <span>iOS list</span>
-      </div>
-
-      <div class="card pad profileCard">
-        <div class="bigAvatar">U</div>
-        <div>
-          <b>@username</b>
-          <span>Member • last seen: today</span>
-        </div>
-      </div>
-
-      <div class="sectionTitle" style="margin-top:14px;">
-        <h3>Menu</h3>
-        <span>layout saja</span>
-      </div>
-
-      <div class="settings">
-        <div class="setRow">
-          <b>Regulation</b>
-          <span>›</span>
-        </div>
-        <div class="setRow">
-          <b>Cara Kerja</b>
-          <span>›</span>
-        </div>
-        <div class="setRow">
-          <b>Verified & Admin</b>
-          <span>›</span>
-        </div>
-        <div class="setRow">
-          <b>Bug / Laporan</b>
-          <span>›</span>
-        </div>
-        <div class="setRow">
-          <b>Request</b>
-          <span>›</span>
-        </div>
-      </div>
-
-      <div class="sectionTitle" style="margin-top:14px;">
-        <h3>Quick Actions</h3>
-        <span>telegram vibe</span>
-      </div>
-
-      <div class="card pad">
-        <button class="cta" style="margin-top:0;">OPEN BOT (dummy)</button>
-      </div>
-    </section>
-
-    <!-- Bottom Tabs -->
-    <div class="tabs">
-      <div class="tabBar">
-        <button class="tab active" data-page="1">Home</button>
-        <button class="tab" data-page="2">Order</button>
-        <button class="tab" data-page="3">Profile</button>
-      </div>
+      </section>
     </div>
+
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+      <div class="nav-items">
+        <div class="nav-item active" onclick="go(1)" id="nav-1">
+          <span class="nav-icon">🏠</span>
+          <span>Home</span>
+        </div>
+        <div class="nav-item" onclick="go(2)" id="nav-2">
+          <span class="nav-icon">📝</span>
+          <span>Order</span>
+        </div>
+        <div class="nav-item" onclick="go(3)" id="nav-3">
+          <span class="nav-icon">⚙️</span>
+          <span>Profile</span>
+        </div>
+      </div>
+    </nav>
   </div>
 
   <script>
-    const tabs = document.querySelectorAll('.tab');
-    const pages = {
-      1: document.getElementById('page-1'),
-      2: document.getElementById('page-2'),
-      3: document.getElementById('page-3'),
-    };
+    let currentService = 'jaspin';
 
-    function go(n){
-      Object.values(pages).forEach(p => p.classList.remove('active'));
-      pages[n].classList.add('active');
-
-      tabs.forEach(t => t.classList.toggle('active', t.dataset.page === String(n)));
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Navigation Logic
+    function go(pageNumber) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + pageNumber).classList.add('active');
+      
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById('nav-' + pageNumber).classList.add('active');
+      
+      if(pageNumber === 2) setService(currentService);
     }
 
-    tabs.forEach(t => t.addEventListener('click', () => go(Number(t.dataset.page))));
+    // Form Switcher Logic
+    function setService(service, el) {
+      currentService = service;
+      if(el) {
+        document.querySelectorAll('.tab-pill').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+      }
+      
+      const container = document.getElementById('form-content');
+      if(service === 'jaspin') {
+        container.innerHTML = `
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="user_j" class="field-input" placeholder="roserekber" oninput="updateAll()">
+          </div>
+          <div class="form-group">
+            <label>Nominal</label>
+            <input type="text" id="nom_j" class="field-input" placeholder="8.000" oninput="formatInput(this); updateAll()">
+          </div>
+          <div class="form-group">
+            <label>Nomor + A.N</label>
+            <input type="text" id="nan_j" class="field-input" placeholder="0812... a.n Rose" oninput="updateAll()">
+          </div>
+        `;
+      } else if(service === 'convert') {
+        container.innerHTML = `
+          <div class="form-group">
+            <label>Tipe E-wallet</label>
+            <select id="tipe_cv" class="field-input" onchange="updateAll()">
+              <option value="prem">E-wallet Premium</option>
+              <option value="nonprem">E-wallet Non-Premium</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="user_c" class="field-input" placeholder="roserekber" oninput="updateAll()">
+          </div>
+          <div class="form-group">
+            <label>Nominal Convert</label>
+            <input type="text" id="nom_c" class="field-input" placeholder="500.000" oninput="formatInput(this); updateAll()">
+          </div>
+          <div style="display:flex; gap:10px;">
+            <div class="form-group" style="flex:1">
+              <label>Dari</label>
+              <input type="text" id="dari_c" class="field-input" placeholder="Dana" oninput="updateAll()">
+            </div>
+            <div class="form-group" style="flex:1">
+              <label>Ke</label>
+              <input type="text" id="ke_c" class="field-input" placeholder="Gopay" oninput="updateAll()">
+            </div>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <div class="form-group">
+            <label>Username Penjual</label>
+            <input type="text" id="user_p_rek" class="field-input" placeholder="penjual" oninput="updateAll()">
+          </div>
+          <div class="form-group">
+            <label>Username Pembeli</label>
+            <input type="text" id="user_b_rek" class="field-input" placeholder="pembeli" oninput="updateAll()">
+          </div>
+          <div class="form-group">
+            <label>Jenis Orderan</label>
+            <input type="text" id="jenis_rek" class="field-input" placeholder="Nox, Acc, dll" oninput="updateAll()">
+          </div>
+          <div class="form-group">
+            <label>Nominal</label>
+            <input type="text" id="nom_rek" class="field-input" placeholder="1.000.000" oninput="formatInput(this); updateAll()">
+          </div>
+          <div style="display:flex; gap:10px;">
+            <div class="form-group" style="flex:1">
+              <label>Penjual Via</label>
+              <input type="text" id="p_via" class="field-input" placeholder="Dana" oninput="updateAll()">
+            </div>
+            <div class="form-group" style="flex:1">
+              <label>Pembeli Via</label>
+              <input type="text" id="b_via" class="field-input" placeholder="Dana" oninput="updateAll()">
+            </div>
+          </div>
+          <span class="info-badge">*Jika via berbeda, fee convert otomatis ditambahkan</span>
+        `;
+      }
+      updateAll();
+    }
+
+    // Logic Functions (Original)
+    function formatRibuan(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+    function formatInput(el) {
+      let val = el.value.replace(/\D/g, '');
+      el.value = val ? formatRibuan(val) : '';
+    }
+
+    function updateAll() {
+      if(currentService === 'jaspin') updateJaspin();
+      else if(currentService === 'convert') updateConvert();
+      else updateRekber();
+    }
+
+    function updateJaspin() {
+      let raw = (document.getElementById('nom_j')?.value || "0").replace(/\./g, '');
+      let nom = parseInt(raw) || 0;
+      let fee = "0";
+      if (nom >= 10 && nom < 1000) fee = "free";
+      else if (nom >= 1000) {
+        let val = (nom < 21000) ? (Math.floor(nom/1000)*10 - 5) : (195 + (Math.floor(nom/1000)-20)*10);
+        fee = val < 1000 ? val + "p" : formatRibuan(val);
+      }
+      let template = `ㅤㅤ ㅤ🪷 𓏸  FORMAT JASPIN ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_j')?.value || "..."}\nㅤ𐀶. . jaspin nominal :: ${formatRibuan(raw) || "0"}\nㅤ𐀶. . fee jaspin :: ${fee}\nㅤ𐀶. . nomor + a.n :: ${document.getElementById('nan_j')?.value || "..."}\nㅤ𐀶. . pakai qris :: ${document.getElementById('qris_global').value}\nㅤ𐀶. . sudah subs @roserekber ? :: ${document.getElementById('subs_global').value}`;
+      document.getElementById('hasilForm').innerText = template;
+    }
+
+    function updateConvert() {
+      let raw = (document.getElementById('nom_c')?.value || "0").replace(/\./g, '');
+      let nom = parseInt(raw) || 0;
+      let tipe = document.getElementById('tipe_cv')?.value;
+      let feeDisplay = "0";
+      if (tipe === 'prem') {
+        feeDisplay = formatRibuan((Math.floor(nom / 100000) + 1) * 1000);
+      } else {
+        if (nom < 20000) feeDisplay = "2.000";
+        else if (nom < 50000) feeDisplay = "3.000";
+        else if (nom < 100000) feeDisplay = "4.000";
+        else if (nom < 20000) feeDisplay = "6.000";
+        else if (nom < 300000) feeDisplay = "8.000";
+        else if (nom < 400000) feeDisplay = "10.000";
+        else if (nom < 500000) feeDisplay = "12.000";
+        else {
+          let rate = Math.max(0.70, 0.97 - (Math.floor((nom - 500000) / 500000) * 0.01));
+          feeDisplay = `${formatRibuan(Math.round(nom - (nom * rate)))} (Rate ${rate.toFixed(2)})`;
+        }
+      }
+      let template = `ㅤㅤ ㅤ🪷 𓏸  FORMAT CONVERT ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_c')?.value || "..."}\nㅤ𐀶. . cv nominal :: ${formatRibuan(raw) || "0"}\nㅤ𐀶. . fee convert :: ${feeDisplay}\nㅤ𐀶. . dari ewallet :: ${document.getElementById('dari_c')?.value || "..."}\nㅤ𐀶. . ewallet tujuan :: ${document.getElementById('ke_c')?.value || "..."}\nㅤ𐀶. . pakai qris :: ${document.getElementById('qris_global').value}\nㅤ𐀶. . sudah subs @roserekber ? :: ${document.getElementById('subs_global').value}`;
+      document.getElementById('hasilForm').innerText = template;
+    }
+
+    function updateRekber() {
+      let raw = (document.getElementById('nom_rek')?.value || "0").replace(/\./g, '');
+      let nom = parseInt(raw) || 0;
+      let v_p = (document.getElementById('p_via')?.value || "").toLowerCase().trim();
+      let v_b = (document.getElementById('b_via')?.value || "").toLowerCase().trim();
+      let qris = document.getElementById('qris_global').value;
+      
+      let feeRekValue = 0; let isPerak = true;
+      if (nom < 10000) feeRekValue = 0;
+      else if (nom < 20000) feeRekValue = 30;
+      else if (nom < 60000) feeRekValue = 100;
+      else if (nom < 400000) feeRekValue = 200;
+      else if (nom < 600000) feeRekValue = 350;
+      else if (nom < 700000) feeRekValue = 550;
+      else if (nom < 800000) feeRekValue = 950;
+      else if (nom < 1000000) { feeRekValue = 2000; isPerak = false; }
+      else if (nom <= 2000000) { feeRekValue = 5000; isPerak = false; }
+      else { feeRekValue = 8000; isPerak = false; }
+
+      let feeCvValue = 0; let infoCv = "";
+      if (v_p !== "" && v_b !== "" && v_p !== v_b) {
+        if (qris.includes("yes")) {
+          if (nom < 20000) feeCvValue = 2000;
+          else if (nom < 50000) feeCvValue = 3000;
+          else if (nom < 100000) feeCvValue = 4000;
+          else {
+            let rate = Math.max(0.70, 0.97 - (Math.floor((nom - 500000) / 500000) * 0.01));
+            feeCvValue = Math.round(nom - (nom * rate));
+          }
+          infoCv = " (inc cv non-prem)";
+        } else {
+          feeCvValue = (Math.floor(nom / 100000) + 1) * 1000;
+          infoCv = " (inc cv prem)";
+        }
+      }
+
+      let totalFeeValue = feeRekValue + feeCvValue;
+      let feeFinal = (totalFeeValue < 1000 && isPerak && feeCvValue === 0) ? totalFeeValue + "p" : formatRibuan(totalFeeValue);
+
+      let template = `🪷 𓏸  FORMAT REKBER E WALLET ☏\n\nㅤ𐀶. . username penjual :: @${document.getElementById('user_p_rek')?.value || "..."}\nㅤ𐀶. . username pembeli :: @${document.getElementById('user_b_rek')?.value || "..."}\nㅤ𐀶. . jenis orderan :: ${document.getElementById('jenis_rek')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatRibuan(raw) || "0"}\nㅤ𐀶. . fee rekber :: ${feeFinal}${infoCv}\nㅤ𐀶. . penjual via :: ${document.getElementById('p_via')?.value || "..."}\nㅤ𐀶. . pembeli via :: ${document.getElementById('b_via')?.value || "..."}\nㅤ𐀶. . pakai qris :: ${qris}\nㅤ𐀶. . sudah subs @roserekber ? :: ${document.getElementById('subs_global').value}`;
+      document.getElementById('hasilForm').innerText = template;
+    }
+
+    function copyText() {
+      const text = document.getElementById('hasilForm').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Format berhasil disalin ke clipboard!");
+      });
+    }
+
+    // Initialize
+    window.onload = () => setService('jaspin');
   </script>
 </body>
 </html>
