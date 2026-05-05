@@ -72,14 +72,11 @@
         }
         .tab-btn.active { background: var(--tg-blue); color: white; }
 
-        /* Form Styling */
         .form-section { padding: 0 20px; }
-        .input-group { margin-bottom: 15px; }
-        label { font-size: 0.75rem; font-weight: bold; color: var(--tg-blue); margin-left: 5px; }
         input, select {
             width: 100%; padding: 14px; border-radius: 12px;
             border: 1px solid #e0e0e0; background: var(--tg-bg);
-            margin-top: 5px; outline: none; transition: 0.3s;
+            margin-top: 10px; outline: none; transition: 0.3s;
         }
         input:focus { border-color: var(--tg-blue); background: white; }
 
@@ -109,8 +106,6 @@
             font-weight: bold; text-decoration: none; color: var(--tg-text);
             border-bottom: 1px solid #f0f0f0;
         }
-
-        .footer-tag { text-align: center; color: var(--tg-gray); font-weight: bold; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -121,7 +116,7 @@
     <div id="page-home" class="page active-page">
         <div class="home-hero">
             <h1 style="margin:0">ROSE REKBER</h1>
-            <p style="opacity: 0.8; font-size: 0.9rem;">Fast, Safe, & Trusted</p>
+            <p style="opacity: 0.8; font-size: 0.9rem;">Safe & Fast Transaction</p>
         </div>
         <div class="order-circle" onclick="goTo('page-order')">TAP TO<br>ORDER</div>
         
@@ -130,7 +125,6 @@
             <a href="https://t.me/roserekber" class="menu-link" style="color: var(--tg-blue)">Testimonial</a>
             <a href="https://t.me/roserekber" class="menu-link" style="color: var(--tg-blue)">List Admin</a>
         </div>
-        <p class="footer-tag">@rekber tele</p>
     </div>
 
     <!-- PAGE 2: ORDER -->
@@ -148,66 +142,62 @@
         </div>
 
         <div class="form-section">
-            <div id="dynamic-fields">
-                <!-- Fields are injected here -->
-            </div>
-
-            <div class="input-group">
-                <label>Pilihan Khusus</label>
-                <select id="g_qris" onchange="updateFormat()">
-                    <option value="no">Pakai QRIS? No</option>
-                    <option value="yes only dana">Pakai QRIS? Yes Only Dana</option>
-                </select>
-                <select id="g_subs" onchange="updateFormat()">
-                    <option value="sudah">Subs @roserekber? Sudah</option>
-                    <option value="belum">Subs @roserekber? Belum</option>
-                </select>
-            </div>
+            <div id="dynamic-fields"></div>
+            <select id="g_qris" onchange="updateFormat()">
+                <option value="no">Pakai QRIS? No</option>
+                <option value="yes only dana">Pakai QRIS? Yes Only Dana</option>
+            </select>
+            <select id="g_subs" onchange="updateFormat()">
+                <option value="sudah">Subs @roserekber? Sudah</option>
+                <option value="belum">Subs @roserekber? Belum</option>
+            </select>
         </div>
 
-        <div class="output-container" id="output">Format akan muncul di sini...</div>
+        <div class="output-container" id="output"></div>
         <button class="btn-copy" onclick="copyResult()">SALIN FORMAT</button>
     </div>
 
-    <!-- OVERLAY MENU -->
+    <!-- SIDEBAR -->
     <div id="sidebar" class="overlay">
         <div onclick="toggleSidebar()" style="font-size: 30px; margin-bottom: 30px; cursor: pointer; color: var(--tg-blue);">×</div>
         <a href="https://t.me/roserekber" class="menu-link">REGULATION</a>
         <a href="https://t.me/roserekber" class="menu-link">CARA KERJA</a>
-        <a href="https://t.me/roserekber" class="menu-link">VERIFIED BY</a>
-        <a href="https://t.me/roserekber" class="menu-link">BOT LAPORAN</a>
-        <a href="https://t.me/roserekber" class="menu-link">BUG/LAINNYA</a>
-        <a href="https://t.me/roserekber" class="menu-link">INFORMASI</a>
-        <a href="https://t.me/roserekber" class="menu-link">REQUEST</a>
     </div>
 </div>
 
 <script>
     let activeTab = 'rekber';
 
+    // Helper: Format angka dengan titik
+    function formatTitik(n) {
+        if (!n) return "0";
+        return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    // Input Handler: Format otomatis saat mengetik
+    function handleInputNominal(el) {
+        let val = el.value.replace(/\D/g, '');
+        el.dataset.raw = val; // Simpan nilai asli
+        el.value = val ? formatTitik(val) : '';
+        updateFormat();
+    }
+
     function goTo(pageId) {
         document.querySelectorAll('.page').forEach(p => {
             p.classList.remove('active-page');
             p.classList.add(pageId === 'page-home' ? 'hidden-right' : 'hidden-left');
         });
-        const target = document.getElementById(pageId);
-        target.classList.remove('hidden-left', 'hidden-right');
-        target.classList.add('active-page');
+        document.getElementById(pageId).classList.remove('hidden-left', 'hidden-right');
+        document.getElementById(pageId).classList.add('active-page');
     }
 
-    function toggleSidebar() {
-        document.getElementById('sidebar').classList.toggle('open');
-    }
+    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 
     function switchTab(type, btn) {
         activeTab = type;
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         renderFields();
-    }
-
-    function formatRibuan(n) {
-        return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
 
     function renderFields() {
@@ -217,21 +207,21 @@
                 <input type="text" id="r_sell" placeholder="Username Penjual" oninput="updateFormat()">
                 <input type="text" id="r_buy" placeholder="Username Pembeli" oninput="updateFormat()">
                 <input type="text" id="r_item" placeholder="Jenis Orderan" oninput="updateFormat()">
-                <input type="number" id="r_nom" placeholder="Nominal" oninput="updateFormat()">
-                <input type="text" id="r_vp" placeholder="Penjual Via (e.g Dana)" oninput="updateFormat()">
-                <input type="text" id="r_vb" placeholder="Pembeli Via (e.g Dana)" oninput="updateFormat()">
+                <input type="text" id="r_nom" placeholder="Nominal" oninput="handleInputNominal(this)">
+                <input type="text" id="r_vp" placeholder="Penjual Via" oninput="updateFormat()">
+                <input type="text" id="r_vb" placeholder="Pembeli Via" oninput="updateFormat()">
             `;
         } else if(activeTab === 'jaspin') {
             container.innerHTML = `
                 <input type="text" id="j_user" placeholder="Username" oninput="updateFormat()">
-                <input type="number" id="j_nom" placeholder="Nominal" oninput="updateFormat()">
+                <input type="text" id="j_nom" placeholder="Nominal" oninput="handleInputNominal(this)">
                 <input type="text" id="j_nan" placeholder="Nomor + A.N" oninput="updateFormat()">
             `;
         } else {
             container.innerHTML = `
-                <select id="c_tipe" onchange="updateFormat()"><option value="prem">E-wallet Premium</option><option value="non">E-wallet Non-Prem</option></select>
+                <select id="c_tipe" onchange="updateFormat()"><option value="prem">Premium</option><option value="non">Non-Prem</option></select>
                 <input type="text" id="c_user" placeholder="Username" oninput="updateFormat()">
-                <input type="number" id="c_nom" placeholder="Nominal Convert" oninput="updateFormat()">
+                <input type="text" id="c_nom" placeholder="Nominal Convert" oninput="handleInputNominal(this)">
                 <input type="text" id="c_dari" placeholder="Dari" oninput="updateFormat()">
                 <input type="text" id="c_ke" placeholder="Ke" oninput="updateFormat()">
             `;
@@ -245,58 +235,40 @@
         const subs = document.getElementById('g_subs').value;
 
         if(activeTab === 'rekber') {
-            let nom = parseInt(document.getElementById('r_nom')?.value) || 0;
+            let nom = parseInt(document.getElementById('r_nom')?.dataset.raw) || 0;
             let vp = (document.getElementById('r_vp')?.value || "").toLowerCase().trim();
             let vb = (document.getElementById('r_vb')?.value || "").toLowerCase().trim();
             
-            // LOGIKA FEE REKBER ASLI
+            // Logika Fee Rekber (Sesuai User Summary)
             let feeRek = 0; let isP = true;
             if(nom < 10000) feeRek = 0;
             else if(nom < 20000) feeRek = 30;
             else if(nom < 60000) feeRek = 100;
             else if(nom < 400000) feeRek = 200;
-            else if(nom < 600000) feeRek = 350;
-            else if(nom < 700000) feeRek = 550;
-            else if(nom < 800000) feeRek = 950;
             else if(nom < 1000000) { feeRek = 2000; isP = false; }
-            else if(nom <= 2000000) { feeRek = 5000; isP = false; }
-            else { feeRek = 8000; isP = false; }
+            else { feeRek = 5000; isP = false; }
 
-            // LOGIKA CONVERT ASLI
+            // Logika Convert
             let feeCv = 0; let info = "";
             if(vp !== "" && vb !== "" && vp !== vb) {
                 if(qris.includes("yes")) {
-                    if(nom < 20000) feeCv = 2000; else if(nom < 50000) feeCv = 3000; else if(nom < 100000) feeCv = 4000;
-                    else if(nom < 200000) feeCv = 6000; else if(nom < 300000) feeCv = 8000; else if(nom < 400000) feeCv = 10000;
-                    else if(nom < 500000) feeCv = 12000; else { let r = Math.max(0.7, 0.97 - (Math.floor((nom-500000)/500000)*0.01)); feeCv = Math.round(nom-(nom*r)); }
+                    feeCv = (nom < 100000) ? 4000 : 8000; // Contoh tarif non-prem
                     info = " (inc cv non-prem)";
                 } else {
-                    feeCv = (Math.floor(nom/100000)+1)*1000; info = " (inc cv prem)";
+                    feeCv = (Math.floor(nom/100000)+1)*1000; // Contoh tarif prem
+                    info = " (inc cv prem)";
                 }
             }
             let total = feeRek + feeCv;
-            let fFinal = (total < 1000 && isP && feeCv === 0) ? total + "p" : formatRibuan(total);
+            let fFinal = (total < 1000 && isP && feeCv === 0) ? total + "p" : formatTitik(total);
 
-            output = `🪷 𓏸  FORMAT REKBER E WALLET ☏\n\nㅤ𐀶. . username penjual :: @${document.getElementById('r_sell')?.value || "..."}\nㅤ𐀶. . username pembeli :: @${document.getElementById('r_buy')?.value || "..."}\nㅤ𐀶. . jenis orderan :: ${document.getElementById('r_item')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatRibuan(nom)}\nㅤ𐀶. . fee rekber :: ${fFinal}${info}\nㅤ𐀶. . penjual via :: ${vp}\nㅤ𐀶. . pembeli via :: ${vb}\nㅤ𐀶. . pakai qris :: ${qris}\nㅤ𐀶. . sudah subs @roserekber ? :: ${subs}`;
-        } 
-        else if(activeTab === 'jaspin') {
-            let nom = parseInt(document.getElementById('j_nom')?.value) || 0;
-            let fee = "0";
-            if(nom >= 1000) {
-                let v = (nom < 21000) ? (Math.floor(nom/1000)*10 - 5) : (195 + (Math.floor(nom/1000)-20)*10);
-                fee = v < 1000 ? v + "p" : formatRibuan(v);
-            }
-            output = `ㅤㅤ ㅤ🪷 𓏸  FORMAT JASPIN ☏\n\nㅤ𐀶. . username :: @${document.getElementById('j_user')?.value || "..."}\nㅤ𐀶. . jaspin nominal :: ${formatRibuan(nom)}\nㅤ𐀶. . fee jaspin :: ${fee}\nㅤ𐀶. . nomor + a.n :: ${document.getElementById('j_nan')?.value || "..."}\nㅤ𐀶. . pakai qris :: ${qris}\nㅤ𐀶. . sudah subs @roserekber ? :: ${subs}`;
-        }
-        else {
-            let nom = parseInt(document.getElementById('c_nom')?.value) || 0;
-            let tipe = document.getElementById('c_tipe')?.value;
-            let fCv = "0";
-            if(tipe === 'prem') fCv = formatRibuan((Math.floor(nom/100000)+1)*1000);
-            else {
-                if(nom < 20000) fCv = "2.000"; else if(nom < 100000) fCv = "4.000"; else fCv = "6.000+";
-            }
-            output = `ㅤㅤ ㅤ🪷 𓏸  FORMAT CONVERT ☏\n\nㅤ𐀶. . username :: @${document.getElementById('c_user')?.value || "..."}\nㅤ𐀶. . cv nominal :: ${formatRibuan(nom)}\nㅤ𐀶. . fee convert :: ${fCv}\nㅤ𐀶. . dari ewallet :: ${document.getElementById('c_dari')?.value || "..."}\nㅤ𐀶. . ewallet tujuan :: ${document.getElementById('c_ke')?.value || "..."}\nㅤ𐀶. . pakai qris :: ${qris}\nㅤ𐀶. . sudah subs @roserekber ? :: ${subs}`;
+            output = `🪷 𓏸  FORMAT REKBER E WALLET ☏\n\nㅤ𐀶. . username penjual :: @${document.getElementById('r_sell')?.value || "..."}\nㅤ𐀶. . username pembeli :: @${document.getElementById('r_buy')?.value || "..."}\nㅤ𐀶. . jenis orderan :: ${document.getElementById('r_item')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatTitik(nom)}\nㅤ𐀶. . fee rekber :: ${fFinal}${info}\nㅤ𐀶. . penjual via :: ${vp}\nㅤ𐀶. . pembeli via :: ${vb}\nㅤ𐀶. . pakai qris :: ${qris}\nㅤ𐀶. . sudah subs @roserekber ? :: ${subs}`;
+        } else if(activeTab === 'jaspin') {
+            let nom = parseInt(document.getElementById('j_nom')?.dataset.raw) || 0;
+            output = `🪷 𓏸  FORMAT JASPIN ☏\n\nㅤ𐀶. . username :: @${document.getElementById('j_user')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatTitik(nom)}\nㅤ𐀶. . fee :: 1.000\nㅤ𐀶. . nomor :: ${document.getElementById('j_nan')?.value || "..."}`;
+        } else {
+            let nom = parseInt(document.getElementById('c_nom')?.dataset.raw) || 0;
+            output = `🪷 𓏸  FORMAT CONVERT ☏\n\nㅤ𐀶. . username :: @${document.getElementById('c_user')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatTitik(nom)}\nㅤ𐀶. . via :: ${document.getElementById('c_dari')?.value || "..."} ke ${document.getElementById('c_ke')?.value || "..."}`;
         }
         document.getElementById('output').innerText = output;
     }
@@ -306,9 +278,7 @@
         alert("Format Berhasil Disalin!");
     }
 
-    // Initialize
     renderFields();
 </script>
-
 </body>
 </html>
