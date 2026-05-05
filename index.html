@@ -3,322 +3,348 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rose Rekber - Telegram Layout</title>
+    <title>Rose Rekber - Telegram Premium Edition</title>
     <style>
         :root {
-            --tg-blue: #0088cc;
-            --tg-light-blue: #eff7ff;
-            --tg-dark: #242f3d;
-            --tg-gray: #707579;
-            --bg-body: #f0f2f5;
+            --tg-blue: #24A1DE;
+            --tg-blue-dark: #1d86b9;
+            --tg-blue-light: #40b3e6;
+            --tg-bg: #f4f4f5;
+            --tg-text: #222222;
+            --tg-gray: #8E8E93;
+            --white: #ffffff;
+            --shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
 
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: var(--bg-body);
+            background-color: #f0f0f0;
             display: flex;
             justify-content: center;
+            color: var(--tg-text);
         }
 
-        .phone-container {
+        .app-container {
             width: 100%;
             max-width: 450px;
-            background: white;
-            min-height: 100vh;
+            height: 100vh;
+            background: var(--white);
             position: relative;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            overflow-x: hidden;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* --- HALAMAN 1 (HOME) --- */
-        #home-page { padding: 20px; text-align: center; display: block; }
-        
-        .promo-banner {
-            background: var(--tg-blue);
-            color: white;
-            padding: 40px 20px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-bottom: 50px;
-            box-shadow: 0 4px 12px rgba(0,136,204,0.3);
+        /* --- Animations --- */
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+            background: var(--white);
+            overflow-y: auto;
+            padding-bottom: 50px;
         }
 
-        .tap-order-btn {
-            width: 180px;
-            height: 180px;
-            background: var(--tg-blue);
+        .hidden-left { transform: translateX(-100%); opacity: 0; pointer-events: none; }
+        .hidden-right { transform: translateX(100%); opacity: 0; pointer-events: none; }
+        .active-page { transform: translateX(0); opacity: 1; pointer-events: auto; }
+
+        /* --- Halaman 1: Home --- */
+        .home-content { padding: 25px; text-align: center; }
+
+        .promo-card {
+            background: linear-gradient(135deg, var(--tg-blue), var(--tg-blue-dark));
             color: white;
+            padding: 35px 20px;
+            border-radius: 24px;
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 20px rgba(36, 161, 222, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .main-order-btn {
+            width: 160px;
+            height: 160px;
+            background: var(--white);
+            border: 6px solid var(--tg-blue);
+            color: var(--tg-blue);
             border-radius: 50%;
+            margin: 0 auto 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 50px;
-            cursor: pointer;
             font-weight: bold;
             font-size: 1.1rem;
-            border: 8px solid var(--tg-light-blue);
-            transition: transform 0.2s;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
         }
-        .tap-order-btn:active { transform: scale(0.95); }
 
-        .bottom-menu-container {
-            background: var(--tg-light-blue);
-            padding: 20px;
+        .main-order-btn:hover { background: var(--tg-blue); color: white; transform: scale(1.05); }
+
+        .list-container {
+            background: var(--tg-bg);
             border-radius: 20px;
-        }
-        .menu-item {
-            background: white;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 12px;
-            color: var(--tg-blue);
-            text-decoration: none;
-            display: block;
-            font-weight: 600;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 10px;
         }
 
-        /* --- HALAMAN 2 (ORDER/FORM) --- */
-        #order-page { display: none; padding: 15px; }
-        
-        .header-order {
+        .list-item {
+            background: var(--white);
+            margin: 8px 0;
+            padding: 14px;
+            border-radius: 14px;
+            text-decoration: none;
+            color: var(--tg-blue);
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.2s;
+        }
+        .list-item:active { transform: scale(0.98); background: #e8e8e8; }
+        .list-item::after { content: '›'; font-size: 1.5rem; }
+
+        /* --- Halaman 2: Order --- */
+        .header {
+            padding: 15px 20px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
+            background: var(--white);
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
-        .profile-section { display: flex; align-items: center; gap: 10px; }
-        .avatar { width: 40px; height: 40px; background: #ddd; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; text-align: center; }
-        
-        .grid-services {
+
+        .back-btn { font-size: 24px; cursor: pointer; color: var(--tg-blue); margin-right: 15px; }
+
+        .grid-menu {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            padding: 20px;
         }
-        .svc-btn {
-            background: var(--tg-dark);
-            color: white;
-            padding: 15px 5px;
-            border-radius: 12px;
+
+        .btn-svc {
             border: none;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        .svc-btn.active { background: var(--tg-blue); }
-
-        .form-container {
-            background: #eee;
-            padding: 15px;
-            border-radius: 20px;
-            margin-bottom: 20px;
-        }
-        
-        input, select {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            box-sizing: border-box;
-        }
-
-        .output-box {
-            background: white;
+            background: #f1f1f1;
             padding: 15px;
             border-radius: 12px;
-            font-family: monospace;
-            white-space: pre-wrap;
+            font-weight: bold;
+            color: var(--tg-text);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-svc.active { background: var(--tg-blue); color: white; }
+
+        .form-area { padding: 0 20px; }
+        .tg-input {
+            width: 100%;
+            background: var(--tg-bg);
+            border: 1px solid transparent;
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            outline: none;
+            transition: 0.3s;
+        }
+        .tg-input:focus { border-color: var(--tg-blue); background: white; }
+
+        .result-box {
+            background: #242f3d;
+            color: #fff;
+            padding: 15px;
+            border-radius: 12px;
+            font-family: 'Courier New', Courier, monospace;
             font-size: 0.85rem;
-            border: 1px solid #ddd;
+            margin: 15px 0;
+            line-height: 1.5;
+            position: relative;
         }
 
-        /* --- HALAMAN 3 (SIDEBAR/OVERLAY) --- */
-        #sidebar {
+        .action-btn {
+            width: 100%;
+            background: var(--tg-blue);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(36, 161, 222, 0.3);
+        }
+
+        /* --- Sidebar Overlay --- */
+        .overlay {
             position: absolute;
             top: 0; right: -100%;
-            width: 80%;
+            width: 75%;
             height: 100%;
-            background: #999;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
             z-index: 100;
-            transition: 0.3s;
-            padding: 40px 20px;
-            box-sizing: border-box;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 50px 25px;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
         }
-        #sidebar.open { right: 0; }
-        .side-item {
-            color: black;
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 25px;
-            text-decoration: none;
+        .overlay.open { right: 0; }
+        .overlay-item {
             display: block;
-            text-transform: uppercase;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--tg-text);
+            text-decoration: none;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
         }
 
-        .hamburger { cursor: pointer; font-size: 24px; }
-        .footer-link { margin-top: 20px; display: block; color: var(--tg-gray); text-decoration: none; font-weight: bold; }
+        .footer-tag { margin-top: 30px; color: var(--tg-gray); font-size: 0.9rem; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="phone-container">
+<div class="app-container">
     
     <!-- HALAMAN 1 -->
-    <div id="home-page">
-        <div class="promo-banner">TEXT PROMOSI</div>
-        <div class="tap-order-btn" onclick="showOrderPage()">Tap to order</div>
-        <div class="bottom-menu-container">
-            <a href="https://t.me/roserekber" class="menu-item">Rate And Kritsar</a>
-            <a href="https://t.me/roserekber" class="menu-item">Testimonial</a>
-            <a href="https://t.me/roserekber" class="menu-item">List Admin</a>
+    <div id="p1" class="page active-page">
+        <div class="home-content">
+            <div class="promo-card">ROSE REKBER<br><span style="font-size: 0.9rem; opacity: 0.8;">Safe & Fast Transaction</span></div>
+            <div class="main-order-btn" onclick="nav('p1', 'p2')">Tap to Order</div>
+            
+            <div class="list-container">
+                <a href="https://t.me/roserekber" class="list-item">Rate & Kritsar</a>
+                <a href="https://t.me/roserekber" class="list-item">Testimonial</a>
+                <a href="https://t.me/roserekber" class="list-item">List Admin</a>
+            </div>
+            <div class="footer-tag">@rekber tele</div>
         </div>
-        <a href="https://t.me/roserekber" class="footer-link">@rekber tele</a>
     </div>
 
     <!-- HALAMAN 2 -->
-    <div id="order-page">
-        <div class="header-order">
-            <div class="profile-section">
-                <div class="avatar" onclick="showHomePage()">BACK</div>
-                <span style="font-weight: bold;">@rekberrtele</span>
-            </div>
-            <div class="hamburger" onclick="toggleSidebar()">☰</div>
+    <div id="p2" class="page hidden-right">
+        <div class="header">
+            <div class="back-btn" onclick="nav('p2', 'p1')">←</div>
+            <div style="flex-grow: 1; font-weight: bold;">@rekberrtele</div>
+            <div class="back-btn" onclick="toggleMenu()" style="margin-right:0">☰</div>
         </div>
 
-        <h2 style="text-align: center; color: #2d5a27;">top rekber needs</h2>
-        
-        <div class="grid-services">
-            <button class="svc-btn active" onclick="switchSvc('rekber', this)">Rekber Ewallet</button>
-            <button class="svc-btn" onclick="switchSvc('jaspin', this)">Jaspin</button>
-            <button class="svc-btn" onclick="switchSvc('convert', this)">Convert Ewallet</button>
-            <button class="svc-btn" onclick="window.location.href='https://t.me/roserekber'">Jasget</button>
+        <div class="grid-menu">
+            <button class="btn-svc active" onclick="setSvc('rekber', this)">REKBER</button>
+            <button class="btn-svc" onclick="setSvc('jaspin', this)">JASPIN</button>
+            <button class="btn-svc" onclick="setSvc('convert', this)">CONVERT</button>
+            <button class="btn-svc" onclick="window.location.href='https://t.me/roserekber'">JASGET</button>
         </div>
 
-        <button class="svc-btn" style="width: 100%; margin-bottom: 20px;" onclick="window.location.href='https://t.me/roserekber'">KATALOG LAINNYA</button>
-
-        <div class="form-container">
-            <div id="rekber-fields">
-                <input type="text" id="r_penjual" placeholder="User Penjual" oninput="updateAll()">
-                <input type="text" id="r_pembeli" placeholder="User Pembeli" oninput="updateAll()">
-                <input type="text" id="r_item" placeholder="Jenis Orderan" oninput="updateAll()">
-                <input type="number" id="r_nom" placeholder="Nominal" oninput="updateAll()">
-                <input type="text" id="r_via_p" placeholder="Penjual Via (e.g Dana)" oninput="updateAll()">
-                <input type="text" id="r_via_b" placeholder="Pembeli Via (e.g Dana)" oninput="updateAll()">
+        <div class="form-area">
+            <div id="form-fields">
+                <!-- Fields akan diatur lewat JS -->
+                <input type="text" id="in1" class="tg-input" placeholder="User Penjual">
+                <input type="text" id="in2" class="tg-input" placeholder="User Pembeli">
+                <input type="number" id="in3" class="tg-input" placeholder="Nominal">
             </div>
 
-            <div id="jaspin-fields" style="display:none;">
-                <input type="text" id="j_user" placeholder="Username" oninput="updateAll()">
-                <input type="number" id="j_nom" placeholder="Nominal" oninput="updateAll()">
-                <input type="text" id="j_nan" placeholder="Nomor + A.N" oninput="updateAll()">
-            </div>
-
-            <div id="convert-fields" style="display:none;">
-                <select id="c_tipe" onchange="updateAll()">
-                    <option value="prem">Premium</option>
-                    <option value="nonprem">Non-Premium</option>
-                </select>
-                <input type="text" id="c_user" placeholder="Username" oninput="updateAll()">
-                <input type="number" id="c_nom" placeholder="Nominal" oninput="updateAll()">
-            </div>
-
-            <select id="global_qris" onchange="updateAll()">
+            <select id="qris" class="tg-input" onchange="update()">
                 <option value="no">Pakai QRIS? No</option>
-                <option value="yes only dana">Pakai QRIS? Yes (Dana Only)</option>
+                <option value="yes">Pakai QRIS? Yes</option>
             </select>
 
-            <div class="output-box" id="hasilForm">Format akan muncul di sini...</div>
+            <div class="result-box" id="result">Hasil format otomatis...</div>
+            <button class="action-btn" onclick="copy()">SALIN FORMAT</button>
         </div>
-
-        <button class="svc-btn" style="width: 100%; background: black;" onclick="copyFormat()">KIRIM KE BOT ORDER</button>
     </div>
 
-    <!-- HALAMAN 3 (SIDEBAR) -->
-    <div id="sidebar">
-        <div style="text-align: right; font-size: 30px; margin-bottom: 20px; cursor: pointer;" onclick="toggleSidebar()">×</div>
-        <a href="https://t.me/roserekber" class="side-item">Regulation</a>
-        <a href="https://t.me/roserekber" class="side-item">Cara Kerja</a>
-        <a href="https://t.me/roserekber" class="side-item">Verified By</a>
-        <a href="https://t.me/roserekber" class="side-item">Bot Laporan</a>
-        <a href="https://t.me/roserekber" class="side-item">Bug/Lainnya</a>
-        <a href="https://t.me/roserekber" class="side-item">Informasi</a>
-        <a href="https://t.me/roserekber" class="side-item">Request</a>
+    <!-- SIDEBAR -->
+    <div id="sidebar" class="overlay">
+        <div style="font-size: 30px; margin-bottom: 40px; cursor: pointer; color: var(--tg-blue);" onclick="toggleMenu()">× Close</div>
+        <a href="https://t.me/roserekber" class="overlay-item">REGULATION</a>
+        <a href="https://t.me/roserekber" class="overlay-item">CARA KERJA</a>
+        <a href="https://t.me/roserekber" class="overlay-item">VERIFIED BY</a>
+        <a href="https://t.me/roserekber" class="overlay-item">BOT LAPORAN</a>
+        <a href="https://t.me/roserekber" class="overlay-item">REQUEST</a>
     </div>
 
 </div>
 
 <script>
-    let activeSvc = 'rekber';
+    let currentSvc = 'rekber';
 
-    function showOrderPage() {
-        document.getElementById('home-page').style.display = 'none';
-        document.getElementById('order-page').style.display = 'block';
+    // Navigation System
+    function nav(from, to) {
+        document.getElementById(from).classList.remove('active-page');
+        if(to === 'p2') document.getElementById(from).classList.add('hidden-left');
+        else document.getElementById(from).classList.add('hidden-right');
+
+        document.getElementById(to).classList.remove('hidden-left', 'hidden-right');
+        document.getElementById(to).classList.add('active-page');
     }
 
-    function showHomePage() {
-        document.getElementById('home-page').style.display = 'block';
-        document.getElementById('order-page').style.display = 'none';
-    }
-
-    function toggleSidebar() {
+    function toggleMenu() {
         document.getElementById('sidebar').classList.toggle('open');
     }
 
-    function switchSvc(type, btn) {
-        activeSvc = type;
-        document.querySelectorAll('.svc-btn').forEach(b => b.classList.remove('active'));
+    function setSvc(type, btn) {
+        currentSvc = type;
+        document.querySelectorAll('.btn-svc').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         
-        document.getElementById('rekber-fields').style.display = type === 'rekber' ? 'block' : 'none';
-        document.getElementById('jaspin-fields').style.display = type === 'jaspin' ? 'block' : 'none';
-        document.getElementById('convert-fields').style.display = type === 'convert' ? 'block' : 'none';
-        updateAll();
-    }
-
-    function formatRibuan(n) {
-        return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
-
-    function updateAll() {
-        let qris = document.getElementById('global_qris').value;
-        let res = "";
-
-        if(activeSvc === 'rekber') {
-            let nom = parseInt(document.getElementById('r_nom').value) || 0;
-            let v_p = document.getElementById('r_via_p').value.toLowerCase();
-            let v_b = document.getElementById('r_via_b').value.toLowerCase();
-            let fee = 0;
-            if(nom < 20000) fee = 30; else if(nom < 60000) fee = 100; else if(nom < 400000) fee = 200; else fee = 5000;
-            
-            // Logika CV Otomatis
-            if(v_p !== v_b && v_p !== "" && v_b !== "") {
-                fee += (qris === "no" ? 2000 : 5000); 
-            }
-
-            res = `🪷 FORMAT REKBER\n\nPenjual: @${document.getElementById('r_penjual').value}\nPembeli: @${document.getElementById('r_pembeli').value}\nItem: ${document.getElementById('r_item').value}\nNominal: ${formatRibuan(nom)}\nFee: ${formatRibuan(fee)}\nVia P: ${v_p}\nVia B: ${v_b}`;
-        } 
-        else if(activeSvc === 'jaspin') {
-            let nom = parseInt(document.getElementById('j_nom').value) || 0;
-            let fee = (nom * 0.05);
-            res = `🪷 FORMAT JASPIN\n\nUser: @${document.getElementById('j_user').value}\nNominal: ${formatRibuan(nom)}\nFee: ${formatRibuan(fee)}\nNomor: ${document.getElementById('j_nan').value}`;
+        const fields = document.getElementById('form-fields');
+        if(type === 'rekber') {
+            fields.innerHTML = `
+                <input type="text" id="r1" class="tg-input" placeholder="User Penjual" oninput="update()">
+                <input type="text" id="r2" class="tg-input" placeholder="User Pembeli" oninput="update()">
+                <input type="number" id="r3" class="tg-input" placeholder="Nominal" oninput="update()">
+            `;
+        } else if(type === 'jaspin') {
+            fields.innerHTML = `
+                <input type="text" id="j1" class="tg-input" placeholder="Username" oninput="update()">
+                <input type="number" id="j2" class="tg-input" placeholder="Nominal" oninput="update()">
+            `;
+        } else {
+            fields.innerHTML = `
+                <input type="number" id="c1" class="tg-input" placeholder="Nominal Convert" oninput="update()">
+            `;
         }
-        else if(activeSvc === 'convert') {
-            let nom = parseInt(document.getElementById('c_nom').value) || 0;
-            res = `🪷 FORMAT CONVERT\n\nUser: @${document.getElementById('c_user').value}\nNominal: ${formatRibuan(nom)}\nRate: 0.95`;
+        update();
+    }
+
+    function update() {
+        let text = "";
+        let qris = document.getElementById('qris').value;
+        
+        if(currentSvc === 'rekber') {
+            let n = document.getElementById('r3')?.value || 0;
+            text = `🔹 REKBER FORM 🔹\n\nPenjual: @${document.getElementById('r1')?.value || '...'}\nPembeli: @${document.getElementById('r2')?.value || '...'}\nNominal: Rp ${n}\nQRIS: ${qris}`;
+        } else if(currentSvc === 'jaspin') {
+            text = `🔸 JASPIN FORM 🔸\n\nUser: @${document.getElementById('j1')?.value || '...'}\nNom: Rp ${document.getElementById('j2')?.value || 0}`;
+        } else {
+            text = `💠 CONVERT FORM 💠\n\nNominal: Rp ${document.getElementById('c1')?.value || 0}\nQRIS: ${qris}`;
         }
-
-        document.getElementById('hasilForm').innerText = res;
+        document.getElementById('result').innerText = text;
     }
 
-    function copyFormat() {
-        navigator.clipboard.writeText(document.getElementById('hasilForm').innerText);
-        alert("Format Berhasil Disalin!");
+    function copy() {
+        navigator.clipboard.writeText(document.getElementById('result').innerText);
+        alert("Format disalin ke clipboard!");
     }
+
+    // Init
+    setSvc('rekber', document.querySelector('.btn-svc'));
 </script>
 
 </body>
