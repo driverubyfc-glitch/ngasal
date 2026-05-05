@@ -127,7 +127,7 @@
         <div class="sectionTitle"><h3>Overview</h3></div>
         <div class="card" style="background: linear-gradient(135deg, #d63384, #9d1757); color: white;">
           <div style="font-size: 20px; font-weight: 800;">Sistem Online ✅</div>
-          <p style="font-size: 12px; opacity: 0.9;">Layanan @cellrekber aktif 24 jam.</p>
+          <p style="font-size: 12px; opacity: 0.9;">Layanan aktif. Silahkan buat format di menu Order.</p>
         </div>
       </section>
 
@@ -146,7 +146,7 @@
 
           <hr style="border: 0; border-top: 1px solid rgba(0,0,0,0.05); margin: 20px 0;">
 
-          <!-- Dropdown QRIS hanya muncul jika bukan Jaspin -->
+          <!-- Dropdown QRIS disembunyikan jika Jaspin -->
           <div class="form-group" id="qris-wrapper">
             <label>Pakai QRIS?</label>
             <select class="field-input" id="qris_global" onchange="updateAll()">
@@ -205,9 +205,8 @@
       const container = document.getElementById('form-content');
       const qrisWrapper = document.getElementById('qris-wrapper');
 
-      // Sembunyikan QRIS selector jika Jaspin
       if(service === 'jaspin') {
-        qrisWrapper.style.display = 'none';
+        qrisWrapper.style.display = 'none'; // Sembunyikan dropdown sesuai permintaan
         container.innerHTML = `
           <div class="form-group"><label>Username</label><input type="text" id="user_j" class="field-input" placeholder="username" oninput="updateAll()"></div>
           <div class="form-group"><label>Nominal</label><input type="text" id="nom_j" class="field-input" placeholder="8.000" oninput="formatInput(this); updateAll()"></div>
