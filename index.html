@@ -1,232 +1,292 @@
-\<!doctype html>
+<!doctype html>
 <html lang="id">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>iOS Style - Order Form</title>
+  <title>iOS x Telegram - 3 Pages</title>
   <style>
-    :root {
+    :root{
       --bg: #f4f6fa;
-      --card: rgba(255,255,255,.9);
+      --card: rgba(255,255,255,.86);
+      --card2: rgba(255,255,255,.72);
       --text: #0f172a;
+      --muted: rgba(15,23,42,.55);
+      --line: rgba(15,23,42,.10);
+      --shadow: 0 18px 60px rgba(2,6,23,.12);
       --tg: #229ED9;
-      --muted: rgba(15,23,42,.5);
+      --tg2: #1b86b6;
       --radius-xl: 28px;
-      --shadow: 0 15px 40px rgba(0,0,0,0.08);
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --blur: blur(18px);
+      --device: 430px;
     }
 
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body {
-      margin: 0;
-      font-family: -apple-system, system-ui, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-      background: var(--bg);
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "SF Pro Display","SF Pro Text", Segoe UI, Roboto, Helvetica, Arial;
+      background: radial-gradient(1200px 600px at 20% -10%, rgba(34,158,217,.18), transparent 60%),
+                  radial-gradient(900px 500px at 90% 10%, rgba(34,158,217,.10), transparent 55%),
+                  linear-gradient(180deg, #eef3fb, var(--bg));
+      display:flex;
+      justify-content:center;
+      padding: 18px 12px 36px;
       color: var(--text);
-      display: flex;
-      justify-content: center;
     }
 
-    .phone {
-      width: 100%;
-      max-width: 430px;
+    .phone{
+      width: min(var(--device), 100%);
+      border-radius: 36px;
+      overflow:hidden;
+      border: 1px solid rgba(2,6,23,.10);
+      box-shadow: 0 30px 90px rgba(2,6,23,.20);
       background: var(--bg);
-      min-height: 100vh;
-      position: relative;
-      padding-bottom: 100px;
+      position:relative;
+      min-height: 800px;
     }
 
-    /* Header iOS Style */
-    header {
-      padding: 40px 20px 20px;
-      background: rgba(244,246,250,0.8);
-      backdrop-filter: blur(15px);
+    .safe{
+      padding-top: max(12px, env(safe-area-inset-top));
+      padding-bottom: max(18px, env(safe-area-inset-bottom));
+    }
+
+    .top{
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 30;
+      padding: 14px 14px 12px;
+      background: rgba(244,246,250,.70);
+      backdrop-filter: var(--blur);
+      border-bottom: 1px solid rgba(15,23,42,.08);
     }
-    header h1 { margin: 0; font-size: 24px; font-weight: 800; }
+    .topRow{ display:flex; align-items:center; justify-content:space-between; gap: 10px; }
+    .brand{ display:flex; align-items:center; gap: 10px; min-width: 140px; }
+    .logo{
+      width: 40px; height: 40px; border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(255,255,255,.25)),
+                  linear-gradient(180deg, rgba(34,158,217,.35), rgba(34,158,217,.15));
+      border: 1px solid rgba(34,158,217,.25);
+      display:grid; place-items:center; font-weight: 900; color: rgba(15,23,42,.75);
+    }
+    .brandText b{ display:block; font-size: 14px; }
+    .brandText span{ display:block; font-size: 12px; color: var(--muted); }
 
-    /* Container & Cards */
-    .content { padding: 0 20px; }
-    .card {
+    .headerActions{ display:flex; align-items:center; gap: 10px; }
+    .iconBtn{
+      width: 42px; height: 42px; border-radius: 14px; border: 1px solid rgba(15,23,42,.10);
+      background: rgba(255,255,255,.72); display:grid; place-items:center; cursor:pointer;
+    }
+
+    .page{ display:none; padding: 14px 14px 120px; }
+    .page.active{ display:block; }
+
+    .card{
       background: var(--card);
+      border: 1px solid rgba(15,23,42,.10);
       border-radius: var(--radius-xl);
-      padding: 20px;
       box-shadow: var(--shadow);
-      margin-bottom: 20px;
-      border: 1px solid rgba(255,255,255,0.5);
+      backdrop-filter: var(--blur);
+    }
+    .card.pad{ padding: 14px; }
+
+    .sectionTitle{ display:flex; align-items:flex-end; justify-content:space-between; margin: 10px 2px 10px; }
+    .sectionTitle h3{ margin:0; font-size: 16px; }
+
+    .field{
+      background: rgba(255,255,255,.74);
+      border: 1px solid rgba(15,23,42,.10);
+      border-radius: 18px;
+      padding: 12px;
+      margin-bottom: 8px;
+    }
+    .field label{ display:block; font-size: 11px; color: var(--tg); font-weight: 900; margin-bottom: 4px; text-transform: uppercase; }
+    .field input, .field select, .field textarea {
+      width:100%; border:0; outline:none; background: transparent; font-size: 14px; color: var(--text);
     }
 
-    /* Tabs */
-    .tab-pills {
-      display: flex;
-      background: rgba(0,0,0,0.05);
-      padding: 4px;
-      border-radius: 14px;
-      margin-bottom: 20px;
-    }
-    .tab-pills button {
-      flex: 1; border: none; padding: 10px; border-radius: 11px;
-      background: transparent; font-weight: 600; cursor: pointer; color: var(--muted);
-    }
-    .tab-pills button.active { background: white; color: var(--tg); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-
-    /* Form Fields */
-    .field { margin-bottom: 15px; }
-    .field label { display: block; font-size: 11px; font-weight: 700; color: var(--tg); text-transform: uppercase; margin-bottom: 5px; margin-left: 4px; }
-    .field input, .field select {
-      width: 100%; padding: 14px; border-radius: 15px; border: 1px solid rgba(0,0,0,0.05);
-      background: white; outline: none; font-size: 15px;
+    .cta{
+      margin-top: 12px; width:100%; border:0; border-radius: 18px; padding: 16px;
+      font-weight: 900; color: #fff; background: linear-gradient(180deg, var(--tg), var(--tg2));
+      box-shadow: 0 20px 40px rgba(34,158,217,.25); cursor:pointer;
     }
 
-    /* Result Box */
-    #orderText {
-      width: 100%; min-height: 150px; background: #f9f9f9; border-radius: 20px;
-      padding: 15px; font-family: monospace; font-size: 12px; line-height: 1.5;
-      border: 1px dashed #ddd; resize: none; outline: none; margin-top: 10px;
+    .tabs{
+      position:absolute; left:0; right:0; bottom:0;
+      padding: 10px 12px max(12px, env(safe-area-inset-bottom));
+      background: rgba(244,246,250,.70); backdrop-filter: var(--blur);
+      border-top: 1px solid rgba(15,23,42,.08); z-index: 40;
     }
+    .tabBar{ display:flex; gap: 8px; background: rgba(15,23,42,.07); border-radius: 20px; padding: 6px; }
+    .tab{
+      flex:1; border:0; padding: 10px; border-radius: 16px;
+      background: transparent; font-weight: 900; color: rgba(15,23,42,.62); cursor:pointer;
+    }
+    .tab.active{ background: #fff; color: var(--tg); border: 1px solid rgba(15,23,42,.1); }
 
-    /* Actions */
-    .btn-main {
-      width: 100%; padding: 18px; border-radius: 20px; border: none;
-      background: var(--tg); color: white; font-weight: 800; font-size: 16px;
-      box-shadow: 0 10px 25px rgba(34,158,217,0.3); cursor: pointer;
+    /* Result Area */
+    #orderOutput {
+      width: 100%; min-height: 120px; background: rgba(0,0,0,0.03);
+      border-radius: 15px; padding: 10px; font-family: monospace; font-size: 11px;
+      border: 1px dashed #ccc; margin-top: 10px; color: #444;
     }
-
-    /* Bottom Nav */
-    .bottom-nav {
-      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-      width: 90%; max-width: 380px; background: rgba(255,255,255,0.9);
-      backdrop-filter: blur(20px); padding: 10px; border-radius: 30px;
-      display: flex; justify-content: space-around; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      border: 1px solid rgba(255,255,255,0.5);
-    }
-    .nav-item { border: none; background: transparent; color: var(--muted); font-weight: 700; font-size: 12px; padding: 10px 20px; border-radius: 20px; }
-    .nav-item.active { color: var(--tg); background: rgba(34,158,217,0.1); }
   </style>
 </head>
+
 <body>
-
-  <div class="phone">
-    <header>
-      <h1>Order Form</h1>
-    </header>
-
-    <div class="content">
-      <div class="tab-pills">
-        <button id="btn-rekber" class="active" onclick="setService('rekber')">Rekber</button>
-        <button id="btn-jaspin" onclick="setService('jaspin')">Jaspin</button>
-        <button id="btn-convert" onclick="setService('convert')">Convert</button>
+  <div class="phone safe" id="app">
+    <!-- TOP -->
+    <div class="top">
+      <div class="topRow">
+        <div class="brand">
+          <div class="logo">CR</div>
+          <div class="brandText">
+            <b>@cellrekber</b>
+            <span>Order Management</span>
+          </div>
+        </div>
+        <div class="headerActions">
+          <div class="iconBtn">≡</div>
+        </div>
       </div>
+    </div>
 
-      <div class="card">
-        <div id="dynamic-fields">
-          <!-- JS Injected -->
+    <!-- PAGE 1: DASHBOARD -->
+    <section class="page active" id="page-1">
+      <div class="sectionTitle"><h3>Dashboard</h3></div>
+      <div class="card pad">
+        <p style="font-size: 13px; color: var(--muted);">Selamat datang di portal order @cellrekber. Silakan pilih menu Order untuk membuat format.</p>
+      </div>
+    </section>
+
+    <!-- PAGE 2: ORDER CENTER (MODIFIED) -->
+    <section class="page" id="page-2">
+      <div class="sectionTitle"><h3>Buat Format Order</h3></div>
+      <div class="card pad">
+        <div class="field">
+          <label>Pilih Layanan</label>
+          <select id="srv" onchange="initForm()">
+            <option value="rekber">Rekber (Rekening Bersama)</option>
+            <option value="jaspin">Jaspin (Jasa Posting)</option>
+            <option value="convert">Convert Saldo</option>
+          </select>
         </div>
 
+        <div id="dynamic-fields"></div>
+
         <div class="field">
-          <label>Pake Qris?</label>
-          <select id="qris_global" onchange="updateAll()">
-            <option value="no">No</option>
-            <option value="yes only dana">Yes Only Dana</option>
+          <label>Pakai Qris?</label>
+          <select id="qris" onchange="updateText()">
+            <option value="no">Tidak</option>
+            <option value="yes only dana">Ya (Hanya Dana)</option>
           </select>
         </div>
 
         <div class="field">
           <label>Sudah Subs @roserekber?</label>
-          <select id="subs_global" onchange="updateAll()">
+          <select id="subs" onchange="updateText()">
             <option value="sudah">Sudah</option>
             <option value="belum">Belum</option>
           </select>
         </div>
 
-        <textarea id="orderText" readonly></textarea>
-        <div style="margin-top: 20px;">
-          <button class="btn-main" onclick="copyAction()">SALIN & KIRIM</button>
-        </div>
+        <textarea id="orderOutput" readonly placeholder="Format akan muncul di sini..."></textarea>
+        <button class="cta" onclick="copyText()">SALIN FORMAT</button>
+      </div>
+    </section>
+
+    <!-- PAGE 3: PROFILE -->
+    <section class="page" id="page-3">
+      <div class="sectionTitle"><h3>Profile</h3></div>
+      <div class="card pad">
+        <b>@User</b>
+        <p style="font-size: 12px; color: var(--muted);">Client Access</p>
+      </div>
+    </section>
+
+    <!-- Bottom Tabs -->
+    <div class="tabs">
+      <div class="tabBar">
+        <button class="tab active" data-page="1">Home</button>
+        <button class="tab" data-page="2">Order</button>
+        <button class="tab" data-page="3">Profile</button>
       </div>
     </div>
-
-    <nav class="bottom-nav">
-      <button class="nav-item active">Home</button>
-      <button class="nav-item">History</button>
-      <button class="nav-item">Settings</button>
-    </nav>
   </div>
 
   <script>
-    let currentService = 'rekber';
+    // Navigation
+    const tabs = document.querySelectorAll('.tab');
+    const pages = { 1: document.getElementById('page-1'), 2: document.getElementById('page-2'), 3: document.getElementById('page-3') };
 
-    function setService(s) {
-      currentService = s;
+    tabs.forEach(t => t.addEventListener('click', () => {
+      const n = t.dataset.page;
+      Object.values(pages).forEach(p => p.classList.remove('active'));
+      pages[n].classList.add('active');
+      tabs.forEach(tab => tab.classList.toggle('active', tab === t));
+    }));
+
+    // Form Logic
+    function initForm() {
+      const s = document.getElementById('srv').value;
       const container = document.getElementById('dynamic-fields');
-      document.querySelectorAll('.tab-pills button').forEach(b => b.classList.remove('active'));
-      document.getElementById('btn-' + s).classList.add('active');
-
       if (s === 'rekber') {
         container.innerHTML = `
-          <div class="field"><label>Username Seller</label><input type="text" id="r_sell" placeholder="@..." oninput="updateAll()"></div>
-          <div class="field"><label>Username Buyer</label><input type="text" id="r_buy" placeholder="@..." oninput="updateAll()"></div>
-          <div class="field"><label>Jenis Item</label><input type="text" id="r_item" placeholder="Akun ML" oninput="updateAll()"></div>
-          <div class="field"><label>Nominal</label><input type="text" id="r_nom" placeholder="0" oninput="handleNominal(this)"></div>
-          <div class="field"><label>Seller Via</label><input type="text" id="r_vp" placeholder="Dana" oninput="updateAll()"></div>
-          <div class="field"><label>Buyer Via</label><input type="text" id="r_vb" placeholder="Dana" oninput="updateAll()"></div>
+          <div class="field"><label>Seller</label><input type="text" id="f1" placeholder="@username" oninput="updateText()"></div>
+          <div class="field"><label>Buyer</label><input type="text" id="f2" placeholder="@username" oninput="updateText()"></div>
+          <div class="field"><label>Item</label><input type="text" id="f3" placeholder="Nama Barang" oninput="updateText()"></div>
+          <div class="field"><label>Nominal</label><input type="number" id="f4" placeholder="Harga" oninput="updateText()"></div>
+          <div class="field"><label>Via (Seller)</label><input type="text" id="f5" placeholder="Dana/Gopay" oninput="updateText()"></div>
+          <div class="field"><label>Via (Buyer)</label><input type="text" id="f6" placeholder="Dana/Gopay" oninput="updateText()"></div>
         `;
       } else if (s === 'jaspin') {
         container.innerHTML = `
-          <div class="field"><label>Username</label><input type="text" id="j_user" placeholder="@..." oninput="updateAll()"></div>
-          <div class="field"><label>Nominal</label><input type="text" id="j_nom" placeholder="0" oninput="handleNominal(this)"></div>
-          <div class="field"><label>Nomor + A.N</label><input type="text" id="j_nan" placeholder="08xxx a.n ..." oninput="updateAll()"></div>
+          <div class="field"><label>Username</label><input type="text" id="f1" placeholder="@username" oninput="updateText()"></div>
+          <div class="field"><label>Nominal</label><input type="number" id="f2" placeholder="Jumlah" oninput="updateText()"></div>
+          <div class="field"><label>No + A.N</label><input type="text" id="f3" placeholder="08xxx a.n ..." oninput="updateText()"></div>
         `;
       } else {
         container.innerHTML = `
-          <div class="field"><label>Username</label><input type="text" id="c_user" placeholder="@..." oninput="updateAll()"></div>
-          <div class="field"><label>Nominal</label><input type="text" id="c_nom" placeholder="0" oninput="handleNominal(this)"></div>
-          <div class="field"><label>Dari - Ke</label><input type="text" id="c_way" placeholder="Dana ke Gopay" oninput="updateAll()"></div>
+          <div class="field"><label>Username</label><input type="text" id="f1" placeholder="@username" oninput="updateText()"></div>
+          <div class="field"><label>Nominal</label><input type="number" id="f2" placeholder="Jumlah" oninput="updateText()"></div>
+          <div class="field"><label>Dari - Ke</label><input type="text" id="f3" placeholder="Dana ke Gopay" oninput="updateText()"></div>
         `;
       }
-      updateAll();
+      updateText();
     }
 
-    function handleNominal(el) {
-      let val = el.value.replace(/\D/g, '');
-      el.dataset.raw = val;
-      el.value = val ? val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : '';
-      updateAll();
-    }
+    function updateText() {
+      const s = document.getElementById('srv').value;
+      const q = document.getElementById('qris').value;
+      const sub = document.getElementById('subs').value;
+      let out = "";
 
-    function updateAll() {
-      const qris = document.getElementById('qris_global').value;
-      const subs = document.getElementById('subs_global').value;
-      let output = "";
+      if(s === 'rekber') {
+        const nom = parseInt(document.getElementById('f4')?.value || 0);
+        let fee = "0";
+        if(nom >= 10000 && nom < 20000) fee = "30p";
+        else if(nom >= 20000 && nom < 60000) fee = "100p";
+        else if(nom >= 60000 && nom < 400000) fee = "200p";
+        else if(nom >= 400000 && nom < 1000000) fee = "2.000";
+        else if(nom >= 1000000) fee = "5.000";
 
-      if (currentService === 'rekber') {
-        let nom = parseInt(document.getElementById('r_nom')?.dataset.raw) || 0;
-        let fee = 0; let isP = true;
-        if(nom < 10000) fee = 0;
-        else if(nom < 20000) fee = 30;
-        else if(nom < 60000) fee = 100;
-        else if(nom < 400000) fee = 200;
-        else if(nom < 1000000) { fee = 2000; isP = false; }
-        else { fee = 5000; isP = false; }
-        let fDisp = (isP && fee > 0) ? fee + "p" : fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-
-        output = `🪷 𓏸  FORMAT REKBER E WALLET ☏\n\nㅤ𐀶. . username penjual :: @${document.getElementById('r_sell')?.value || "..."}\nㅤ𐀶. . username pembeli :: @${document.getElementById('r_buy')?.value || "..."}\nㅤ𐀶. . jenis orderan :: ${document.getElementById('r_item')?.value || "..."}\nㅤ𐀶. . nominal :: ${document.getElementById('r_nom')?.value || "0"}\nㅤ𐀶. . fee rekber :: ${fDisp}\nㅤ𐀶. . penjual via :: ${document.getElementById('r_vp')?.value || "..."}\nㅤ𐀶. . pembeli via :: ${document.getElementById('r_vb')?.value || "..."}\nㅤ𐀶. . pakai qris :: ${qris}\nㅤ𐀶. . sudah subs @roserekber ? :: ${subs}`;
-      } else if(currentService === 'jaspin') {
-        output = `🪷 𓏸  FORMAT JASPIN ☏\n\nㅤ𐀶. . username :: @${document.getElementById('j_user')?.value || "..."}\nㅤ𐀶. . nominal :: ${document.getElementById('j_nom')?.value || "0"}\nㅤ𐀶. . fee :: 1.000\nㅤ𐀶. . nomor + a.n :: ${document.getElementById('j_nan')?.value || "..."}\nㅤ𐀶. . pakai qris :: ${qris}\nㅤ𐀶. . sudah subs @roserekber ? :: ${subs}`;
+        out = `🪷 𓏸 FORMAT REKBER\n\nㅤ𐀶 username penjual :: @${document.getElementById('f1')?.value || ""}\nㅤ𐀶 username pembeli :: @${document.getElementById('f2')?.value || ""}\nㅤ𐀶 jenis orderan :: ${document.getElementById('f3')?.value || ""}\nㅤ𐀶 nominal :: ${nom.toLocaleString()}\nㅤ𐀶 fee rekber :: ${fee}\nㅤ𐀶 penjual via :: ${document.getElementById('f5')?.value || ""}\nㅤ𐀶 pembeli via :: ${document.getElementById('f6')?.value || ""}\nㅤ𐀶 pakai qris :: ${q}\nㅤ𐀶 sudah subs @roserekber? :: ${sub}`;
+      } else if(s === 'jaspin') {
+        out = `🪷 𓏸 FORMAT JASPIN\n\nㅤ𐀶 username :: @${document.getElementById('f1')?.value || ""}\nㅤ𐀶 nominal :: ${(document.getElementById('f2')?.value || 0).toLocaleString()}\nㅤ𐀶 fee :: 1.000\nㅤ𐀶 nomor + a.n :: ${document.getElementById('f3')?.value || ""}\nㅤ𐀶 pakai qris :: ${q}\nㅤ𐀶 sudah subs @roserekber? :: ${sub}`;
       } else {
-        output = `🪷 𓏸  FORMAT CONVERT ☏\n\nㅤ𐀶. . username :: @${document.getElementById('c_user')?.value || "..."}\nㅤ𐀶. . nominal :: ${document.getElementById('c_nom')?.value || "0"}\nㅤ𐀶. . via :: ${document.getElementById('c_way')?.value || "..."}\nㅤ𐀶. . pakai qris :: ${qris}\nㅤ𐀶. . sudah subs @roserekber ? :: ${subs}`;
+        out = `🪷 𓏸 FORMAT CONVERT\n\nㅤ𐀶 username :: @${document.getElementById('f1')?.value || ""}\nㅤ𐀶 nominal :: ${(document.getElementById('f2')?.value || 0).toLocaleString()}\nㅤ𐀶 via :: ${document.getElementById('f3')?.value || ""}\nㅤ𐀶 pakai qris :: ${q}\nㅤ𐀶 sudah subs @roserekber? :: ${sub}`;
       }
-      document.getElementById('orderText').value = output;
+      document.getElementById('orderOutput').value = out;
     }
 
-    function copyAction() {
-      const area = document.getElementById('orderText');
+    function copyText() {
+      const area = document.getElementById('orderOutput');
       area.select();
       navigator.clipboard.writeText(area.value);
-      alert("Format disalin!");
+      alert("Format disalin ke clipboard!");
     }
 
-    window.onload = () => setService('rekber');
+    initForm();
   </script>
 </body>
 </html>
