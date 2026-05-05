@@ -178,7 +178,7 @@
       </div>
     </section>
 
-    <!-- PAGE 2: ORDER CENTER (MODIFIED) -->
+    <!-- PAGE 2: ORDER CENTER -->
     <section class="page" id="page-2">
       <div class="sectionTitle"><h3>Order Center</h3><span>Auto-Logic v2.4</span></div>
       
@@ -254,16 +254,16 @@
       const qrisWrapper = document.getElementById('qris-wrapper');
 
       if(service === 'jaspin') {
-        qrisWrapper.style.display = 'none';
+        qrisWrapper.style.display = 'none'; // Jaspin biasanya ga pake pilihan qris
         container.innerHTML = `
-          <div class="field"><label>Username</label><input type="text" id="user_j" placeholder="username" oninput="updateAll()"></div>
+          <div class="field"><label>Username</label><input type="text" id="user_j" placeholder="@username" oninput="updateAll()"></div>
           <div class="field"><label>Nominal</label><input type="text" id="nom_j" placeholder="8.000" oninput="formatInput(this); updateAll()"></div>
           <div class="field"><label>Nomor + A.N</label><input type="text" id="nan_j" placeholder="0812... a.n Rose" oninput="updateAll()"></div>
         `;
       } else if(service === 'convert') {
         qrisWrapper.style.display = 'block';
         container.innerHTML = `
-          <div class="field"><label>Username</label><input type="text" id="user_c" placeholder="username" oninput="updateAll()"></div>
+          <div class="field"><label>Username</label><input type="text" id="user_c" placeholder="@username" oninput="updateAll()"></div>
           <div class="field"><label>Nominal Convert</label><input type="text" id="nom_c" placeholder="500.000" oninput="formatInput(this); updateAll()"></div>
           <div style="display:flex; gap:10px;">
             <div class="field" style="flex:1"><label>Dari</label><input type="text" id="dari_c" placeholder="Dana" oninput="updateAll()"></div>
@@ -273,9 +273,14 @@
       } else {
         qrisWrapper.style.display = 'block';
         container.innerHTML = `
-          <div class="field"><label>Username Penjual</label><input type="text" id="user_p_rek" placeholder="penjual" oninput="updateAll()"></div>
-          <div class="field"><label>Username Pembeli</label><input type="text" id="user_b_rek" placeholder="pembeli" oninput="updateAll()"></div>
+          <div class="field"><label>Username Penjual</label><input type="text" id="user_p_rek" placeholder="@penjual" oninput="updateAll()"></div>
+          <div class="field"><label>Username Pembeli</label><input type="text" id="user_b_rek" placeholder="@pembeli" oninput="updateAll()"></div>
           <div class="field"><label>Nominal</label><input type="text" id="nom_rek" placeholder="1.000.000" oninput="formatInput(this); updateAll()"></div>
+          <div class="field"><label>Jenis Orderan</label><input type="text" id="item_rek" placeholder="Akun ML / DLL" oninput="updateAll()"></div>
+          <div style="display:flex; gap:10px;">
+            <div class="field" style="flex:1"><label>Penjual Via</label><input type="text" id="vp_rek" placeholder="Dana" oninput="updateAll()"></div>
+            <div class="field" style="flex:1"><label>Pembeli Via</label><input type="text" id="vb_rek" placeholder="Gopay" oninput="updateAll()"></div>
+          </div>
         `;
       }
       updateAll();
@@ -295,8 +300,9 @@
       if(currentService === 'jaspin') {
         let raw = (document.getElementById('nom_j')?.value || "0").replace(/\./g, '');
         let nom = parseInt(raw) || 0;
-        let fee = (nom < 21000) ? (Math.floor(nom/1000)*10 - 5) : (195 + (Math.floor(nom/1000)-20)*10);
-        output.value = `🪷 𓏸  FORMAT JASPIN ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_j')?.value || "..."}\nㅤ𐀶. . jaspin nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . fee jaspin :: ${fee < 1000 ? fee+'p' : formatRibuan(fee)}\nㅤ𐀶. . nomor + a.n :: ${document.getElementById('nan_j')?.value || "..."}\nㅤ𐀶. . pakai qris :: yes only dana\nㅤ𐀶. . sudah subs @Rekberr TeLe ? :: ${subs}`;
+        // Logic fee jaspin (Contoh fee: 1.000)
+        let fee = "1.000"; 
+        output.value = `🪷 𓏸  FORMAT JASPIN ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_j')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . fee jaspin :: ${fee}\nㅤ𐀶. . nomor + a.n :: ${document.getElementById('nan_j')?.value || "..."}\nㅤ𐀶. . pakai qris :: yes only dana\nㅤ𐀶. . sudah subs @Rekberr TeLe ? :: ${subs}`;
       } 
       else if(currentService === 'convert') {
         let raw = (document.getElementById('nom_c')?.value || "0").replace(/\./g, '');
@@ -304,7 +310,17 @@
       }
       else {
         let raw = (document.getElementById('nom_rek')?.value || "0").replace(/\./g, '');
-        output.value = `🪷 𓏸  FORMAT REKBER ☏\n\nㅤ𐀶. . penjual :: @${document.getElementById('user_p_rek')?.value || "..."}\nㅤ𐀶. . pembeli :: @${document.getElementById('user_b_rek')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . pakai qris :: ${qris}\nㅤ𐀶. . sudah subs @Rekberr TeLe ? :: ${subs}`;
+        let nom = parseInt(raw) || 0;
+        let fee = "0";
+        // Logic fee rekber standar
+        if(nom < 10000) fee = "0";
+        else if(nom < 20000) fee = "30p";
+        else if(nom < 60000) fee = "100p";
+        else if(nom < 400000) fee = "200p";
+        else if(nom < 1000000) fee = "2.000";
+        else fee = "5.000";
+
+        output.value = `🪷 𓏸  FORMAT REKBER ☏\n\nㅤ𐀶. . penjual :: @${document.getElementById('user_p_rek')?.value || "..."}\nㅤ𐀶. . pembeli :: @${document.getElementById('user_b_rek')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . fee rekber :: ${fee}\nㅤ𐀶. . jenis orderan :: ${document.getElementById('item_rek')?.value || "..."}\nㅤ𐀶. . penjual via :: ${document.getElementById('vp_rek')?.value || "..."}\nㅤ𐀶. . pembeli via :: ${document.getElementById('vb_rek')?.value || "..."}\nㅤ𐀶. . pakai qris :: ${qris}\nㅤ𐀶. . sudah subs @Rekberr TeLe ? :: ${subs}`;
       }
     }
 
