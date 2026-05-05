@@ -3,223 +3,323 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rose Rekber - Smart Form</title>
+    <title>Rose Rekber - Telegram Layout</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background: #f0f2f5; color: #333; }
-        .container { max-width: 480px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .tabs { display: flex; gap: 5px; margin-bottom: 20px; overflow-x: auto; }
-        .tab-btn { flex: 1; padding: 10px; border: none; border-radius: 8px; cursor: pointer; background: #ddd; font-weight: bold; transition: 0.3s; white-space: nowrap; }
-        .tab-btn.active { background: #d63384; color: white; }
-        .form-section { display: none; }
-        .form-section.active { display: block; }
-        h3 { text-align: center; color: #d63384; margin-top: 0; }
-        label { font-size: 0.85rem; font-weight: bold; display: block; margin-top: 10px; }
-        input, select { width: 100%; padding: 12px; margin: 5px 0 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
-        .output-box { background: #fff5f8; padding: 15px; margin-top: 15px; white-space: pre-wrap; border: 1px dashed #d63384; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.9rem; line-height: 1.4; }
-        .copy-btn { margin-top: 10px; width: 100%; padding: 12px; background: #d63384; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1rem; }
-        .copy-btn:hover { background: #b82a6e; }
-        .info-fee { font-size: 0.75rem; color: #d63384; font-style: italic; margin-bottom: 10px; display: block; }
+        :root {
+            --tg-blue: #0088cc;
+            --tg-light-blue: #eff7ff;
+            --tg-dark: #242f3d;
+            --tg-gray: #707579;
+            --bg-body: #f0f2f5;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-body);
+            display: flex;
+            justify-content: center;
+        }
+
+        .phone-container {
+            width: 100%;
+            max-width: 450px;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            overflow-x: hidden;
+        }
+
+        /* --- HALAMAN 1 (HOME) --- */
+        #home-page { padding: 20px; text-align: center; display: block; }
+        
+        .promo-banner {
+            background: var(--tg-blue);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 50px;
+            box-shadow: 0 4px 12px rgba(0,136,204,0.3);
+        }
+
+        .tap-order-btn {
+            width: 180px;
+            height: 180px;
+            background: var(--tg-blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 50px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border: 8px solid var(--tg-light-blue);
+            transition: transform 0.2s;
+        }
+        .tap-order-btn:active { transform: scale(0.95); }
+
+        .bottom-menu-container {
+            background: var(--tg-light-blue);
+            padding: 20px;
+            border-radius: 20px;
+        }
+        .menu-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 12px;
+            color: var(--tg-blue);
+            text-decoration: none;
+            display: block;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* --- HALAMAN 2 (ORDER/FORM) --- */
+        #order-page { display: none; padding: 15px; }
+        
+        .header-order {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .profile-section { display: flex; align-items: center; gap: 10px; }
+        .avatar { width: 40px; height: 40px; background: #ddd; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; text-align: center; }
+        
+        .grid-services {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .svc-btn {
+            background: var(--tg-dark);
+            color: white;
+            padding: 15px 5px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .svc-btn.active { background: var(--tg-blue); }
+
+        .form-container {
+            background: #eee;
+            padding: 15px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+
+        .output-box {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            font-size: 0.85rem;
+            border: 1px solid #ddd;
+        }
+
+        /* --- HALAMAN 3 (SIDEBAR/OVERLAY) --- */
+        #sidebar {
+            position: absolute;
+            top: 0; right: -100%;
+            width: 80%;
+            height: 100%;
+            background: #999;
+            z-index: 100;
+            transition: 0.3s;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+        #sidebar.open { right: 0; }
+        .side-item {
+            color: black;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-decoration: none;
+            display: block;
+            text-transform: uppercase;
+        }
+
+        .hamburger { cursor: pointer; font-size: 24px; }
+        .footer-link { margin-top: 20px; display: block; color: var(--tg-gray); text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="tabs">
-        <button class="tab-btn active" onclick="openTab('jaspin')">Jaspin</button>
-        <button class="tab-btn" onclick="openTab('convert')">Convert</button>
-        <button class="tab-btn" onclick="openTab('rekber')">Rekber</button>
-    </div>
-
-    <!-- SECTION JASPIN -->
-    <div id="jaspin" class="form-section active">
-        <h3>🪷 Jaspin Form</h3>
-        <label>Username</label>
-        <input type="text" id="user_j" placeholder="roserekber" oninput="updateAll()">
-        <label>Nominal</label>
-        <input type="text" id="nom_j" placeholder="8.000" oninput="formatInput(this); updateAll()">
-        <label>Nomor + A.N</label>
-        <input type="text" id="nan_j" placeholder="0812... a.n Rose" oninput="updateAll()">
-    </div>
-
-    <!-- SECTION CONVERT -->
-    <div id="convert" class="form-section">
-        <h3>🪷 Convert E-wallet</h3>
-        <label>Tipe E-wallet</label>
-        <select id="tipe_cv" onchange="updateAll()">
-            <option value="prem">E-wallet Premium</option>
-            <option value="nonprem">E-wallet Non-Premium</option>
-        </select>
-        <label>Username</label>
-        <input type="text" id="user_c" placeholder="roserekber" oninput="updateAll()">
-        <label>Nominal Convert</label>
-        <input type="text" id="nom_c" placeholder="500.000" oninput="formatInput(this); updateAll()">
-        <label>Dari & Tujuan</label>
-        <div style="display:flex; gap:5px;">
-            <input type="text" id="dari_c" placeholder="Dari" oninput="updateAll()">
-            <input type="text" id="ke_c" placeholder="Ke" oninput="updateAll()">
+<div class="phone-container">
+    
+    <!-- HALAMAN 1 -->
+    <div id="home-page">
+        <div class="promo-banner">TEXT PROMOSI</div>
+        <div class="tap-order-btn" onclick="showOrderPage()">Tap to order</div>
+        <div class="bottom-menu-container">
+            <a href="https://t.me/roserekber" class="menu-item">Rate And Kritsar</a>
+            <a href="https://t.me/roserekber" class="menu-item">Testimonial</a>
+            <a href="https://t.me/roserekber" class="menu-item">List Admin</a>
         </div>
+        <a href="https://t.me/roserekber" class="footer-link">@rekber tele</a>
     </div>
 
-    <!-- SECTION REKBER -->
-    <div id="rekber" class="form-section">
-        <h3>🪷 Rekber E-wallet</h3>
-        <label>Username Penjual</label>
-        <input type="text" id="user_p_rek" placeholder="penjual" oninput="updateAll()">
-        <label>Username Pembeli</label>
-        <input type="text" id="user_b_rek" placeholder="pembeli" oninput="updateAll()">
-        <label>Jenis Orderan</label>
-        <input type="text" id="jenis_rek" placeholder="Nox, Acc, dll" oninput="updateAll()">
-        <label>Nominal</label>
-        <input type="text" id="nom_rek" placeholder="1.000.000" oninput="formatInput(this); updateAll()">
+    <!-- HALAMAN 2 -->
+    <div id="order-page">
+        <div class="header-order">
+            <div class="profile-section">
+                <div class="avatar" onclick="showHomePage()">BACK</div>
+                <span style="font-weight: bold;">@rekberrtele</span>
+            </div>
+            <div class="hamburger" onclick="toggleSidebar()">☰</div>
+        </div>
+
+        <h2 style="text-align: center; color: #2d5a27;">top rekber needs</h2>
         
-        <label>Penjual Via (E-wallet Tujuan)</label>
-        <input type="text" id="p_via" placeholder="Dana" oninput="updateAll()">
-        
-        <label>Pembeli Via (E-wallet Asal)</label>
-        <input type="text" id="b_via" placeholder="Dana" oninput="updateAll()">
-        <span class="info-fee">*Jika via berbeda, fee convert otomatis ditambahkan</span>
+        <div class="grid-services">
+            <button class="svc-btn active" onclick="switchSvc('rekber', this)">Rekber Ewallet</button>
+            <button class="svc-btn" onclick="switchSvc('jaspin', this)">Jaspin</button>
+            <button class="svc-btn" onclick="switchSvc('convert', this)">Convert Ewallet</button>
+            <button class="svc-btn" onclick="window.location.href='https://t.me/roserekber'">Jasget</button>
+        </div>
+
+        <button class="svc-btn" style="width: 100%; margin-bottom: 20px;" onclick="window.location.href='https://t.me/roserekber'">KATALOG LAINNYA</button>
+
+        <div class="form-container">
+            <div id="rekber-fields">
+                <input type="text" id="r_penjual" placeholder="User Penjual" oninput="updateAll()">
+                <input type="text" id="r_pembeli" placeholder="User Pembeli" oninput="updateAll()">
+                <input type="text" id="r_item" placeholder="Jenis Orderan" oninput="updateAll()">
+                <input type="number" id="r_nom" placeholder="Nominal" oninput="updateAll()">
+                <input type="text" id="r_via_p" placeholder="Penjual Via (e.g Dana)" oninput="updateAll()">
+                <input type="text" id="r_via_b" placeholder="Pembeli Via (e.g Dana)" oninput="updateAll()">
+            </div>
+
+            <div id="jaspin-fields" style="display:none;">
+                <input type="text" id="j_user" placeholder="Username" oninput="updateAll()">
+                <input type="number" id="j_nom" placeholder="Nominal" oninput="updateAll()">
+                <input type="text" id="j_nan" placeholder="Nomor + A.N" oninput="updateAll()">
+            </div>
+
+            <div id="convert-fields" style="display:none;">
+                <select id="c_tipe" onchange="updateAll()">
+                    <option value="prem">Premium</option>
+                    <option value="nonprem">Non-Premium</option>
+                </select>
+                <input type="text" id="c_user" placeholder="Username" oninput="updateAll()">
+                <input type="number" id="c_nom" placeholder="Nominal" oninput="updateAll()">
+            </div>
+
+            <select id="global_qris" onchange="updateAll()">
+                <option value="no">Pakai QRIS? No</option>
+                <option value="yes only dana">Pakai QRIS? Yes (Dana Only)</option>
+            </select>
+
+            <div class="output-box" id="hasilForm">Format akan muncul di sini...</div>
+        </div>
+
+        <button class="svc-btn" style="width: 100%; background: black;" onclick="copyFormat()">KIRIM KE BOT ORDER</button>
     </div>
 
-    <!-- GLOBAL INPUTS -->
-    <label>Pakai QRIS?</label>
-    <select id="qris_global" onchange="updateAll()">
-        <option value="no">No</option>
-        <option value="yes only dana">Yes Only Dana</option>
-    </select>
-    <label>Subs @roserekber?</label>
-    <select id="subs_global" onchange="updateAll()">
-        <option value="sudah">Sudah</option>
-        <option value="belum">Belum</option>
-    </select>
+    <!-- HALAMAN 3 (SIDEBAR) -->
+    <div id="sidebar">
+        <div style="text-align: right; font-size: 30px; margin-bottom: 20px; cursor: pointer;" onclick="toggleSidebar()">×</div>
+        <a href="https://t.me/roserekber" class="side-item">Regulation</a>
+        <a href="https://t.me/roserekber" class="side-item">Cara Kerja</a>
+        <a href="https://t.me/roserekber" class="side-item">Verified By</a>
+        <a href="https://t.me/roserekber" class="side-item">Bot Laporan</a>
+        <a href="https://t.me/roserekber" class="side-item">Bug/Lainnya</a>
+        <a href="https://t.me/roserekber" class="side-item">Informasi</a>
+        <a href="https://t.me/roserekber" class="side-item">Request</a>
+    </div>
 
-    <div class="output-box" id="hasilForm">Format akan muncul di sini...</div>
-    <button class="copy-btn" onclick="copyText()">Salin Format</button>
 </div>
 
 <script>
-let currentTab = 'jaspin';
+    let activeSvc = 'rekber';
 
-function openTab(name) {
-    currentTab = name;
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
-    event.currentTarget.classList.add('active');
-    document.getElementById(name).classList.add('active');
-    updateAll();
-}
-
-function formatRibuan(n) {
-    return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
-
-function formatInput(el) {
-    let val = el.value.replace(/\D/g, '');
-    el.value = val ? formatRibuan(val) : '';
-}
-
-function updateAll() {
-    if(currentTab === 'jaspin') updateJaspin();
-    else if(currentTab === 'convert') updateConvert();
-    else updateRekber();
-}
-
-function updateJaspin() {
-    let raw = document.getElementById('nom_j').value.replace(/\./g, '');
-    let nom = parseInt(raw) || 0;
-    let fee = "0";
-    if (nom >= 10 && nom < 1000) fee = "free";
-    else if (nom >= 1000) {
-        let val = (nom < 21000) ? (Math.floor(nom/1000)*10 - 5) : (195 + (Math.floor(nom/1000)-20)*10);
-        fee = val < 1000 ? val + "p" : formatRibuan(val);
+    function showOrderPage() {
+        document.getElementById('home-page').style.display = 'none';
+        document.getElementById('order-page').style.display = 'block';
     }
-    let template = `ㅤㅤ ㅤ🪷 𓏸  FORMAT JASPIN ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_j').value || "..."}\nㅤ𐀶. . jaspin nominal :: ${formatRibuan(raw) || "0"}\nㅤ𐀶. . fee jaspin :: ${fee}\nㅤ𐀶. . nomor + a.n :: ${document.getElementById('nan_j').value || "..."}\nㅤ𐀶. . pakai qris :: ${document.getElementById('qris_global').value}\nㅤ𐀶. . sudah subs @roserekber ? :: ${document.getElementById('subs_global').value}`;
-    document.getElementById('hasilForm').innerText = template;
-}
 
-function updateConvert() {
-    let raw = document.getElementById('nom_c').value.replace(/\./g, '');
-    let nom = parseInt(raw) || 0;
-    let tipe = document.getElementById('tipe_cv').value;
-    let feeDisplay = "0";
-    if (tipe === 'prem') {
-        feeDisplay = formatRibuan((Math.floor(nom / 100000) + 1) * 1000);
-    } else {
-        if (nom < 20000) feeDisplay = "2.000";
-        else if (nom < 50000) feeDisplay = "3.000";
-        else if (nom < 100000) feeDisplay = "4.000";
-        else if (nom < 200000) feeDisplay = "6.000";
-        else if (nom < 300000) feeDisplay = "8.000";
-        else if (nom < 400000) feeDisplay = "10.000";
-        else if (nom < 500000) feeDisplay = "12.000";
-        else {
-            let rate = Math.max(0.70, 0.97 - (Math.floor((nom - 500000) / 500000) * 0.01)); 
-            feeDisplay = `${formatRibuan(Math.round(nom - (nom * rate)))} (Rate ${rate.toFixed(2)})`;
-        }
+    function showHomePage() {
+        document.getElementById('home-page').style.display = 'block';
+        document.getElementById('order-page').style.display = 'none';
     }
-    let template = `ㅤㅤ ㅤ🪷 𓏸  FORMAT CONVERT ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_c').value || "..."}\nㅤ𐀶. . cv nominal :: ${formatRibuan(raw) || "0"}\nㅤ𐀶. . fee convert :: ${feeDisplay}\nㅤ𐀶. . dari ewallet :: ${document.getElementById('dari_c').value || "..."}\nㅤ𐀶. . ewallet tujuan :: ${document.getElementById('ke_c').value || "..."}\nㅤ𐀶. . pakai qris :: ${document.getElementById('qris_global').value}\nㅤ𐀶. . sudah subs @roserekber ? :: ${document.getElementById('subs_global').value}`;
-    document.getElementById('hasilForm').innerText = template;
-}
 
-function updateRekber() {
-    let raw = document.getElementById('nom_rek').value.replace(/\./g, '');
-    let nom = parseInt(raw) || 0;
-    let v_p = document.getElementById('p_via').value.toLowerCase().trim();
-    let v_b = document.getElementById('b_via').value.toLowerCase().trim();
-    let qris = document.getElementById('qris_global').value;
-    
-    // 1. HITUNG FEE REKBER MURNI
-    let feeRekValue = 0;
-    let isPerak = true;
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('open');
+    }
 
-    if (nom < 10000) feeRekValue = 0;
-    else if (nom < 20000) feeRekValue = 30;
-    else if (nom < 60000) feeRekValue = 100;
-    else if (nom < 400000) feeRekValue = 200;
-    else if (nom < 600000) feeRekValue = 350;
-    else if (nom < 700000) feeRekValue = 550;
-    else if (nom < 800000) feeRekValue = 950;
-    else if (nom < 1000000) { feeRekValue = 2000; isPerak = false; }
-    else if (nom <= 2000000) { feeRekValue = 5000; isPerak = false; }
-    else { feeRekValue = 8000; isPerak = false; }
+    function switchSvc(type, btn) {
+        activeSvc = type;
+        document.querySelectorAll('.svc-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        document.getElementById('rekber-fields').style.display = type === 'rekber' ? 'block' : 'none';
+        document.getElementById('jaspin-fields').style.display = type === 'jaspin' ? 'block' : 'none';
+        document.getElementById('convert-fields').style.display = type === 'convert' ? 'block' : 'none';
+        updateAll();
+    }
 
-    // 2. LOGIKA CONVERT OTOMATIS
-    let feeCvValue = 0;
-    let infoCv = "";
+    function formatRibuan(n) {
+        return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
 
-    if (v_p !== "" && v_b !== "" && v_p !== v_b) {
-        if (qris.includes("yes")) {
-            // Pakai QRIS -> Non Prem
-            if (nom < 20000) feeCvValue = 2000;
-            else if (nom < 50000) feeCvValue = 3000;
-            else if (nom < 100000) feeCvValue = 4000;
-            else if (nom < 200000) feeCvValue = 6000;
-            else if (nom < 300000) feeCvValue = 8000;
-            else if (nom < 400000) feeCvValue = 10000;
-            else if (nom < 500000) feeCvValue = 12000;
-            else {
-                let rate = Math.max(0.70, 0.97 - (Math.floor((nom - 500000) / 500000) * 0.01));
-                feeCvValue = Math.round(nom - (nom * rate));
+    function updateAll() {
+        let qris = document.getElementById('global_qris').value;
+        let res = "";
+
+        if(activeSvc === 'rekber') {
+            let nom = parseInt(document.getElementById('r_nom').value) || 0;
+            let v_p = document.getElementById('r_via_p').value.toLowerCase();
+            let v_b = document.getElementById('r_via_b').value.toLowerCase();
+            let fee = 0;
+            if(nom < 20000) fee = 30; else if(nom < 60000) fee = 100; else if(nom < 400000) fee = 200; else fee = 5000;
+            
+            // Logika CV Otomatis
+            if(v_p !== v_b && v_p !== "" && v_b !== "") {
+                fee += (qris === "no" ? 2000 : 5000); 
             }
-            infoCv = " (inc cv non-prem)";
-        } else {
-            // Gak pakai QRIS -> Prem
-            feeCvValue = (Math.floor(nom / 100000) + 1) * 1000;
-            infoCv = " (inc cv prem)";
+
+            res = `🪷 FORMAT REKBER\n\nPenjual: @${document.getElementById('r_penjual').value}\nPembeli: @${document.getElementById('r_pembeli').value}\nItem: ${document.getElementById('r_item').value}\nNominal: ${formatRibuan(nom)}\nFee: ${formatRibuan(fee)}\nVia P: ${v_p}\nVia B: ${v_b}`;
+        } 
+        else if(activeSvc === 'jaspin') {
+            let nom = parseInt(document.getElementById('j_nom').value) || 0;
+            let fee = (nom * 0.05);
+            res = `🪷 FORMAT JASPIN\n\nUser: @${document.getElementById('j_user').value}\nNominal: ${formatRibuan(nom)}\nFee: ${formatRibuan(fee)}\nNomor: ${document.getElementById('j_nan').value}`;
         }
+        else if(activeSvc === 'convert') {
+            let nom = parseInt(document.getElementById('c_nom').value) || 0;
+            res = `🪷 FORMAT CONVERT\n\nUser: @${document.getElementById('c_user').value}\nNominal: ${formatRibuan(nom)}\nRate: 0.95`;
+        }
+
+        document.getElementById('hasilForm').innerText = res;
     }
 
-    let totalFeeValue = feeRekValue + feeCvValue;
-    let feeFinal = (totalFeeValue < 1000 && isPerak && feeCvValue === 0) ? totalFeeValue + "p" : formatRibuan(totalFeeValue);
-
-    let template = `🪷 𓏸  FORMAT REKBER E WALLET ☏\n\nㅤ𐀶. . username penjual :: @${document.getElementById('user_p_rek').value || "..."}\nㅤ𐀶. . username pembeli :: @${document.getElementById('user_b_rek').value || "..."}\nㅤ𐀶. . jenis orderan :: ${document.getElementById('jenis_rek').value || "..."}\nㅤ𐀶. . nominal :: ${formatRibuan(raw) || "0"}\nㅤ𐀶. . fee rekber :: ${feeFinal}${infoCv}\nㅤ𐀶. . penjual via :: ${document.getElementById('p_via').value || "..."}\nㅤ𐀶. . pembeli via :: ${document.getElementById('b_via').value || "..."}\nㅤ𐀶. . pakai qris :: ${qris}\nㅤ𐀶. . sudah subs @roserekber ? :: ${document.getElementById('subs_global').value}`;
-    
-    document.getElementById('hasilForm').innerText = template;
-}
-
-function copyText() {
-    navigator.clipboard.writeText(document.getElementById('hasilForm').innerText);
-    alert("Format disalin!");
-}
+    function copyFormat() {
+        navigator.clipboard.writeText(document.getElementById('hasilForm').innerText);
+        alert("Format Berhasil Disalin!");
+    }
 </script>
+
 </body>
 </html>
