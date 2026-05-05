@@ -7,14 +7,18 @@
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background: #f0f2f5; color: #333; }
         .container { max-width: 480px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { flex: 1; padding: 10px; border: none; border-radius: 8px; cursor: pointer; background: #ddd; font-weight: bold; transition: 0.3s; }
+        
+        .tabs { display: flex; gap: 5px; margin-bottom: 20px; overflow-x: auto; }
+        .tab-btn { flex: 1; padding: 10px; border: none; border-radius: 8px; cursor: pointer; background: #ddd; font-weight: bold; transition: 0.3s; white-space: nowrap; }
         .tab-btn.active { background: #d63384; color: white; }
+        
         .form-section { display: none; }
         .form-section.active { display: block; }
+
         h3 { text-align: center; color: #d63384; margin-top: 0; }
         label { font-size: 0.85rem; font-weight: bold; display: block; margin-top: 10px; }
         input, select { width: 100%; padding: 12px; margin: 5px 0 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
+        
         .output-box { background: #fff5f8; padding: 15px; margin-top: 15px; white-space: pre-wrap; border: 1px dashed #d63384; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.9rem; line-height: 1.4; }
         .copy-btn { margin-top: 10px; width: 100%; padding: 12px; background: #d63384; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1rem; }
         .copy-btn:hover { background: #b82a6e; }
@@ -26,41 +30,56 @@
     <div class="tabs">
         <button class="tab-btn active" onclick="openTab('jaspin')">Jaspin</button>
         <button class="tab-btn" onclick="openTab('convert')">Convert</button>
+        <button class="tab-btn" onclick="openTab('rekber')">Rekber</button>
     </div>
 
-    <!-- SECTION JASPIN -->
     <div id="jaspin" class="form-section active">
         <h3>🪷 Jaspin Form</h3>
         <label>Username</label>
-        <input type="text" id="user_j" placeholder="roserekber" oninput="updateJaspin()">
+        <input type="text" id="user_j" placeholder="roserekber" oninput="updateAll()">
         <label>Nominal</label>
-        <input type="text" id="nom_j" placeholder="8.000" oninput="formatInput(this); updateJaspin()">
+        <input type="text" id="nom_j" placeholder="8.000" oninput="formatInput(this); updateAll()">
         <label>Nomor + A.N</label>
-        <input type="text" id="nan_j" placeholder="0812... a.n Rose" oninput="updateJaspin()">
+        <input type="text" id="nan_j" placeholder="0812... a.n Rose" oninput="updateAll()">
     </div>
 
-    <!-- SECTION CONVERT -->
     <div id="convert" class="form-section">
         <h3>🪷 Convert E-wallet</h3>
         <label>Tipe E-wallet</label>
-        <select id="tipe_cv" onchange="updateConvert()">
+        <select id="tipe_cv" onchange="updateAll()">
             <option value="prem">E-wallet Premium</option>
             <option value="nonprem">E-wallet Non-Premium</option>
         </select>
         <label>Username</label>
-        <input type="text" id="user_c" placeholder="roserekber" oninput="updateConvert()">
+        <input type="text" id="user_c" placeholder="roserekber" oninput="updateAll()">
         <label>Nominal Convert</label>
-        <input type="text" id="nom_c" placeholder="500.000" oninput="formatInput(this); updateConvert()">
-        <label>Dari & Tujuan E-wallet</label>
+        <input type="text" id="nom_c" placeholder="500.000" oninput="formatInput(this); updateAll()">
+        <label>Dari & Tujuan</label>
         <div style="display:flex; gap:5px;">
-            <input type="text" id="dari_c" placeholder="Dana" oninput="updateConvert()">
-            <input type="text" id="ke_c" placeholder="Gopay" oninput="updateConvert()">
+            <input type="text" id="dari_c" placeholder="Dari" oninput="updateAll()">
+            <input type="text" id="ke_c" placeholder="Ke" oninput="updateAll()">
         </div>
         <label>Nomor Tujuan</label>
-        <input type="text" id="tujuan_c" placeholder="0812..." oninput="updateConvert()">
+        <input type="text" id="tujuan_c" placeholder="0812..." oninput="updateAll()">
     </div>
 
-    <!-- GLOBAL INPUTS -->
+    <div id="rekber" class="form-section">
+        <h3>🪷 Rekber E-wallet</h3>
+        <label>Username Penjual</label>
+        <input type="text" id="user_p_rek" placeholder="penjual" oninput="updateAll()">
+        <label>Username Pembeli</label>
+        <input type="text" id="user_b_rek" placeholder="pembeli" oninput="updateAll()">
+        <label>Jenis Orderan</label>
+        <input type="text" id="jenis_rek" placeholder="Nox, Acc, dll" oninput="updateAll()">
+        <label>Nominal</label>
+        <input type="text" id="nom_rek" placeholder="1.000.000" oninput="formatInput(this); updateAll()">
+        <label>Penjual Via & Pembeli Via</label>
+        <div style="display:flex; gap:5px;">
+            <input type="text" id="p_via" placeholder="Via Dana" oninput="updateAll()">
+            <input type="text" id="b_via" placeholder="Via QRIS" oninput="updateAll()">
+        </div>
+    </div>
+
     <label>Pakai QRIS?</label>
     <select id="qris_global" onchange="updateAll()">
         <option value="yes only dana">Yes Only Dana</option>
@@ -99,20 +118,19 @@ function formatInput(el) {
 
 function updateAll() {
     if(currentTab === 'jaspin') updateJaspin();
-    else updateConvert();
+    else if(currentTab === 'convert') updateConvert();
+    else updateRekber();
 }
 
 function updateJaspin() {
     let raw = document.getElementById('nom_j').value.replace(/\./g, '');
     let nom = parseInt(raw) || 0;
     let fee = "0";
-
     if (nom >= 10 && nom < 1000) fee = "free";
     else if (nom >= 1000) {
         let val = (nom < 21000) ? (Math.floor(nom/1000)*10 - 5) : (195 + (Math.floor(nom/1000)-20)*10);
         fee = val < 1000 ? val + "p" : formatRibuan(val);
     }
-
     let template = `ㅤㅤ ㅤ🪷 𓏸  FORMAT JASPIN ☏
 
 ㅤ𐀶. . username :: @${document.getElementById('user_j').value || "..."}
@@ -121,7 +139,6 @@ function updateJaspin() {
 ㅤ𐀶. . nomor + a.n :: ${document.getElementById('nan_j').value || "..."}
 ㅤ𐀶. . pakai qris :: ${document.getElementById('qris_global').value}
 ㅤ𐀶. . sudah subs @roserekber ? :: ${document.getElementById('subs_global').value}`;
-    
     document.getElementById('hasilForm').innerText = template;
 }
 
@@ -130,7 +147,6 @@ function updateConvert() {
     let nom = parseInt(raw) || 0;
     let tipe = document.getElementById('tipe_cv').value;
     let feeDisplay = "0";
-
     if (tipe === 'prem') {
         let k = Math.floor(nom / 100000);
         feeDisplay = formatRibuan((k + 1) * 1000);
@@ -143,20 +159,13 @@ function updateConvert() {
         else if (nom < 400000) feeDisplay = "10.000";
         else if (nom < 500000) feeDisplay = "12.000";
         else {
-            // Logika Rate: 500rb - 2jt (Rate 0.97 - 0.95)
-            // Kelipatan 500rb menurunkan rate sebesar 0.01
             let rate = 0.97;
             let kelipatan500k = Math.floor((nom - 500000) / 500000);
-            
-            // Limit minimal rate (biar gak minus kalau nominal terlalu besar)
             rate = Math.max(0.70, rate - (kelipatan500k * 0.01)); 
-            
             let totalFee = nom - (nom * rate);
-            // Menampilkan fee bersih + info rate yang dipakai
             feeDisplay = `${formatRibuan(Math.round(totalFee))} (Rate ${rate.toFixed(2)})`;
         }
     }
-
     let template = `ㅤㅤ ㅤ🪷 𓏸  FORMAT CONVERT ☏
 
 ㅤ𐀶. . username :: @${document.getElementById('user_c').value || "..."}
@@ -167,7 +176,39 @@ function updateConvert() {
 ㅤ𐀶. . nomor tujuan :: ${document.getElementById('tujuan_c').value || "..."}
 ㅤ𐀶. . pakai qris :: ${document.getElementById('qris_global').value}
 ㅤ𐀶. . sudah subs @roserekber ? :: ${document.getElementById('subs_global').value}`;
+    document.getElementById('hasilForm').innerText = template;
+}
 
+function updateRekber() {
+    let raw = document.getElementById('nom_rek').value.replace(/\./g, '');
+    let nom = parseInt(raw) || 0;
+    let fee = "0";
+
+    if (nom < 10000) fee = "0p";
+    else if (nom < 20000) fee = "30p";
+    else if (nom < 60000) fee = "100p";
+    else if (nom < 400000) fee = "200p";
+    else if (nom < 600000) fee = "350p";
+    else if (nom < 700000) fee = "550p";
+    else if (nom < 800000) fee = "950p";
+    else if (nom < 900000) fee = "2.000";
+    else if (nom < 1000000) fee = "2.000"; // Sesuai pricelist 800k-900k
+    else if (nom <= 2000000) fee = "5.000";
+    else if (nom <= 3000000) fee = "8.000";
+    else fee = formatRibuan(Math.floor(nom/1000000)*3000); // Estimasi kelipatan
+
+    let template = `🪷 𓏸  FORMAT REKBER E WALLET ☏
+
+ㅤ𐀶. . username penjual :: @${document.getElementById('user_p_rek').value || "..."}
+ㅤ𐀶. . username pembeli :: @${document.getElementById('user_b_rek').value || "..."}
+ㅤ𐀶. . jenis orderan :: ${document.getElementById('jenis_rek').value || "..."}
+ㅤ𐀶. . nominal :: ${formatRibuan(raw) || "0"}
+ㅤ𐀶. . fee rekber :: ${fee}
+ㅤ𐀶. . penjual via :: ${document.getElementById('p_via').value || "..."}
+ㅤ𐀶. . pembeli via :: ${document.getElementById('b_via').value || "..."}
+ㅤ𐀶. . pakai qris :: ${document.getElementById('qris_global').value}
+ㅤ𐀶. . sudah subs @roserekber ? :: ${document.getElementById('subs_global').value}`;
+    
     document.getElementById('hasilForm').innerText = template;
 }
 
