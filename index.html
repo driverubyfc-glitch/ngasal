@@ -143,12 +143,16 @@ function updateConvert() {
         else if (nom < 400000) feeDisplay = "10.000";
         else if (nom < 500000) feeDisplay = "12.000";
         else {
-            // Logika Rate Otomatis
+            // Logika Rate: 500rb - 2jt (Rate 0.97 - 0.95)
+            // Kelipatan 500rb menurunkan rate sebesar 0.01
             let rate = 0.97;
             let kelipatan500k = Math.floor((nom - 500000) / 500000);
+            
+            // Limit minimal rate (biar gak minus kalau nominal terlalu besar)
             rate = Math.max(0.70, rate - (kelipatan500k * 0.01)); 
             
             let totalFee = nom - (nom * rate);
+            // Menampilkan fee bersih + info rate yang dipakai
             feeDisplay = `${formatRibuan(Math.round(totalFee))} (Rate ${rate.toFixed(2)})`;
         }
     }
