@@ -3,230 +3,223 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rose Rekber Premium</title>
+    <title>Rose Rekber - Smart Form</title>
     <style>
-        :root {
-            --tg-blue: #24A1DE;
-            --tg-dark: #1d2733;
-            --tg-bg: #f0f2f5;
-            --white: #ffffff;
-            --glass: rgba(255, 255, 255, 0.8);
-        }
-
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-            margin: 0; background: var(--tg-bg); color: #333; overflow: hidden;
-        }
-
-        .app-shell {
-            width: 100%; max-width: 430px; height: 100vh; margin: auto;
-            background: var(--white); position: relative; overflow: hidden;
-            box-shadow: 0 0 40px rgba(0,0,0,0.1);
-        }
-
-        /* --- ANIMATIONS --- */
-        .page {
-            position: absolute; width: 100%; height: 100%;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow-y: auto; background: var(--white);
-        }
-        .slide-out { transform: translateX(-100%); opacity: 0; }
-        .slide-in { transform: translateX(100%); opacity: 0; }
-        .active { transform: translateX(0); opacity: 1; z-index: 5; }
-
-        /* --- PAGE 1: INSTA-PROFILE --- */
-        .profile-header { padding: 25px 20px; text-align: center; background: linear-gradient(180deg, #eef7ff 0%, #fff 100%); }
-        .avatar-ring {
-            width: 90px; height: 90px; border-radius: 50%;
-            padding: 3px; background: linear-gradient(45deg, #24A1DE, #64b5f6);
-            margin: 0 auto 15px;
-        }
-        .avatar-img { width: 100%; height: 100%; border-radius: 50%; background: #ddd; border: 3px solid white; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--tg-blue); font-size: 1.5rem; }
-        
-        .stats-row { display: flex; justify-content: space-around; margin: 20px 0; }
-        .stat-item { text-align: center; }
-        .stat-num { font-weight: 800; font-size: 1.1rem; }
-        .stat-label { font-size: 0.8rem; color: #888; }
-
-        .bio { padding: 0 25px; text-align: center; margin-bottom: 25px; font-size: 0.9rem; }
-        
-        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 20px; }
-        .btn-main { 
-            grid-column: span 2; background: var(--tg-blue); color: white; 
-            padding: 14px; border-radius: 10px; font-weight: bold; border: none; cursor: pointer;
-            transition: 0.3s; margin-bottom: 10px;
-        }
-        .btn-sub { 
-            background: #f1f1f1; border: none; padding: 10px; border-radius: 8px; 
-            font-size: 0.85rem; font-weight: 600; cursor: pointer;
-        }
-
-        /* --- PAGE 2: DASHBOARD --- */
-        .top-bar { 
-            padding: 15px; display: flex; align-items: center; justify-content: space-between;
-            background: var(--white); border-bottom: 1px solid #eee; position: sticky; top: 0;
-        }
-        .form-container { padding: 20px; }
-        .smart-input {
-            width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #e0e0e0;
-            background: #f9f9f9; margin-bottom: 12px; outline: none; transition: 0.3s;
-        }
-        .smart-input:focus { border-color: var(--tg-blue); background: #fff; box-shadow: 0 4px 12px rgba(36,161,222,0.1); }
-
-        .output-card {
-            background: #2b3949; color: #fff; padding: 20px; border-radius: 15px;
-            font-family: 'Consolas', monospace; font-size: 0.8rem; line-height: 1.5;
-            margin-top: 20px; position: relative; overflow: hidden;
-        }
-        .output-card::after { content: 'FORMAT'; position: absolute; top: 10px; right: 10px; font-size: 0.6rem; opacity: 0.3; }
-
-        .floating-copy {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 380px; background: var(--tg-blue);
-            color: white; border: none; padding: 16px; border-radius: 15px;
-            font-weight: bold; box-shadow: 0 10px 20px rgba(36,161,222,0.3); cursor: pointer;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background: #f0f2f5; color: #333; }
+        .container { max-width: 480px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .tabs { display: flex; gap: 5px; margin-bottom: 20px; overflow-x: auto; }
+        .tab-btn { flex: 1; padding: 10px; border: none; border-radius: 8px; cursor: pointer; background: #ddd; font-weight: bold; transition: 0.3s; white-space: nowrap; }
+        .tab-btn.active { background: #d63384; color: white; }
+        .form-section { display: none; }
+        .form-section.active { display: block; }
+        h3 { text-align: center; color: #d63384; margin-top: 0; }
+        label { font-size: 0.85rem; font-weight: bold; display: block; margin-top: 10px; }
+        input, select { width: 100%; padding: 12px; margin: 5px 0 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
+        .output-box { background: #fff5f8; padding: 15px; margin-top: 15px; white-space: pre-wrap; border: 1px dashed #d63384; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.9rem; line-height: 1.4; }
+        .copy-btn { margin-top: 10px; width: 100%; padding: 12px; background: #d63384; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1rem; }
+        .copy-btn:hover { background: #b82a6e; }
+        .info-fee { font-size: 0.75rem; color: #d63384; font-style: italic; margin-bottom: 10px; display: block; }
     </style>
 </head>
 <body>
 
-<div class="app-shell">
-    
-    <!-- PAGE 1 -->
-    <div id="p1" class="page active">
-        <div class="profile-header">
-            <div class="avatar-ring"><div class="avatar-img">RR</div></div>
-            <h3 style="margin:0">@roserekber</h3>
-            <p style="color:var(--tg-blue); font-size: 0.8rem; font-weight:bold;">Verified Service System</p>
-        </div>
+<div class="container">
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab('jaspin')">Jaspin</button>
+        <button class="tab-btn" onclick="openTab('convert')">Convert</button>
+        <button class="tab-btn" onclick="openTab('rekber')">Rekber</button>
+    </div>
 
-        <div class="stats-row">
-            <div class="stat-item"><div class="stat-num">500+</div><div class="stat-label">Trust</div></div>
-            <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-label">Online</div></div>
-            <div class="stat-item"><div class="stat-num">1k+</div><div class="stat-label">Subs</div></div>
-        </div>
+    <!-- SECTION JASPIN -->
+    <div id="jaspin" class="form-section active">
+        <h3>🪷 Jaspin Form</h3>
+        <label>Username</label>
+        <input type="text" id="user_j" placeholder="roserekber" oninput="updateAll()">
+        <label>Nominal</label>
+        <input type="text" id="nom_j" placeholder="8.000" oninput="formatInput(this); updateAll()">
+        <label>Nomor + A.N</label>
+        <input type="text" id="nan_j" placeholder="0812... a.n Rose" oninput="updateAll()">
+    </div>
 
-        <div class="bio">
-            <b>Rose Rekber System</b><br>
-            Fast, Safe, & Trusted Digital Escrow.<br>
-            Powered by @cellrekber Logic.
-        </div>
-
-        <div class="action-grid">
-            <button class="btn-main" onclick="nav(2)">ORDER SEKARANG</button>
-            <button class="btn-sub" onclick="window.open('https://t.me/roserekber')">REGULATION</button>
-            <button class="btn-sub" onclick="window.open('https://t.me/roserekber')">RATE & KRISTAR</button>
-            <button class="btn-sub" style="grid-column: span 2;" onclick="window.open('https://t.me/roserekber')">LIST ADMINS</button>
+    <!-- SECTION CONVERT -->
+    <div id="convert" class="form-section">
+        <h3>🪷 Convert E-wallet</h3>
+        <label>Tipe E-wallet</label>
+        <select id="tipe_cv" onchange="updateAll()">
+            <option value="prem">E-wallet Premium</option>
+            <option value="nonprem">E-wallet Non-Premium</option>
+        </select>
+        <label>Username</label>
+        <input type="text" id="user_c" placeholder="roserekber" oninput="updateAll()">
+        <label>Nominal Convert</label>
+        <input type="text" id="nom_c" placeholder="500.000" oninput="formatInput(this); updateAll()">
+        <label>Dari & Tujuan</label>
+        <div style="display:flex; gap:5px;">
+            <input type="text" id="dari_c" placeholder="Dari" oninput="updateAll()">
+            <input type="text" id="ke_c" placeholder="Ke" oninput="updateAll()">
         </div>
     </div>
 
-    <!-- PAGE 2 -->
-    <div id="p2" class="page slide-in">
-        <div class="top-bar">
-            <div onclick="nav(1)" style="cursor:pointer; color:var(--tg-blue); font-size:1.2rem;">✕</div>
-            <b style="font-size: 0.9rem;">BUAT FORMAT</b>
-            <div style="font-size:1.5rem; color:var(--tg-blue); cursor:pointer;">⋮</div>
-        </div>
-
-        <div class="form-container">
-            <select class="smart-input" id="serv" onchange="renderForm()">
-                <option value="rek">REKBER E-WALLET</option>
-                <option value="jas">JASPIN (Jasa Pinjam)</option>
-                <option value="con">CONVERT PREMIUM</option>
-            </select>
-
-            <div id="fields"></div>
-
-            <select class="smart-input" id="qris" onchange="upd()">
-                <option value="no">Pakai QRIS? No</option>
-                <option value="yes only dana">Pakai QRIS? Yes (Dana Only)</option>
-            </select>
-
-            <div class="output-card" id="out">Silahkan isi data...</div>
-            <div style="height: 100px;"></div> <!-- Spacer -->
-        </div>
-
-        <button class="floating-copy" onclick="copy()">SALIN FORMAT</button>
+    <!-- SECTION REKBER -->
+    <div id="rekber" class="form-section">
+        <h3>🪷 Rekber E-wallet</h3>
+        <label>Username Penjual</label>
+        <input type="text" id="user_p_rek" placeholder="penjual" oninput="updateAll()">
+        <label>Username Pembeli</label>
+        <input type="text" id="user_b_rek" placeholder="pembeli" oninput="updateAll()">
+        <label>Jenis Orderan</label>
+        <input type="text" id="jenis_rek" placeholder="Nox, Acc, dll" oninput="updateAll()">
+        <label>Nominal</label>
+        <input type="text" id="nom_rek" placeholder="1.000.000" oninput="formatInput(this); updateAll()">
+        
+        <label>Penjual Via (E-wallet Tujuan)</label>
+        <input type="text" id="p_via" placeholder="Dana" oninput="updateAll()">
+        
+        <label>Pembeli Via (E-wallet Asal)</label>
+        <input type="text" id="b_via" placeholder="Dana" oninput="updateAll()">
+        <span class="info-fee">*Jika via berbeda, fee convert otomatis ditambahkan</span>
     </div>
 
+    <!-- GLOBAL INPUTS -->
+    <label>Pakai QRIS?</label>
+    <select id="qris_global" onchange="updateAll()">
+        <option value="no">No</option>
+        <option value="yes only dana">Yes Only Dana</option>
+    </select>
+    <label>Subs @roserekber?</label>
+    <select id="subs_global" onchange="updateAll()">
+        <option value="sudah">Sudah</option>
+        <option value="belum">Belum</option>
+    </select>
+
+    <div class="output-box" id="hasilForm">Format akan muncul di sini...</div>
+    <button class="copy-btn" onclick="copyText()">Salin Format</button>
 </div>
 
 <script>
-    let mode = 'rek';
+let currentTab = 'jaspin';
 
-    function nav(p) {
-        if(p===2) {
-            document.getElementById('p1').className = 'page slide-out';
-            document.getElementById('p2').className = 'page active';
-            renderForm();
+function openTab(name) {
+    currentTab = name;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    document.getElementById(name).classList.add('active');
+    updateAll();
+}
+
+function formatRibuan(n) {
+    return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+function formatInput(el) {
+    let val = el.value.replace(/\D/g, '');
+    el.value = val ? formatRibuan(val) : '';
+}
+
+function updateAll() {
+    if(currentTab === 'jaspin') updateJaspin();
+    else if(currentTab === 'convert') updateConvert();
+    else updateRekber();
+}
+
+function updateJaspin() {
+    let raw = document.getElementById('nom_j').value.replace(/\./g, '');
+    let nom = parseInt(raw) || 0;
+    let fee = "0";
+    if (nom >= 10 && nom < 1000) fee = "free";
+    else if (nom >= 1000) {
+        let val = (nom < 21000) ? (Math.floor(nom/1000)*10 - 5) : (195 + (Math.floor(nom/1000)-20)*10);
+        fee = val < 1000 ? val + "p" : formatRibuan(val);
+    }
+    let template = `ㅤㅤ ㅤ🪷 𓏸  FORMAT JASPIN ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_j').value || "..."}\nㅤ𐀶. . jaspin nominal :: ${formatRibuan(raw) || "0"}\nㅤ𐀶. . fee jaspin :: ${fee}\nㅤ𐀶. . nomor + a.n :: ${document.getElementById('nan_j').value || "..."}\nㅤ𐀶. . pakai qris :: ${document.getElementById('qris_global').value}\nㅤ𐀶. . sudah subs @roserekber ? :: ${document.getElementById('subs_global').value}`;
+    document.getElementById('hasilForm').innerText = template;
+}
+
+function updateConvert() {
+    let raw = document.getElementById('nom_c').value.replace(/\./g, '');
+    let nom = parseInt(raw) || 0;
+    let tipe = document.getElementById('tipe_cv').value;
+    let feeDisplay = "0";
+    if (tipe === 'prem') {
+        feeDisplay = formatRibuan((Math.floor(nom / 100000) + 1) * 1000);
+    } else {
+        if (nom < 20000) feeDisplay = "2.000";
+        else if (nom < 50000) feeDisplay = "3.000";
+        else if (nom < 100000) feeDisplay = "4.000";
+        else if (nom < 200000) feeDisplay = "6.000";
+        else if (nom < 300000) feeDisplay = "8.000";
+        else if (nom < 400000) feeDisplay = "10.000";
+        else if (nom < 500000) feeDisplay = "12.000";
+        else {
+            let rate = Math.max(0.70, 0.97 - (Math.floor((nom - 500000) / 500000) * 0.01)); 
+            feeDisplay = `${formatRibuan(Math.round(nom - (nom * rate)))} (Rate ${rate.toFixed(2)})`;
+        }
+    }
+    let template = `ㅤㅤ ㅤ🪷 𓏸  FORMAT CONVERT ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_c').value || "..."}\nㅤ𐀶. . cv nominal :: ${formatRibuan(raw) || "0"}\nㅤ𐀶. . fee convert :: ${feeDisplay}\nㅤ𐀶. . dari ewallet :: ${document.getElementById('dari_c').value || "..."}\nㅤ𐀶. . ewallet tujuan :: ${document.getElementById('ke_c').value || "..."}\nㅤ𐀶. . pakai qris :: ${document.getElementById('qris_global').value}\nㅤ𐀶. . sudah subs @roserekber ? :: ${document.getElementById('subs_global').value}`;
+    document.getElementById('hasilForm').innerText = template;
+}
+
+function updateRekber() {
+    let raw = document.getElementById('nom_rek').value.replace(/\./g, '');
+    let nom = parseInt(raw) || 0;
+    let v_p = document.getElementById('p_via').value.toLowerCase().trim();
+    let v_b = document.getElementById('b_via').value.toLowerCase().trim();
+    let qris = document.getElementById('qris_global').value;
+    
+    // 1. HITUNG FEE REKBER MURNI
+    let feeRekValue = 0;
+    let isPerak = true;
+
+    if (nom < 10000) feeRekValue = 0;
+    else if (nom < 20000) feeRekValue = 30;
+    else if (nom < 60000) feeRekValue = 100;
+    else if (nom < 400000) feeRekValue = 200;
+    else if (nom < 600000) feeRekValue = 350;
+    else if (nom < 700000) feeRekValue = 550;
+    else if (nom < 800000) feeRekValue = 950;
+    else if (nom < 1000000) { feeRekValue = 2000; isPerak = false; }
+    else if (nom <= 2000000) { feeRekValue = 5000; isPerak = false; }
+    else { feeRekValue = 8000; isPerak = false; }
+
+    // 2. LOGIKA CONVERT OTOMATIS
+    let feeCvValue = 0;
+    let infoCv = "";
+
+    if (v_p !== "" && v_b !== "" && v_p !== v_b) {
+        if (qris.includes("yes")) {
+            // Pakai QRIS -> Non Prem
+            if (nom < 20000) feeCvValue = 2000;
+            else if (nom < 50000) feeCvValue = 3000;
+            else if (nom < 100000) feeCvValue = 4000;
+            else if (nom < 200000) feeCvValue = 6000;
+            else if (nom < 300000) feeCvValue = 8000;
+            else if (nom < 400000) feeCvValue = 10000;
+            else if (nom < 500000) feeCvValue = 12000;
+            else {
+                let rate = Math.max(0.70, 0.97 - (Math.floor((nom - 500000) / 500000) * 0.01));
+                feeCvValue = Math.round(nom - (nom * rate));
+            }
+            infoCv = " (inc cv non-prem)";
         } else {
-            document.getElementById('p1').className = 'page active';
-            document.getElementById('p2').className = 'page slide-in';
+            // Gak pakai QRIS -> Prem
+            feeCvValue = (Math.floor(nom / 100000) + 1) * 1000;
+            infoCv = " (inc cv prem)";
         }
     }
 
-    function dot(n) {
-        return n.toString().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
+    let totalFeeValue = feeRekValue + feeCvValue;
+    let feeFinal = (totalFeeValue < 1000 && isPerak && feeCvValue === 0) ? totalFeeValue + "p" : formatRibuan(totalFeeValue);
 
-    function renderForm() {
-        mode = document.getElementById('serv').value;
-        const f = document.getElementById('fields');
-        if(mode==='rek') {
-            f.innerHTML = `
-                <input class="smart-input" id="s" placeholder="Username Penjual" oninput="upd()">
-                <input class="smart-input" id="b" placeholder="Username Pembeli" oninput="upd()">
-                <input class="smart-input" id="i" placeholder="Jenis Barang" oninput="upd()">
-                <input class="smart-input" id="n" placeholder="Nominal (Titik Otomatis)" oninput="handleNom(this)">
-                <input class="smart-input" id="v1" placeholder="Penjual Via (e.g Dana)" oninput="upd()">
-                <input class="smart-input" id="v2" placeholder="Pembeli Via (e.g Dana)" oninput="upd()">
-            `;
-        } else {
-            f.innerHTML = `
-                <input class="smart-input" id="u" placeholder="Username" oninput="upd()">
-                <input class="smart-input" id="n" placeholder="Nominal" oninput="handleNom(this)">
-                <input class="smart-input" id="ext" placeholder="${mode==='jas'?'No + A.N':'E-Wallet Tujuan'}" oninput="upd()">
-            `;
-        }
-        upd();
-    }
+    let template = `🪷 𓏸  FORMAT REKBER E WALLET ☏\n\nㅤ𐀶. . username penjual :: @${document.getElementById('user_p_rek').value || "..."}\nㅤ𐀶. . username pembeli :: @${document.getElementById('user_b_rek').value || "..."}\nㅤ𐀶. . jenis orderan :: ${document.getElementById('jenis_rek').value || "..."}\nㅤ𐀶. . nominal :: ${formatRibuan(raw) || "0"}\nㅤ𐀶. . fee rekber :: ${feeFinal}${infoCv}\nㅤ𐀶. . penjual via :: ${document.getElementById('p_via').value || "..."}\nㅤ𐀶. . pembeli via :: ${document.getElementById('b_via').value || "..."}\nㅤ𐀶. . pakai qris :: ${qris}\nㅤ𐀶. . sudah subs @roserekber ? :: ${document.getElementById('subs_global').value}`;
+    
+    document.getElementById('hasilForm').innerText = template;
+}
 
-    function handleNom(el) {
-        let v = el.value.replace(/\D/g, "");
-        el.dataset.raw = v;
-        el.value = v ? dot(v) : "";
-        upd();
-    }
-
-    function upd() {
-        let nom = parseInt(document.getElementById('n')?.dataset?.raw || 0);
-        let out = "";
-        
-        if(mode==='rek') {
-            // Logika Fee Original
-            let fee = 0; let p = true;
-            if(nom < 10000) fee = 0;
-            else if(nom < 20000) fee = 30;
-            else if(nom < 60000) fee = 100;
-            else if(nom < 400000) fee = 200;
-            else if(nom < 1000000) { fee = 2000; p = false; }
-            else { fee = 5000; p = false; }
-            
-            let fFinal = (fee < 1000 && p) ? fee + "p" : dot(fee);
-
-            out = `🪷 𓏸 FORMAT REKBER E WALLET ☏\n\nㅤ𐀶. . penjual :: @${document.getElementById('s')?.value || "..."}\nㅤ𐀶. . pembeli :: @${document.getElementById('b')?.value || "..."}\nㅤ𐀶. . barang :: ${document.getElementById('i')?.value || "..."}\nㅤ𐀶. . nominal :: ${dot(nom)}\nㅤ𐀶. . fee rekber :: ${fFinal}\nㅤ𐀶. . penjual via :: ${document.getElementById('v1')?.value || "..."}\nㅤ𐀶. . pembeli via :: ${document.getElementById('v2')?.value || "..."}\nㅤ𐀶. . qris :: ${document.getElementById('qris').value}`;
-        } else {
-            out = `🪷 𓏸 FORMAT ${mode.toUpperCase()} ☏\n\nㅤ𐀶. . user :: @${document.getElementById('u')?.value || "..."}\nㅤ𐀶. . nominal :: ${dot(nom)}\nㅤ𐀶. . data :: ${document.getElementById('ext')?.value || "..."}`;
-        }
-        document.getElementById('out').innerText = out;
-    }
-
-    function copy() {
-        navigator.clipboard.writeText(document.getElementById('out').innerText);
-        alert("Format Berhasil Disalin!");
-    }
+function copyText() {
+    navigator.clipboard.writeText(document.getElementById('hasilForm').innerText);
+    alert("Format disalin!");
+}
 </script>
-
 </body>
 </html>
