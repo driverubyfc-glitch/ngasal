@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Rose Rekber - iOS Telegram UI</title>
+  <title>Rose Rekber - Smart Form</title>
   <style>
     :root{
       --bg: #f4f6fa;
@@ -12,11 +12,9 @@
       --muted: rgba(15,23,42,.55);
       --line: rgba(15,23,42,.10);
       --shadow: 0 18px 60px rgba(2,6,23,.12);
-      --tg: #d63384; /* Rose Theme */
+      --tg: #d63384; 
       --tg2: #b82a6e;
       --radius-xl: 28px;
-      --radius-lg: 20px;
-      --radius-md: 16px;
       --blur: blur(20px);
       --device: 430px;
     }
@@ -26,9 +24,8 @@
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial;
       background: radial-gradient(1000px 500px at 10% -10%, rgba(214,51,132,.15), transparent 50%),
-                  radial-gradient(800px 400px at 90% 10%, rgba(214,51,132,.08), transparent 50%),
                   linear-gradient(180deg, #fdf2f8, var(--bg));
-      display:flex; justify-content:center; padding: 18px 12px 36px; color: var(--text); min-height: 100vh;
+      display:flex; justify-content:center; padding: 18px 12px; color: var(--text); min-height: 100vh;
     }
 
     .phone{
@@ -36,7 +33,7 @@
       border-radius: 40px; overflow:hidden;
       border: 1px solid rgba(2,6,23,.08);
       box-shadow: 0 30px 90px rgba(2,6,23,.15);
-      background: var(--bg); position:relative; display: flex; flex-direction: column; height: 844px; /* Fixed height for demo */
+      background: var(--bg); position:relative; display: flex; flex-direction: column; height: 844px;
     }
 
     .top{
@@ -60,9 +57,7 @@
 
     .sectionTitle{ margin: 20px 4px 10px; display: flex; justify-content: space-between; align-items: flex-end; }
     .sectionTitle h3{ margin:0; font-size: 17px; font-weight: 800; }
-    .sectionTitle span{ font-size: 12px; color: var(--muted); font-weight: 600; }
 
-    /* Forms iOS Style */
     .card{
       background: var(--card); border: 1px solid var(--line);
       border-radius: var(--radius-xl); padding: 20px; box-shadow: var(--shadow);
@@ -100,7 +95,6 @@
     }
     .cta-btn:active{ transform: scale(0.97); opacity: 0.9; }
 
-    /* Bottom Nav */
     .nav-bar{
       position: absolute; bottom: 0; left: 0; right: 0;
       background: rgba(244,246,250,.85); backdrop-filter: var(--blur);
@@ -112,15 +106,11 @@
       color: var(--muted); cursor: pointer; font-size: 11px; font-weight: 700;
     }
     .nav-item.active{ color: var(--tg); }
-    .nav-icon{ font-size: 20px; margin-bottom: 2px; }
-
-    .info-badge { font-size: 11px; color: var(--tg2); font-style: italic; margin-top: 4px; display: block; opacity: 0.8; }
   </style>
 </head>
 
 <body>
   <div class="phone" id="app">
-    <!-- Header -->
     <header class="top">
       <div class="brand">
         <div class="logo">🪷</div>
@@ -132,39 +122,18 @@
     </header>
 
     <div class="content-area">
-      <!-- PAGE 1: DASHBOARD -->
+      <!-- DASHBOARD -->
       <section class="page active" id="page-1">
-        <div class="sectionTitle">
-          <h3>Welcome back!</h3>
-          <span>Overview</span>
-        </div>
-        <div class="card" style="margin-bottom: 15px; background: linear-gradient(135deg, #d63384, #9d1757); color: white;">
-          <small style="opacity: 0.8;">Status Layanan</small>
-          <div style="font-size: 20px; font-weight: 800; margin: 5px 0;">Sistem Online ✅</div>
-          <p style="font-size: 12px; margin: 0; opacity: 0.9;">Silahkan pilih menu Order untuk membuat format transaksi otomatis.</p>
-        </div>
-        
-        <div class="sectionTitle">
-          <h3>Quick Links</h3>
-        </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-          <div class="card" style="padding: 15px; text-align: center; cursor: pointer;" onclick="go(2)">
-            <div style="font-size: 24px;">📝</div>
-            <b style="font-size: 13px; display: block; margin-top: 8px;">Buat Format</b>
-          </div>
-          <div class="card" style="padding: 15px; text-align: center; cursor: pointer;">
-            <div style="font-size: 24px;">⚖️</div>
-            <b style="font-size: 13px; display: block; margin-top: 8px;">Cek Rate</b>
-          </div>
+        <div class="sectionTitle"><h3>Overview</h3></div>
+        <div class="card" style="background: linear-gradient(135deg, #d63384, #9d1757); color: white;">
+          <div style="font-size: 20px; font-weight: 800;">Sistem Online ✅</div>
+          <p style="font-size: 12px; opacity: 0.9;">Layanan @cellrekber aktif 24 jam.</p>
         </div>
       </section>
 
-      <!-- PAGE 2: ORDER CENTER (SMART FORM) -->
+      <!-- ORDER CENTER -->
       <section class="page" id="page-2">
-        <div class="sectionTitle">
-          <h3>Order Center</h3>
-          <span>Smart Calculator</span>
-        </div>
+        <div class="sectionTitle"><h3>Order Center</h3></div>
 
         <div class="tab-pill-container">
           <button class="tab-pill active" onclick="setService('jaspin', this)">Jaspin</button>
@@ -173,14 +142,12 @@
         </div>
 
         <div class="card">
-          <!-- Dinamis Form Content -->
-          <div id="form-content">
-            <!-- Isi form akan berubah sesuai tab -->
-          </div>
+          <div id="form-content"></div>
 
           <hr style="border: 0; border-top: 1px solid rgba(0,0,0,0.05); margin: 20px 0;">
 
-          <div class="form-group">
+          <!-- Dropdown QRIS hanya muncul jika bukan Jaspin -->
+          <div class="form-group" id="qris-wrapper">
             <label>Pakai QRIS?</label>
             <select class="field-input" id="qris_global" onchange="updateAll()">
               <option value="no">No</option>
@@ -196,55 +163,23 @@
             </select>
           </div>
 
-          <div class="output-box" id="hasilForm">Format muncul di sini...</div>
+          <div class="output-box" id="hasilForm"></div>
           <button class="cta-btn" onclick="copyText()">SALIN FORMAT</button>
         </div>
       </section>
 
-      <!-- PAGE 3: PROFILE -->
+      <!-- PROFILE -->
       <section class="page" id="page-3">
-        <div class="sectionTitle">
-          <h3>Settings</h3>
-        </div>
-        <div class="card" style="display: flex; align-items: center; gap: 15px;">
-          <div style="width: 60px; height: 60px; border-radius: 20px; background: #eee; display: grid; place-items: center; font-size: 30px;">👤</div>
-          <div>
-            <b style="font-size: 16px;">Customer</b>
-            <span style="display: block; font-size: 12px; color: var(--muted);">v2.4 Smart-Logic</span>
-          </div>
-        </div>
-        <div class="card" style="margin-top: 15px; padding: 0;">
-            <div style="padding: 15px; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between;">
-                <span style="font-size: 14px; font-weight: 600;">Regulation</span>
-                <span style="color: var(--muted);">›</span>
-            </div>
-            <div style="padding: 15px; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between;">
-                <span style="font-size: 14px; font-weight: 600;">Testimoni</span>
-                <span style="color: var(--muted);">›</span>
-            </div>
-            <div style="padding: 15px; display: flex; justify-content: space-between;">
-                <span style="font-size: 14px; font-weight: 600; color: #ef4444;">Bantuan Admin</span>
-                <span style="color: var(--muted);">›</span>
-            </div>
-        </div>
+        <div class="sectionTitle"><h3>Settings</h3></div>
+        <div class="card"><b>@cellrekber</b><br><small>v2.4 Smart-Logic</small></div>
       </section>
     </div>
 
-    <!-- Navigation Bar -->
     <nav class="nav-bar">
       <div class="nav-items">
-        <div class="nav-item active" onclick="go(1)" id="nav-1">
-          <span class="nav-icon">🏠</span>
-          <span>Home</span>
-        </div>
-        <div class="nav-item" onclick="go(2)" id="nav-2">
-          <span class="nav-icon">📝</span>
-          <span>Order</span>
-        </div>
-        <div class="nav-item" onclick="go(3)" id="nav-3">
-          <span class="nav-icon">⚙️</span>
-          <span>Profile</span>
-        </div>
+        <div class="nav-item active" onclick="go(1)" id="nav-1">🏠<span>Home</span></div>
+        <div class="nav-item" onclick="go(2)" id="nav-2">📝<span>Order</span></div>
+        <div class="nav-item" onclick="go(3)" id="nav-3">⚙️<span>Settings</span></div>
       </div>
     </nav>
   </div>
@@ -252,18 +187,14 @@
   <script>
     let currentService = 'jaspin';
 
-    // Navigation Logic
     function go(pageNumber) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.getElementById('page-' + pageNumber).classList.add('active');
-      
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
       document.getElementById('nav-' + pageNumber).classList.add('active');
-      
       if(pageNumber === 2) setService(currentService);
     }
 
-    // Form Switcher Logic
     function setService(service, el) {
       currentService = service;
       if(el) {
@@ -272,84 +203,37 @@
       }
       
       const container = document.getElementById('form-content');
+      const qrisWrapper = document.getElementById('qris-wrapper');
+
+      // Sembunyikan QRIS selector jika Jaspin
       if(service === 'jaspin') {
+        qrisWrapper.style.display = 'none';
         container.innerHTML = `
-          <div class="form-group">
-            <label>Username</label>
-            <input type="text" id="user_j" class="field-input" placeholder="roserekber" oninput="updateAll()">
-          </div>
-          <div class="form-group">
-            <label>Nominal</label>
-            <input type="text" id="nom_j" class="field-input" placeholder="8.000" oninput="formatInput(this); updateAll()">
-          </div>
-          <div class="form-group">
-            <label>Nomor + A.N</label>
-            <input type="text" id="nan_j" class="field-input" placeholder="0812... a.n Rose" oninput="updateAll()">
-          </div>
+          <div class="form-group"><label>Username</label><input type="text" id="user_j" class="field-input" placeholder="username" oninput="updateAll()"></div>
+          <div class="form-group"><label>Nominal</label><input type="text" id="nom_j" class="field-input" placeholder="8.000" oninput="formatInput(this); updateAll()"></div>
+          <div class="form-group"><label>Nomor + A.N</label><input type="text" id="nan_j" class="field-input" placeholder="0812... a.n Rose" oninput="updateAll()"></div>
         `;
       } else if(service === 'convert') {
+        qrisWrapper.style.display = 'block';
         container.innerHTML = `
-          <div class="form-group">
-            <label>Tipe E-wallet</label>
-            <select id="tipe_cv" class="field-input" onchange="updateAll()">
-              <option value="prem">E-wallet Premium</option>
-              <option value="nonprem">E-wallet Non-Premium</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Username</label>
-            <input type="text" id="user_c" class="field-input" placeholder="roserekber" oninput="updateAll()">
-          </div>
-          <div class="form-group">
-            <label>Nominal Convert</label>
-            <input type="text" id="nom_c" class="field-input" placeholder="500.000" oninput="formatInput(this); updateAll()">
-          </div>
+          <div class="form-group"><label>Username</label><input type="text" id="user_c" class="field-input" placeholder="username" oninput="updateAll()"></div>
+          <div class="form-group"><label>Nominal Convert</label><input type="text" id="nom_c" class="field-input" placeholder="500.000" oninput="formatInput(this); updateAll()"></div>
           <div style="display:flex; gap:10px;">
-            <div class="form-group" style="flex:1">
-              <label>Dari</label>
-              <input type="text" id="dari_c" class="field-input" placeholder="Dana" oninput="updateAll()">
-            </div>
-            <div class="form-group" style="flex:1">
-              <label>Ke</label>
-              <input type="text" id="ke_c" class="field-input" placeholder="Gopay" oninput="updateAll()">
-            </div>
+            <div class="form-group" style="flex:1"><label>Dari</label><input type="text" id="dari_c" class="field-input" placeholder="Dana" oninput="updateAll()"></div>
+            <div class="form-group" style="flex:1"><label>Ke</label><input type="text" id="ke_c" class="field-input" placeholder="Gopay" oninput="updateAll()"></div>
           </div>
         `;
       } else {
+        qrisWrapper.style.display = 'block';
         container.innerHTML = `
-          <div class="form-group">
-            <label>Username Penjual</label>
-            <input type="text" id="user_p_rek" class="field-input" placeholder="penjual" oninput="updateAll()">
-          </div>
-          <div class="form-group">
-            <label>Username Pembeli</label>
-            <input type="text" id="user_b_rek" class="field-input" placeholder="pembeli" oninput="updateAll()">
-          </div>
-          <div class="form-group">
-            <label>Jenis Orderan</label>
-            <input type="text" id="jenis_rek" class="field-input" placeholder="Nox, Acc, dll" oninput="updateAll()">
-          </div>
-          <div class="form-group">
-            <label>Nominal</label>
-            <input type="text" id="nom_rek" class="field-input" placeholder="1.000.000" oninput="formatInput(this); updateAll()">
-          </div>
-          <div style="display:flex; gap:10px;">
-            <div class="form-group" style="flex:1">
-              <label>Penjual Via</label>
-              <input type="text" id="p_via" class="field-input" placeholder="Dana" oninput="updateAll()">
-            </div>
-            <div class="form-group" style="flex:1">
-              <label>Pembeli Via</label>
-              <input type="text" id="b_via" class="field-input" placeholder="Dana" oninput="updateAll()">
-            </div>
-          </div>
-          <span class="info-badge">*Jika via berbeda, fee convert otomatis ditambahkan</span>
+          <div class="form-group"><label>Username Penjual</label><input type="text" id="user_p_rek" class="field-input" placeholder="penjual" oninput="updateAll()"></div>
+          <div class="form-group"><label>Username Pembeli</label><input type="text" id="user_b_rek" class="field-input" placeholder="pembeli" oninput="updateAll()"></div>
+          <div class="form-group"><label>Nominal</label><input type="text" id="nom_rek" class="field-input" placeholder="1.000.000" oninput="formatInput(this); updateAll()"></div>
         `;
       }
       updateAll();
     }
 
-    // Logic Functions (Original)
     function formatRibuan(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
     function formatInput(el) {
       let val = el.value.replace(/\D/g, '');
@@ -357,99 +241,30 @@
     }
 
     function updateAll() {
-      if(currentService === 'jaspin') updateJaspin();
-      else if(currentService === 'convert') updateConvert();
-      else updateRekber();
-    }
-
-    function updateJaspin() {
-      let raw = (document.getElementById('nom_j')?.value || "0").replace(/\./g, '');
-      let nom = parseInt(raw) || 0;
-      let fee = "0";
-      if (nom >= 10 && nom < 1000) fee = "free";
-      else if (nom >= 1000) {
-        let val = (nom < 21000) ? (Math.floor(nom/1000)*10 - 5) : (195 + (Math.floor(nom/1000)-20)*10);
-        fee = val < 1000 ? val + "p" : formatRibuan(val);
+      if(currentService === 'jaspin') {
+        let raw = (document.getElementById('nom_j')?.value || "0").replace(/\./g, '');
+        let nom = parseInt(raw) || 0;
+        let fee = (nom < 21000) ? (Math.floor(nom/1000)*10 - 5) : (195 + (Math.floor(nom/1000)-20)*10);
+        let template = `🪷 𓏸  FORMAT JASPIN ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_j')?.value || "..."}\nㅤ𐀶. . jaspin nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . fee jaspin :: ${fee < 1000 ? fee+'p' : formatRibuan(fee)}\nㅤ𐀶. . nomor + a.n :: ${document.getElementById('nan_j')?.value || "..."}\nㅤ𐀶. . pakai qris :: yes only dana\nㅤ𐀶. . sudah subs @roserekber ? :: ${document.getElementById('subs_global').value}`;
+        document.getElementById('hasilForm').innerText = template;
+      } 
+      else if(currentService === 'convert') {
+        let raw = (document.getElementById('nom_c')?.value || "0").replace(/\./g, '');
+        let template = `🪷 𓏸  FORMAT CONVERT ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_c')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . dari :: ${document.getElementById('dari_c')?.value || "..."}\nㅤ𐀶. . ke :: ${document.getElementById('ke_c')?.value || "..."}\nㅤ𐀶. . pakai qris :: ${document.getElementById('qris_global').value}\nㅤ𐀶. . sudah subs @roserekber ? :: ${document.getElementById('subs_global').value}`;
+        document.getElementById('hasilForm').innerText = template;
       }
-      let template = `ㅤㅤ ㅤ🪷 𓏸  FORMAT JASPIN ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_j')?.value || "..."}\nㅤ𐀶. . jaspin nominal :: ${formatRibuan(raw) || "0"}\nㅤ𐀶. . fee jaspin :: ${fee}\nㅤ𐀶. . nomor + a.n :: ${document.getElementById('nan_j')?.value || "..."}\nㅤ𐀶. . pakai qris :: ${document.getElementById('qris_global').value}\nㅤ𐀶. . sudah subs @roserekber ? :: ${document.getElementById('subs_global').value}`;
-      document.getElementById('hasilForm').innerText = template;
-    }
-
-    function updateConvert() {
-      let raw = (document.getElementById('nom_c')?.value || "0").replace(/\./g, '');
-      let nom = parseInt(raw) || 0;
-      let tipe = document.getElementById('tipe_cv')?.value;
-      let feeDisplay = "0";
-      if (tipe === 'prem') {
-        feeDisplay = formatRibuan((Math.floor(nom / 100000) + 1) * 1000);
-      } else {
-        if (nom < 20000) feeDisplay = "2.000";
-        else if (nom < 50000) feeDisplay = "3.000";
-        else if (nom < 100000) feeDisplay = "4.000";
-        else if (nom < 20000) feeDisplay = "6.000";
-        else if (nom < 300000) feeDisplay = "8.000";
-        else if (nom < 400000) feeDisplay = "10.000";
-        else if (nom < 500000) feeDisplay = "12.000";
-        else {
-          let rate = Math.max(0.70, 0.97 - (Math.floor((nom - 500000) / 500000) * 0.01));
-          feeDisplay = `${formatRibuan(Math.round(nom - (nom * rate)))} (Rate ${rate.toFixed(2)})`;
-        }
+      else {
+        let raw = (document.getElementById('nom_rek')?.value || "0").replace(/\./g, '');
+        let template = `🪷 𓏸  FORMAT REKBER ☏\n\nㅤ𐀶. . penjual :: @${document.getElementById('user_p_rek')?.value || "..."}\nㅤ𐀶. . pembeli :: @${document.getElementById('user_b_rek')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . pakai qris :: ${document.getElementById('qris_global').value}\nㅤ𐀶. . sudah subs @roserekber ? :: ${document.getElementById('subs_global').value}`;
+        document.getElementById('hasilForm').innerText = template;
       }
-      let template = `ㅤㅤ ㅤ🪷 𓏸  FORMAT CONVERT ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_c')?.value || "..."}\nㅤ𐀶. . cv nominal :: ${formatRibuan(raw) || "0"}\nㅤ𐀶. . fee convert :: ${feeDisplay}\nㅤ𐀶. . dari ewallet :: ${document.getElementById('dari_c')?.value || "..."}\nㅤ𐀶. . ewallet tujuan :: ${document.getElementById('ke_c')?.value || "..."}\nㅤ𐀶. . pakai qris :: ${document.getElementById('qris_global').value}\nㅤ𐀶. . sudah subs @roserekber ? :: ${document.getElementById('subs_global').value}`;
-      document.getElementById('hasilForm').innerText = template;
-    }
-
-    function updateRekber() {
-      let raw = (document.getElementById('nom_rek')?.value || "0").replace(/\./g, '');
-      let nom = parseInt(raw) || 0;
-      let v_p = (document.getElementById('p_via')?.value || "").toLowerCase().trim();
-      let v_b = (document.getElementById('b_via')?.value || "").toLowerCase().trim();
-      let qris = document.getElementById('qris_global').value;
-      
-      let feeRekValue = 0; let isPerak = true;
-      if (nom < 10000) feeRekValue = 0;
-      else if (nom < 20000) feeRekValue = 30;
-      else if (nom < 60000) feeRekValue = 100;
-      else if (nom < 400000) feeRekValue = 200;
-      else if (nom < 600000) feeRekValue = 350;
-      else if (nom < 700000) feeRekValue = 550;
-      else if (nom < 800000) feeRekValue = 950;
-      else if (nom < 1000000) { feeRekValue = 2000; isPerak = false; }
-      else if (nom <= 2000000) { feeRekValue = 5000; isPerak = false; }
-      else { feeRekValue = 8000; isPerak = false; }
-
-      let feeCvValue = 0; let infoCv = "";
-      if (v_p !== "" && v_b !== "" && v_p !== v_b) {
-        if (qris.includes("yes")) {
-          if (nom < 20000) feeCvValue = 2000;
-          else if (nom < 50000) feeCvValue = 3000;
-          else if (nom < 100000) feeCvValue = 4000;
-          else {
-            let rate = Math.max(0.70, 0.97 - (Math.floor((nom - 500000) / 500000) * 0.01));
-            feeCvValue = Math.round(nom - (nom * rate));
-          }
-          infoCv = " (inc cv non-prem)";
-        } else {
-          feeCvValue = (Math.floor(nom / 100000) + 1) * 1000;
-          infoCv = " (inc cv prem)";
-        }
-      }
-
-      let totalFeeValue = feeRekValue + feeCvValue;
-      let feeFinal = (totalFeeValue < 1000 && isPerak && feeCvValue === 0) ? totalFeeValue + "p" : formatRibuan(totalFeeValue);
-
-      let template = `🪷 𓏸  FORMAT REKBER E WALLET ☏\n\nㅤ𐀶. . username penjual :: @${document.getElementById('user_p_rek')?.value || "..."}\nㅤ𐀶. . username pembeli :: @${document.getElementById('user_b_rek')?.value || "..."}\nㅤ𐀶. . jenis orderan :: ${document.getElementById('jenis_rek')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatRibuan(raw) || "0"}\nㅤ𐀶. . fee rekber :: ${feeFinal}${infoCv}\nㅤ𐀶. . penjual via :: ${document.getElementById('p_via')?.value || "..."}\nㅤ𐀶. . pembeli via :: ${document.getElementById('b_via')?.value || "..."}\nㅤ𐀶. . pakai qris :: ${qris}\nㅤ𐀶. . sudah subs @roserekber ? :: ${document.getElementById('subs_global').value}`;
-      document.getElementById('hasilForm').innerText = template;
     }
 
     function copyText() {
-      const text = document.getElementById('hasilForm').innerText;
-      navigator.clipboard.writeText(text).then(() => {
-        alert("Format berhasil disalin ke clipboard!");
-      });
+      navigator.clipboard.writeText(document.getElementById('hasilForm').innerText);
+      alert("Format disalin!");
     }
 
-    // Initialize
     window.onload = () => setService('jaspin');
   </script>
 </body>
