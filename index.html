@@ -7,19 +7,14 @@
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background: #f0f2f5; color: #333; }
         .container { max-width: 480px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        
-        /* Tab Styling */
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
         .tab-btn { flex: 1; padding: 10px; border: none; border-radius: 8px; cursor: pointer; background: #ddd; font-weight: bold; transition: 0.3s; }
         .tab-btn.active { background: #d63384; color: white; }
-        
         .form-section { display: none; }
         .form-section.active { display: block; }
-
         h3 { text-align: center; color: #d63384; margin-top: 0; }
         label { font-size: 0.85rem; font-weight: bold; display: block; margin-top: 10px; }
         input, select { width: 100%; padding: 12px; margin: 5px 0 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
-        
         .output-box { background: #fff5f8; padding: 15px; margin-top: 15px; white-space: pre-wrap; border: 1px dashed #d63384; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 0.9rem; line-height: 1.4; }
         .copy-btn { margin-top: 10px; width: 100%; padding: 12px; background: #d63384; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1rem; }
         .copy-btn:hover { background: #b82a6e; }
@@ -134,25 +129,27 @@ function updateConvert() {
     let raw = document.getElementById('nom_c').value.replace(/\./g, '');
     let nom = parseInt(raw) || 0;
     let tipe = document.getElementById('tipe_cv').value;
-    let fee = "0";
+    let feeDisplay = "0";
 
     if (tipe === 'prem') {
         let k = Math.floor(nom / 100000);
-        fee = formatRibuan((k + 1) * 1000);
+        feeDisplay = formatRibuan((k + 1) * 1000);
     } else {
-        if (nom < 20000) fee = "2.000";
-        else if (nom < 50000) fee = "3.000";
-        else if (nom < 100000) fee = "4.000";
-        else if (nom < 200000) fee = "6.000";
-        else if (nom < 300000) fee = "8.000";
-        else if (nom < 400000) fee = "10.000";
-        else if (nom < 500000) fee = "12.000";
+        if (nom < 20000) feeDisplay = "2.000";
+        else if (nom < 50000) feeDisplay = "3.000";
+        else if (nom < 100000) feeDisplay = "4.000";
+        else if (nom < 200000) feeDisplay = "6.000";
+        else if (nom < 300000) feeDisplay = "8.000";
+        else if (nom < 400000) feeDisplay = "10.000";
+        else if (nom < 500000) feeDisplay = "12.000";
         else {
-            // Logika Rate
+            // Logika Rate Otomatis
             let rate = 0.97;
             let kelipatan500k = Math.floor((nom - 500000) / 500000);
             rate = Math.max(0.70, rate - (kelipatan500k * 0.01)); 
-            fee = "Rate " + rate.toFixed(2);
+            
+            let totalFee = nom - (nom * rate);
+            feeDisplay = `${formatRibuan(Math.round(totalFee))} (Rate ${rate.toFixed(2)})`;
         }
     }
 
@@ -160,7 +157,7 @@ function updateConvert() {
 
 ㅤ𐀶. . username :: @${document.getElementById('user_c').value || "..."}
 ㅤ𐀶. . cv nominal :: ${formatRibuan(raw) || "0"}
-ㅤ𐀶. . fee convert :: ${fee}
+ㅤ𐀶. . fee convert :: ${feeDisplay}
 ㅤ𐀶. . dari ewallet :: ${document.getElementById('dari_c').value || "..."}
 ㅤ𐀶. . ewallet tujuan :: ${document.getElementById('ke_c').value || "..."}
 ㅤ𐀶. . nomor tujuan :: ${document.getElementById('tujuan_c').value || "..."}
