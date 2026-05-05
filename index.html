@@ -7,7 +7,8 @@
   <style>
     :root{
       --bg: #f4f6fa;
-      --card: rgba(255,255,255,.90);
+      --card: rgba(255,255,255,.86);
+      --card2: rgba(255,255,255,.72);
       --text: #0f172a;
       --muted: rgba(15,23,42,.55);
       --line: rgba(15,23,42,.10);
@@ -15,170 +16,197 @@
       --tg: #d63384; 
       --tg2: #b82a6e;
       --radius-xl: 28px;
-      --blur: blur(20px);
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --blur: blur(18px);
       --device: 430px;
     }
 
     *{ box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial;
-      background: radial-gradient(1000px 500px at 10% -10%, rgba(214,51,132,.15), transparent 50%),
+      font-family: ui-sans-serif, system-ui, -apple-system, "SF Pro Display","SF Pro Text", Segoe UI, Roboto, Helvetica, Arial;
+      background: radial-gradient(1200px 600px at 20% -10%, rgba(214,51,132,.18), transparent 60%),
                   linear-gradient(180deg, #fdf2f8, var(--bg));
-      display:flex; justify-content:center; padding: 18px 12px; color: var(--text); min-height: 100vh;
+      display:flex; justify-content:center; padding: 18px 12px 36px; color: var(--text);
     }
 
     .phone{
       width: min(var(--device), 100%);
-      border-radius: 40px; overflow:hidden;
-      border: 1px solid rgba(2,6,23,.08);
-      box-shadow: 0 30px 90px rgba(2,6,23,.15);
-      background: var(--bg); position:relative; display: flex; flex-direction: column; height: 844px;
+      border-radius: 36px; overflow:hidden;
+      border: 1px solid rgba(2,6,23,.10);
+      box-shadow: 0 30px 90px rgba(2,6,23,.20);
+      background: var(--bg); position:relative;
+      min-height: 844px; display: flex; flex-direction: column;
     }
+
+    .safe{ padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
 
     .top{
-      position: sticky; top: 0; z-index: 30; padding: 16px 20px 12px;
-      background: rgba(244,246,250,.75); backdrop-filter: var(--blur);
-      border-bottom: 1px solid rgba(15,23,42,.06);
+      position: sticky; top: 0; z-index: 30; padding: 14px 14px 12px;
+      background: rgba(244,246,250,.70); backdrop-filter: var(--blur);
+      border-bottom: 1px solid rgba(15,23,42,.08);
     }
-    .brand{ display:flex; align-items:center; gap: 12px; }
+    .topRow{ display:flex; align-items:center; justify-content:space-between; gap: 10px; }
+    .brand{ display:flex; align-items:center; gap: 10px; min-width: 140px; }
     .logo{
-      width: 42px; height: 42px; border-radius: 14px;
+      width: 40px; height: 40px; border-radius: 12px;
       background: linear-gradient(135deg, var(--tg), var(--tg2));
-      display:grid; place-items:center; color: white; font-weight: bold; font-size: 20px;
+      display:grid; place-items:center; font-weight: 900; color: white;
     }
-    .brandText b{ display:block; font-size: 15px; }
+    .brandText b{ display:block; font-size: 14px; }
     .brandText span{ display:block; font-size: 12px; color: var(--muted); }
 
-    .content-area { flex: 1; overflow-y: auto; padding: 10px 16px 100px; scroll-behavior: smooth; }
-    .page{ display:none; animation: fadeIn 0.3s ease; }
+    .page{ display:none; padding: 14px 14px 100px; animation: fadeIn 0.3s ease; }
     .page.active{ display:block; }
-    @keyframes fadeIn { from{opacity:0; transform: translateY(10px);} to{opacity:1; transform: translateY(0);} }
+    @keyframes fadeIn { from{opacity:0; transform: translateY(8px);} to{opacity:1; transform: translateY(0);} }
 
-    .sectionTitle{ margin: 20px 4px 10px; display: flex; justify-content: space-between; align-items: flex-end; }
-    .sectionTitle h3{ margin:0; font-size: 17px; font-weight: 800; }
+    .card{ background: var(--card); border: 1px solid rgba(15,23,42,.10); border-radius: var(--radius-xl); box-shadow: var(--shadow); backdrop-filter: var(--blur); }
+    .card.pad{ padding: 18px; }
 
-    .card{
-      background: var(--card); border: 1px solid var(--line);
-      border-radius: var(--radius-xl); padding: 20px; box-shadow: var(--shadow);
-    }
-    .form-group{ margin-bottom: 14px; }
-    .form-group label{ display:block; font-size: 12px; font-weight: 700; color: var(--tg); margin-bottom: 6px; margin-left: 4px; }
-    .field-input{
-      width: 100%; padding: 14px; border-radius: 16px; border: 1px solid rgba(15,23,42,.08);
-      background: white; font-size: 15px; transition: 0.2s; outline: none;
-    }
-    .field-input:focus{ border-color: var(--tg); box-shadow: 0 0 0 4px rgba(214,51,132,0.1); }
-    
-    select.field-input { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
+    .sectionTitle{ display:flex; align-items:flex-end; justify-content:space-between; margin: 10px 2px 10px; }
+    .sectionTitle h3{ margin:0; font-size: 16px; font-weight: 800; }
+    .sectionTitle span{ font-size: 11px; color: var(--muted); font-weight: 700; }
 
-    .tab-pill-container{
-      display: flex; background: rgba(15,23,42,.05); padding: 4px; border-radius: 14px; margin-bottom: 15px;
-    }
-    .tab-pill{
-      flex: 1; padding: 8px; border: none; border-radius: 11px; background: transparent;
-      font-size: 13px; font-weight: 700; color: var(--muted); cursor: pointer; transition: 0.2s;
-    }
+    /* Smart Form Styles */
+    .tab-pill-container{ display: flex; background: rgba(15,23,42,.05); padding: 4px; border-radius: 16px; margin-bottom: 18px; }
+    .tab-pill{ flex: 1; padding: 10px; border: none; border-radius: 12px; background: transparent; font-size: 13px; font-weight: 700; color: var(--muted); cursor: pointer; transition: 0.2s; }
     .tab-pill.active{ background: white; color: var(--tg); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
 
+    .field{ background: rgba(255,255,255,.74); border: 1px solid rgba(15,23,42,.10); border-radius: 18px; padding: 12px; margin-bottom: 10px; }
+    .field label{ display:block; font-size: 11px; color: var(--tg); font-weight: 900; margin-bottom: 4px; text-transform: uppercase; }
+    .field input, .field select{ width:100%; border:0; outline:none; background: transparent; font-size: 14px; color: var(--text); }
+
     .output-box {
-      background: #fff5f8; padding: 16px; border-radius: 18px; margin-top: 15px;
-      font-family: 'SF Mono', 'Courier New', monospace; font-size: 12px;
-      white-space: pre-wrap; border: 1px dashed rgba(214,51,132,0.3); color: #444; line-height: 1.5;
+      background: #fff5f8; padding: 16px; border-radius: 20px; margin-top: 15px;
+      font-family: 'SF Mono', monospace; font-size: 12px; white-space: pre-wrap;
+      border: 1px dashed rgba(214,51,132,0.3); color: #444; line-height: 1.5;
     }
 
-    .cta-btn{
-      width: 100%; padding: 16px; border-radius: 18px; border: none;
-      background: linear-gradient(180deg, var(--tg), var(--tg2));
-      color: white; font-weight: 800; font-size: 15px; cursor: pointer;
-      box-shadow: 0 10px 25px rgba(214,51,132,.25); margin-top: 15px; transition: 0.3s;
-    }
-    .cta-btn:active{ transform: scale(0.97); opacity: 0.9; }
+    .cta{ width:100%; border:0; border-radius: 18px; padding: 16px; font-weight: 900; color: white; background: linear-gradient(180deg, var(--tg), var(--tg2)); box-shadow: 0 15px 35px rgba(214,51,132,.25); cursor:pointer; margin-top: 12px; }
 
-    .nav-bar{
-      position: absolute; bottom: 0; left: 0; right: 0;
-      background: rgba(244,246,250,.85); backdrop-filter: var(--blur);
-      border-top: 1px solid rgba(15,23,42,.06); padding: 10px 20px 30px;
-    }
-    .nav-items{ display: flex; justify-content: space-around; }
-    .nav-item{
-      display: flex; flex-direction: column; align-items: center; gap: 4px;
-      color: var(--muted); cursor: pointer; font-size: 11px; font-weight: 700;
-    }
-    .nav-item.active{ color: var(--tg); }
+    /* Nav Bar */
+    .tabs{ position:absolute; left:0; right:0; bottom:0; padding: 10px 12px 30px; background: rgba(244,246,250,.70); backdrop-filter: var(--blur); border-top: 1px solid rgba(15,23,42,.08); z-index: 40; }
+    .tabBar{ display:flex; gap: 8px; background: rgba(15,23,42,.07); border-radius: 20px; padding: 6px; }
+    .tab{ flex:1; border:0; padding: 12px; border-radius: 16px; background: transparent; font-weight: 800; color: var(--muted); cursor:pointer; font-size: 13px; }
+    .tab.active{ background: white; color: var(--text); box-shadow: 0 8px 20px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05); }
+
+    /* Dashboard Elements */
+    .chatRow{ display:flex; gap: 12px; align-items:center; padding: 12px; border-radius: 18px; cursor:pointer; transition: 0.2s; }
+    .chatRow:hover{ background: rgba(214,51,132,.05); }
+    .chatAvatar{ width: 44px; height: 44px; border-radius: 999px; background: rgba(214,51,132,.1); border: 1px solid rgba(214,51,132,.2); display:grid; place-items:center; font-weight: 900; color: var(--tg); }
   </style>
 </head>
 
 <body>
-  <div class="phone" id="app">
+  <div class="phone safe" id="app">
     <header class="top">
-      <div class="brand">
-        <div class="logo">🪷</div>
-        <div class="brandText">
-          <b>Rekberr TeLe</b>
-          <span>Automated Smart Form</span>
+      <div class="topRow">
+        <div class="brand">
+          <div class="logo">RT</div>
+          <div class="brandText">
+            <b>Rekberr TeLe</b>
+            <span>Automated Smart Form</span>
+          </div>
         </div>
+        <div class="iconBtn" style="font-size: 20px;">≡</div>
       </div>
     </header>
 
-    <div class="content-area">
-      <!-- DASHBOARD -->
-      <section class="page active" id="page-1">
-        <div class="sectionTitle"><h3>Overview</h3></div>
-        <div class="card" style="background: linear-gradient(135deg, #d63384, #9d1757); color: white;">
-          <div style="font-size: 20px; font-weight: 800;">Sistem Online ✅</div>
-          <p style="font-size: 12px; opacity: 0.9;">Layanan aktif. Silahkan buat format di menu Order.</p>
-        </div>
-      </section>
+    <!-- PAGE 1: HOME -->
+    <section class="page active" id="page-1">
+      <div class="sectionTitle">
+        <h3>Dashboard</h3>
+        <span>Sistem Online ✅</span>
+      </div>
+      <div class="card pad" style="background: linear-gradient(135deg, var(--tg), var(--tg2)); color: white; border: none; margin-bottom: 20px;">
+        <h4 style="margin:0">Selamat Datang!</h4>
+        <p style="font-size: 12px; opacity: 0.9; margin: 8px 0 0;">Gunakan menu Order untuk membuat format transaksi secara otomatis.</p>
+      </div>
 
-      <!-- ORDER CENTER -->
-      <section class="page" id="page-2">
-        <div class="sectionTitle"><h3>Order Center</h3></div>
-
-        <div class="tab-pill-container">
-          <button class="tab-pill active" onclick="setService('jaspin', this)">Jaspin</button>
-          <button class="tab-pill" onclick="setService('convert', this)">Convert</button>
-          <button class="tab-pill" onclick="setService('rekber', this)">Rekber</button>
-        </div>
-
-        <div class="card">
-          <div id="form-content"></div>
-
-          <hr style="border: 0; border-top: 1px solid rgba(0,0,0,0.05); margin: 20px 0;">
-
-          <div class="form-group" id="qris-wrapper">
-            <label>Pakai QRIS?</label>
-            <select class="field-input" id="qris_global" onchange="updateAll()">
-              <option value="no">No</option>
-              <option value="yes only dana">Yes Only Dana</option>
-            </select>
+      <div class="sectionTitle"><h3>Info Layanan</h3></div>
+      <div class="card chatList">
+        <div class="chatRow" onclick="go(2)">
+          <div class="chatAvatar">📝</div>
+          <div class="chatMeta" style="flex:1">
+            <b style="font-size: 14px;">Buat Order</b>
+            <span style="display:block; font-size: 12px; color: var(--muted);">Rekber, Convert, & Jaspin</span>
           </div>
-
-          <div class="form-group">
-            <label>Subs @Rekberr TeLe?</label>
-            <select class="field-input" id="subs_global" onchange="updateAll()">
-              <option value="sudah">Sudah</option>
-              <option value="belum">Belum</option>
-            </select>
-          </div>
-
-          <div class="output-box" id="hasilForm"></div>
-          <button class="cta-btn" onclick="copyText()">SALIN FORMAT</button>
+          <div style="color: var(--muted)">›</div>
         </div>
-      </section>
+        <div class="chatRow">
+          <div class="chatAvatar">📢</div>
+          <div class="chatMeta" style="flex:1">
+            <b style="font-size: 14px;">Channel Pusat</b>
+            <span style="display:block; font-size: 12px; color: var(--muted);">Update @Rekberr TeLe</span>
+          </div>
+          <div style="color: var(--muted)">›</div>
+        </div>
+      </div>
+    </section>
 
-      <!-- PROFILE -->
-      <section class="page" id="page-3">
-        <div class="sectionTitle"><h3>Settings</h3></div>
-        <div class="card"><b>@Rekberr TeLe</b><br><small>v2.4 Smart-Logic</small></div>
-      </section>
-    </div>
+    <!-- PAGE 2: ORDER CENTER -->
+    <section class="page" id="page-2">
+      <div class="sectionTitle">
+        <h3>Order Center</h3>
+        <span>Auto-Logic v2.4</span>
+      </div>
 
-    <nav class="nav-bar">
-      <div class="nav-items">
-        <div class="nav-item active" onclick="go(1)" id="nav-1">🏠<span>Home</span></div>
-        <div class="nav-item" onclick="go(2)" id="nav-2">📝<span>Order</span></div>
-        <div class="nav-item" onclick="go(3)" id="nav-3">⚙️<span>Settings</span></div>
+      <div class="tab-pill-container">
+        <button class="tab-pill active" onclick="setService('jaspin', this)">Jaspin</button>
+        <button class="tab-pill" onclick="setService('convert', this)">Convert</button>
+        <button class="tab-pill" onclick="setService('rekber', this)">Rekber</button>
+      </div>
+
+      <div class="card pad">
+        <div id="form-fields">
+          <!-- Fields akan diisi oleh JS -->
+        </div>
+
+        <div class="field" id="qris-wrapper">
+          <label>Pakai QRIS?</label>
+          <select id="qris_global" onchange="updateAll()">
+            <option value="no">No</option>
+            <option value="yes only dana">Yes Only Dana</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Subs @Rekberr TeLe?</label>
+          <select id="subs_global" onchange="updateAll()">
+            <option value="sudah">Sudah</option>
+            <option value="belum">Belum</option>
+          </select>
+        </div>
+
+        <div class="output-box" id="hasilForm"></div>
+        <button class="cta" onclick="copyText()">SALIN FORMAT</button>
+      </div>
+    </section>
+
+    <!-- PAGE 3: PROFILE -->
+    <section class="page" id="page-3">
+      <div class="sectionTitle"><h3>Profile & Settings</h3></div>
+      <div class="card pad" style="display:flex; align-items:center; gap:15px; margin-bottom: 15px;">
+        <div class="chatAvatar" style="width:60px; height:60px; font-size: 24px;">RT</div>
+        <div>
+          <b style="font-size: 16px;">@Rekberr TeLe</b>
+          <span style="display:block; font-size: 12px; color: var(--muted);">Official Digital Service</span>
+        </div>
+      </div>
+      
+      <div class="card" style="overflow:hidden">
+        <div style="padding: 15px; border-bottom: 1px solid var(--line); font-size: 14px; font-weight: 700;">Pengaturan</div>
+        <div style="padding: 15px; font-size: 13px; color: var(--muted);">Versi Aplikasi: 2.4.0-stable</div>
+      </div>
+    </section>
+
+    <!-- NAV BAR -->
+    <nav class="tabs">
+      <div class="tabBar">
+        <button class="tab active" data-page="1">Home</button>
+        <button class="tab" data-page="2">Order</button>
+        <button class="tab" data-page="3">Profile</button>
       </div>
     </nav>
   </div>
@@ -186,14 +214,18 @@
   <script>
     let currentService = 'jaspin';
 
-    function go(pageNumber) {
+    // Navigation Logic
+    const tabs = document.querySelectorAll('.tab');
+    function go(n){
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById('page-' + pageNumber).classList.add('active');
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      document.getElementById('nav-' + pageNumber).classList.add('active');
-      if(pageNumber === 2) setService(currentService);
+      document.getElementById('page-' + n).classList.add('active');
+      tabs.forEach(t => t.classList.toggle('active', t.dataset.page === String(n)));
+      if(n === 2) setService(currentService);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+    tabs.forEach(t => t.addEventListener('click', () => go(Number(t.dataset.page))));
 
+    // Form Logic
     function setService(service, el) {
       currentService = service;
       if(el) {
@@ -201,32 +233,32 @@
         el.classList.add('active');
       }
       
-      const container = document.getElementById('form-content');
+      const container = document.getElementById('form-fields');
       const qrisWrapper = document.getElementById('qris-wrapper');
 
       if(service === 'jaspin') {
         qrisWrapper.style.display = 'none';
         container.innerHTML = `
-          <div class="form-group"><label>Username</label><input type="text" id="user_j" class="field-input" placeholder="username" oninput="updateAll()"></div>
-          <div class="form-group"><label>Nominal</label><input type="text" id="nom_j" class="field-input" placeholder="8.000" oninput="formatInput(this); updateAll()"></div>
-          <div class="form-group"><label>Nomor + A.N</label><input type="text" id="nan_j" class="field-input" placeholder="0812... a.n Rose" oninput="updateAll()"></div>
+          <div class="field"><label>Username</label><input type="text" id="user_j" placeholder="username" oninput="updateAll()"></div>
+          <div class="field"><label>Nominal</label><input type="text" id="nom_j" placeholder="8.000" oninput="formatInput(this); updateAll()"></div>
+          <div class="field"><label>Nomor + A.N</label><input type="text" id="nan_j" placeholder="0812... a.n Rose" oninput="updateAll()"></div>
         `;
       } else if(service === 'convert') {
         qrisWrapper.style.display = 'block';
         container.innerHTML = `
-          <div class="form-group"><label>Username</label><input type="text" id="user_c" class="field-input" placeholder="username" oninput="updateAll()"></div>
-          <div class="form-group"><label>Nominal Convert</label><input type="text" id="nom_c" class="field-input" placeholder="500.000" oninput="formatInput(this); updateAll()"></div>
+          <div class="field"><label>Username</label><input type="text" id="user_c" placeholder="username" oninput="updateAll()"></div>
+          <div class="field"><label>Nominal Convert</label><input type="text" id="nom_c" placeholder="500.000" oninput="formatInput(this); updateAll()"></div>
           <div style="display:flex; gap:10px;">
-            <div class="form-group" style="flex:1"><label>Dari</label><input type="text" id="dari_c" class="field-input" placeholder="Dana" oninput="updateAll()"></div>
-            <div class="form-group" style="flex:1"><label>Ke</label><input type="text" id="ke_c" class="field-input" placeholder="Gopay" oninput="updateAll()"></div>
+            <div class="field" style="flex:1"><label>Dari</label><input type="text" id="dari_c" placeholder="Dana" oninput="updateAll()"></div>
+            <div class="field" style="flex:1"><label>Ke</label><input type="text" id="ke_c" placeholder="Gopay" oninput="updateAll()"></div>
           </div>
         `;
       } else {
         qrisWrapper.style.display = 'block';
         container.innerHTML = `
-          <div class="form-group"><label>Username Penjual</label><input type="text" id="user_p_rek" class="field-input" placeholder="penjual" oninput="updateAll()"></div>
-          <div class="form-group"><label>Username Pembeli</label><input type="text" id="user_b_rek" class="field-input" placeholder="pembeli" oninput="updateAll()"></div>
-          <div class="form-group"><label>Nominal</label><input type="text" id="nom_rek" class="field-input" placeholder="1.000.000" oninput="formatInput(this); updateAll()"></div>
+          <div class="field"><label>Username Penjual</label><input type="text" id="user_p_rek" placeholder="penjual" oninput="updateAll()"></div>
+          <div class="field"><label>Username Pembeli</label><input type="text" id="user_b_rek" placeholder="pembeli" oninput="updateAll()"></div>
+          <div class="field"><label>Nominal</label><input type="text" id="nom_rek" placeholder="1.000.000" oninput="formatInput(this); updateAll()"></div>
         `;
       }
       updateAll();
@@ -239,30 +271,32 @@
     }
 
     function updateAll() {
+      const hasil = document.getElementById('hasilForm');
+      const subs = document.getElementById('subs_global').value;
+      const qris = document.getElementById('qris_global').value;
+
       if(currentService === 'jaspin') {
         let raw = (document.getElementById('nom_j')?.value || "0").replace(/\./g, '');
         let nom = parseInt(raw) || 0;
         let fee = (nom < 21000) ? (Math.floor(nom/1000)*10 - 5) : (195 + (Math.floor(nom/1000)-20)*10);
-        let template = `🪷 𓏸  FORMAT JASPIN ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_j')?.value || "..."}\nㅤ𐀶. . jaspin nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . fee jaspin :: ${fee < 1000 ? fee+'p' : formatRibuan(fee)}\nㅤ𐀶. . nomor + a.n :: ${document.getElementById('nan_j')?.value || "..."}\nㅤ𐀶. . pakai qris :: yes only dana\nㅤ𐀶. . sudah subs @Rekberr TeLe ? :: ${document.getElementById('subs_global').value}`;
-        document.getElementById('hasilForm').innerText = template;
+        hasil.innerText = `🪷 𓏸  FORMAT JASPIN ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_j')?.value || "..."}\nㅤ𐀶. . jaspin nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . fee jaspin :: ${fee < 1000 ? fee+'p' : formatRibuan(fee)}\nㅤ𐀶. . nomor + a.n :: ${document.getElementById('nan_j')?.value || "..."}\nㅤ𐀶. . pakai qris :: yes only dana\nㅤ𐀶. . sudah subs @Rekberr TeLe ? :: ${subs}`;
       } 
       else if(currentService === 'convert') {
         let raw = (document.getElementById('nom_c')?.value || "0").replace(/\./g, '');
-        let template = `🪷 𓏸  FORMAT CONVERT ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_c')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . dari :: ${document.getElementById('dari_c')?.value || "..."}\nㅤ𐀶. . ke :: ${document.getElementById('ke_c')?.value || "..."}\nㅤ𐀶. . pakai qris :: ${document.getElementById('qris_global').value}\nㅤ𐀶. . sudah subs @Rekberr TeLe ? :: ${document.getElementById('subs_global').value}`;
-        document.getElementById('hasilForm').innerText = template;
+        hasil.innerText = `🪷 𓏸  FORMAT CONVERT ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_c')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . dari :: ${document.getElementById('dari_c')?.value || "..."}\nㅤ𐀶. . ke :: ${document.getElementById('ke_c')?.value || "..."}\nㅤ𐀶. . pakai qris :: ${qris}\nㅤ𐀶. . sudah subs @Rekberr TeLe ? :: ${subs}`;
       }
       else {
         let raw = (document.getElementById('nom_rek')?.value || "0").replace(/\./g, '');
-        let template = `🪷 𓏸  FORMAT REKBER ☏\n\nㅤ𐀶. . penjual :: @${document.getElementById('user_p_rek')?.value || "..."}\nㅤ𐀶. . pembeli :: @${document.getElementById('user_b_rek')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . pakai qris :: ${document.getElementById('qris_global').value}\nㅤ𐀶. . sudah subs @Rekberr TeLe ? :: ${document.getElementById('subs_global').value}`;
-        document.getElementById('hasilForm').innerText = template;
+        hasil.innerText = `🪷 𓏸  FORMAT REKBER ☏\n\nㅤ𐀶. . penjual :: @${document.getElementById('user_p_rek')?.value || "..."}\nㅤ𐀶. . pembeli :: @${document.getElementById('user_b_rek')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . pakai qris :: ${qris}\nㅤ𐀶. . sudah subs @Rekberr TeLe ? :: ${subs}`;
       }
     }
 
     function copyText() {
       navigator.clipboard.writeText(document.getElementById('hasilForm').innerText);
-      alert("Format disalin!");
+      alert("Format disalin ke clipboard!");
     }
 
+    // Init
     window.onload = () => setService('jaspin');
   </script>
 </body>
