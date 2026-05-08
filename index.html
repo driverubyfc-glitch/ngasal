@@ -74,8 +74,8 @@
     .field input, .field select{ width:100%; border:0; outline:none; background: transparent; font-size: 14px; color: var(--text); }
 
     #orderText {
-      width: 100%; min-height: 140px; background: #fff5f8; padding: 16px; border-radius: 20px; 
-      margin-top: 15px; font-family: 'SF Mono', monospace; font-size: 12px;
+      width: 100%; min-height: 180px; background: #fff5f8; padding: 16px; border-radius: 20px; 
+      margin-top: 15px; font-family: 'SF Mono', monospace; font-size: 11px;
       border: 1px dashed rgba(214,51,132,0.3); color: #444; line-height: 1.5; outline: none; resize: none;
     }
 
@@ -113,30 +113,17 @@
         <h4 style="margin:0">Selamat Datang!</h4>
         <p style="font-size: 12px; opacity: 0.9; margin: 8px 0 0;">Layanan transaksi aman dan terpercaya.</p>
       </div>
-      
       <div class="card chatList">
-        <div class="chatRow" onclick="go(2)">
-          <div class="chatAvatar">📝</div>
-          <div style="flex:1"><b style="font-size: 14px;">Buat Order</b><br><small style="color:var(--muted)">Rekber, Convert, & Jaspin</small></div>
-          <div>›</div>
-        </div>
+        <div class="chatRow" onclick="go(2)"><div class="chatAvatar">📝</div><div style="flex:1"><b style="font-size: 14px;">Buat Order</b><br><small style="color:var(--muted)">Rekber, Convert, & Jaspin</small></div><div>›</div></div>
         <div style="height: 1px; background: var(--line); margin: 0 14px;"></div>
-        <div class="chatRow" onclick="window.open('https://t.me/ROSEREKBER/1687', '_blank')">
-          <div class="chatAvatar">👥</div>
-          <div style="flex:1"><b style="font-size: 14px;">List Admin</b><br><small style="color:var(--muted)">Daftar admin resmi terpercaya</small></div>
-          <div>›</div>
-        </div>
+        <div class="chatRow" onclick="window.open('https://t.me/ROSEREKBER/1687', '_blank')"><div class="chatAvatar">👥</div><div style="flex:1"><b style="font-size: 14px;">List Admin</b><br><small style="color:var(--muted)">Daftar admin resmi terpercaya</small></div><div>›</div></div>
         <div style="height: 1px; background: var(--line); margin: 0 14px;"></div>
-        <div class="chatRow" onclick="window.open('https://t.me/ROSEREKBER/1591', '_blank')">
-          <div class="chatAvatar">ℹ️</div>
-          <div style="flex:1"><b style="font-size: 14px;">Cara Order</b><br><small style="color:var(--muted)">Panduan penggunaan layanan</small></div>
-          <div>›</div>
-        </div>
+        <div class="chatRow" onclick="window.open('https://t.me/ROSEREKBER/1591', '_blank')"><div class="chatAvatar">ℹ️</div><div style="flex:1"><b style="font-size: 14px;">Cara Order</b><br><small style="color:var(--muted)">Panduan penggunaan layanan</small></div><div>›</div></div>
       </div>
     </section>
 
     <section class="page" id="page-2">
-      <div class="sectionTitle"><h3>Order Center</h3><span>Auto-Logic v2.4</span></div>
+      <div class="sectionTitle"><h3>Order Center</h3><span>Auto-Logic v2.5</span></div>
       <div class="tab-pill-container">
         <button class="tab-pill active" onclick="setService('jaspin', this)">Jaspin</button>
         <button class="tab-pill" onclick="setService('convert', this)">Convert</button>
@@ -148,8 +135,8 @@
         <div class="field" id="qris-wrapper">
             <label>Pakai QRIS?</label>
             <select id="qris_global" onchange="updateAll()">
-                <option value="no">No, Pakai Nomor (Fee Prem)</option>
-                <option value="yes">Yes, Pakai QRIS (Fee Non-Prem)</option>
+                <option value="no">No, Pakai Nomor (Premium)</option>
+                <option value="yes">Yes, Pakai QRIS (Non-Prem)</option>
             </select>
         </div>
 
@@ -227,7 +214,12 @@
         container.innerHTML = `
           <div class="field"><label>Username Penjual</label><input type="text" id="user_p_rek" placeholder="penjual" oninput="updateAll()"></div>
           <div class="field"><label>Username Pembeli</label><input type="text" id="user_b_rek" placeholder="pembeli" oninput="updateAll()"></div>
+          <div class="field"><label>Jenis Orderan</label><input type="text" id="jenis_rek" placeholder="Akun Game / Saldo" oninput="updateAll()"></div>
           <div class="field"><label>Nominal</label><input type="text" id="nom_rek" placeholder="1.000.000" oninput="formatInput(this); updateAll()"></div>
+          <div style="display:flex; gap:10px;">
+            <div class="field" style="flex:1"><label>Penjual Via</label><input type="text" id="p_via" placeholder="Dana" oninput="updateAll()"></div>
+            <div class="field" style="flex:1"><label>Pembeli Via</label><input type="text" id="b_via" placeholder="Gopay" oninput="updateAll()"></div>
+          </div>
         `;
       }
       updateAll();
@@ -240,14 +232,14 @@
     }
 
     function calculateFeeConvert(nominal, isQris) {
-        if (!isQris) { // EWALLET PREM (NOMOR)
+        if (!isQris) { 
             if (nominal < 200000) return 1000;
             if (nominal < 300000) return 2000;
             if (nominal < 400000) return 3000;
             if (nominal < 500000) return 4000;
             if (nominal < 600000) return 5000;
             return 5000 + (Math.floor((nominal - 500000) / 100000) * 1000);
-        } else { // EWALLET NON-PREM (QRIS)
+        } else {
             if (nominal < 20000) return 2000;
             if (nominal < 50000) return 3000;
             if (nominal < 100000) return 4000;
@@ -255,7 +247,6 @@
             if (nominal < 300000) return 8000;
             if (nominal < 400000) return 10000;
             if (nominal < 500000) return 12000;
-            
             let rate = 0.97;
             if (nominal >= 1000000 && nominal < 1500000) rate = 0.96;
             else if (nominal >= 1500000 && nominal < 2000000) rate = 0.95;
@@ -268,6 +259,22 @@
         }
     }
 
+    function calculateFeeRekber(nom) {
+        if (nom < 10000) return "0p";
+        if (nom < 20000) return "30p";
+        if (nom < 60000) return "100p";
+        if (nom < 400000) return "200p";
+        if (nom < 600000) return "350p";
+        if (nom < 700000) return "550p";
+        if (nom < 800000) return "950p";
+        if (nom < 900000) return "2.000";
+        if (nom <= 2000000) return "5.000";
+        if (nom <= 3000000) return "8.000";
+        // Kelipatan 10k + 10p
+        let extra = Math.floor((nom - 3000000) / 10000) * 10;
+        return formatRibuan(8000 + extra);
+    }
+
     function updateAll() {
       const output = document.getElementById('orderText');
       const subs = document.getElementById('subs_global').value;
@@ -277,28 +284,33 @@
       if(currentService === 'jaspin') {
         let raw = (document.getElementById('nom_j')?.value || "0").replace(/\./g, '');
         let nom = parseInt(raw) || 0;
-        let fee;
-        
-        // LOGIKA BARU: 10p - 999p FREE
-        if (nom > 0 && nom < 1000) {
-            fee = "Free";
-        } else {
-            fee = (nom < 21000) ? (Math.floor(nom/1000)*10 - 5) : (195 + (Math.floor(nom/1000)-20)*10);
-            fee = fee < 1000 ? fee + 'p' : formatRibuan(fee);
-        }
-        
+        let fee = (nom > 0 && nom < 1000) ? "Free" : ((nom < 21000) ? (Math.floor(nom/1000)*10 - 5) : (195 + (Math.floor(nom/1000)-20)*10));
+        if (fee !== "Free") fee = fee < 1000 ? fee + 'p' : formatRibuan(fee);
         output.value = `🪷 𓏸  FORMAT JASPIN ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_j')?.value || "..."}\nㅤ𐀶. . jaspin nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . fee jaspin :: ${fee}\nㅤ𐀶. . nomor + a.n :: ${document.getElementById('nan_j')?.value || "..."}\nㅤ𐀶. . pakai qris :: yes only dana\nㅤ𐀶. . sudah subs @roserekber ? :: ${subs}`;
       } 
       else if(currentService === 'convert') {
         let raw = (document.getElementById('nom_c')?.value || "0").replace(/\./g, '');
         let nom = parseInt(raw) || 0;
         let fee = calculateFeeConvert(nom, isQris);
-        
         output.value = `ㅤㅤ ㅤ🪷 𓏸  FORMAT CONVERT ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_c')?.value || "..."}\nㅤ𐀶. . cv nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . fee convert :: ${formatRibuan(fee)}\nㅤ𐀶. . dari ewallet :: ${document.getElementById('dari_c')?.value || "..."}\nㅤ𐀶. . ewallet tujuan :: ${document.getElementById('ke_c')?.value || "..."}\nㅤ𐀶. . nomor tujuan :: ${document.getElementById('no_tujuan')?.value || "..."}\nㅤ𐀶. . pakai qris :: ${isQris ? 'Yes, pakai qris' : 'No, Pakai Nomor'}\nㅤ𐀶. . sudah subs @roserekber ? :: ${subs}`;
       }
       else {
         let raw = (document.getElementById('nom_rek')?.value || "0").replace(/\./g, '');
-        output.value = `🪷 𓏸  FORMAT REKBER ☏\n\nㅤ𐀶. . penjual :: @${document.getElementById('user_p_rek')?.value || "..."}\nㅤ𐀶. . pembeli :: @${document.getElementById('user_b_rek')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . pakai qris :: ${isQris ? 'Yes' : 'No'}\nㅤ𐀶. . sudah subs @roserekber ? :: ${subs}`;
+        let nom = parseInt(raw) || 0;
+        let pVia = (document.getElementById('p_via')?.value || "").toLowerCase();
+        let bVia = (document.getElementById('b_via')?.value || "").toLowerCase();
+        
+        let feeRek = calculateFeeRekber(nom);
+        let feeConv = 0;
+        let rincianFee = `Rp ${feeRek}`;
+
+        // Logika Convert dalam Rekber
+        if (pVia !== bVia || isQris) {
+            feeConv = calculateFeeConvert(nom, isQris);
+            rincianFee = `${feeRek} (Rekber) + ${formatRibuan(feeConv)} (Fee ${isQris ? 'QRIS' : 'Convert'})`;
+        }
+
+        output.value = `🪷 𓏸  FORMAT REKBER E WALLET ☏\n\nㅤ𐀶. . username penjual :: @${document.getElementById('user_p_rek')?.value || "..."}\nㅤ𐀶. . username pembeli :: @${document.getElementById('user_b_rek')?.value || "..."}\nㅤ𐀶. . jenis orderan :: ${document.getElementById('jenis_rek')?.value || "..."}\nㅤ𐀶. . nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . fee rekber :: ${rincianFee}\nㅤ𐀶. . penjual via :: ${pVia || "..."}\nㅤ𐀶. . pembeli via :: ${bVia || "..."}\nㅤ𐀶. . pakai qris :: ${isQris ? 'yes' : 'no'}\nㅤ𐀶. . sudah subs @roserekber ? :: ${subs}`;
       }
     }
 
