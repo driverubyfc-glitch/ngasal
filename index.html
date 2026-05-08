@@ -220,7 +220,7 @@
             <div class="field" style="flex:1"><label>Dari E-Wallet</label><input type="text" id="dari_c" placeholder="Dana" oninput="updateAll()"></div>
             <div class="field" style="flex:1"><label>E-Wallet Tujuan</label><input type="text" id="ke_c" placeholder="Gopay" oninput="updateAll()"></div>
           </div>
-          <div class="field"><label>Nomor Tujuan</label><input type="text" id="no_tujuan" placeholder="08..." oninput="updateAll()"></div>
+          <div class="field"><label>Nomor Tujuan</label><input type="text" id="no_tujuan" placeholder="0812... a.n Rose" oninput="updateAll()"></div>
         `;
       } else {
         qrisWrapper.style.display = 'block';
@@ -246,7 +246,6 @@
             if (nominal < 400000) return 3000;
             if (nominal < 500000) return 4000;
             if (nominal < 600000) return 5000;
-            // Kelipatan 100k + 1000
             return 5000 + (Math.floor((nominal - 500000) / 100000) * 1000);
         } else { // EWALLET NON-PREM (QRIS)
             if (nominal < 20000) return 2000;
@@ -257,13 +256,12 @@
             if (nominal < 400000) return 10000;
             if (nominal < 500000) return 12000;
             
-            // Rate Logic
-            let rate = 0.97; // 500k - 999k
+            let rate = 0.97;
             if (nominal >= 1000000 && nominal < 1500000) rate = 0.96;
             else if (nominal >= 1500000 && nominal < 2000000) rate = 0.95;
             else if (nominal >= 2000000) {
                 let steps = Math.floor((nominal - 2000000) / 500000);
-                rate = 0.95 - (steps * 0.05); // Menurun 1 (asumsi 0.05 sesuai 2.5jt = 0.90)
+                rate = 0.95 - (steps * 0.05);
                 if (rate < 0.1) rate = 0.1;
             }
             return Math.ceil(nominal - (nominal * rate));
