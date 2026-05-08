@@ -277,8 +277,17 @@
       if(currentService === 'jaspin') {
         let raw = (document.getElementById('nom_j')?.value || "0").replace(/\./g, '');
         let nom = parseInt(raw) || 0;
-        let fee = (nom < 21000) ? (Math.floor(nom/1000)*10 - 5) : (195 + (Math.floor(nom/1000)-20)*10);
-        output.value = `🪷 𓏸  FORMAT JASPIN ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_j')?.value || "..."}\nㅤ𐀶. . jaspin nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . fee jaspin :: ${fee < 1000 ? fee+'p' : formatRibuan(fee)}\nㅤ𐀶. . nomor + a.n :: ${document.getElementById('nan_j')?.value || "..."}\nㅤ𐀶. . pakai qris :: yes only dana\nㅤ𐀶. . sudah subs @roserekber ? :: ${subs}`;
+        let fee;
+        
+        // LOGIKA BARU: 10p - 999p FREE
+        if (nom > 0 && nom < 1000) {
+            fee = "Free";
+        } else {
+            fee = (nom < 21000) ? (Math.floor(nom/1000)*10 - 5) : (195 + (Math.floor(nom/1000)-20)*10);
+            fee = fee < 1000 ? fee + 'p' : formatRibuan(fee);
+        }
+        
+        output.value = `🪷 𓏸  FORMAT JASPIN ☏\n\nㅤ𐀶. . username :: @${document.getElementById('user_j')?.value || "..."}\nㅤ𐀶. . jaspin nominal :: ${formatRibuan(raw)}\nㅤ𐀶. . fee jaspin :: ${fee}\nㅤ𐀶. . nomor + a.n :: ${document.getElementById('nan_j')?.value || "..."}\nㅤ𐀶. . pakai qris :: yes only dana\nㅤ𐀶. . sudah subs @roserekber ? :: ${subs}`;
       } 
       else if(currentService === 'convert') {
         let raw = (document.getElementById('nom_c')?.value || "0").replace(/\./g, '');
