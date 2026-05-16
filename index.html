@@ -46,8 +46,8 @@ body{
 .brand{ display:flex; align-items:center; gap: 10px; }
 .logo{
   width: 40px; height: 40px; border-radius: 12px;
-  background: linear-gradient(135deg, var(--tg), var(--tg2));
-  display:grid; place-items:center; font-weight: 900; color: white;
+  overflow: hidden; object-fit: cover;
+  display: block;
 }
 .brandText b{ display:block; font-size: 14px; }
 .brandText span{ display:block; font-size: 12px; color: var(--muted); }
@@ -95,7 +95,7 @@ body{
   <header class="top">
     <div class="topRow">
       <div class="brand">
-        <div class="logo">RT</div>
+        <img class="logo" src="https://i.ibb.co.com/hFd35SV4/photo-2026-05-16-14-59-31.jpg" alt="Logo">
         <div class="brandText">
           <b>Rose Rekber</b>
           <span>Automated Smart Form</span>
