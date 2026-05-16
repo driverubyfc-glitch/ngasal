@@ -191,18 +191,28 @@ body{
   let currentService = 'jaspin';
 
   function go(n){
+    // Sembunyikan semua halaman terlebih dahulu, lalu aktifkan yang dipilih
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-' + n).classList.add('active');
-    document.querySelectorAll('.tab').forEach(t => t.toggle('active', t.dataset.page === String(n)));
+    
+    // Ganti class active pada tombol menu navigasi utama bawah secara akurat
+    document.querySelectorAll('.tab').forEach(t => {
+      t.classList.toggle('active', t.getAttribute('data-page') === String(n));
+    });
+    
     if(n === 2) setService(currentService);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-  document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => go(Number(t.dataset.page))));
+  
+  document.querySelectorAll('.tab').forEach(t => {
+    t.addEventListener('click', () => go(Number(t.getAttribute('data-page'))));
+  });
 
   function setService(service, el) {
     currentService = service;
     if(el) {
-      document.querySelectorAll('.tab-pill').forEach(b => b.classList.remove('active'));
+      // Dibuat lebih spesifik ke penampung tab-pill-container agar tidak merusak class .active milik .tab bawah
+      document.querySelectorAll('.tab-pill-container .tab-pill').forEach(b => b.classList.remove('active'));
       el.classList.add('active');
     }
     const container = document.getElementById('form-fields');
